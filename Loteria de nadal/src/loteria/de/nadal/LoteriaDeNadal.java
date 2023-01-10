@@ -4,6 +4,8 @@
  */
 package loteria.de.nadal;
 
+import java.util.Random;
+
 /**
  *
  * @author ausias
@@ -15,6 +17,19 @@ public class LoteriaDeNadal {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        int[] numeros_premiats = new int[1807];
+        Sorteig(numeros_premiats);
+        System.out.println("a");
+    }
+    
+    //Fem amb el rnd els numeros premiats
+    public static void Sorteig(int[] npremi){
+        Random rnd = new Random();
+        for (int i = 0; i < npremi.length; i++){
+            int num_afegir  = rnd.nextInt(100000);
+            //Afegirem 0 per a fer-lo de 5 digits????
+            npremi[i] = 
+        }
     }
     
 }
