@@ -28,7 +28,7 @@ public class LoteriaDeNadal {
         for (int i = 0; i < npremi.length; i++){
             int num_afegir  = rnd.nextInt(100000);
             //Afegirem 0 per a fer-lo de 5 digits????
-            npremi[i] = 
+            num_afegir = npremi[i]; 
         }
     }
     
