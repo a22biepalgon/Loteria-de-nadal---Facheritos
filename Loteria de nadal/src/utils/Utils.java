@@ -281,13 +281,14 @@ public class Utils {
      * @return Retorna un numero enter depenent de la entrada seleccionada
      */
     public static int Menu(String[] array_opcions) {
+        Scanner scan = new Scanner(System.in);
         int resultat;
 
         for (int i = 0; i < array_opcions.length; i++) {
             System.out.println(i + 1 + ") " + array_opcions[i]);
         }
         System.out.println(array_opcions.length + 1 + ") Sortir");
-        resultat = LlegirInt(scan, "Opció seleccionada: ", 1, array_opcions.length);
+        resultat = LlegirInt(scan, "Opció seleccionada: ", 1, array_opcions.length+1);
 
         return resultat;
     }
