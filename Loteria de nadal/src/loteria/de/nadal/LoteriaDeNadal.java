@@ -5,8 +5,8 @@
 package loteria.de.nadal;
 
 import java.util.Random;
-import utils.Utils;
-import java.utils.Scanner;
+import java.util.Scanner;
+import static utils.Utils.*;
 /**
  *
  * @author ausias
@@ -28,7 +28,7 @@ public class LoteriaDeNadal {
         boolean sortir = false;
         
         while (!sortir) {
-            menusurtida = Utils.Menu(menu);
+            menusurtida = Menu(menu);
             switch (menusurtida) {
                 case 1:
                     numcupon = LlegirInt(scan,"Introduce tu número: ",0,99999);
