@@ -490,4 +490,36 @@ public class Utils {
         
        return result;
    }
+    public static void BubbleSortRemove(int[] array) {
+        boolean haycambios = true;
+        for (int i = 0; i < array.length && haycambios == true; i++) {
+            haycambios = false;
+            int aux;
+            for (int j = 0; j < array.length - 1 - i; j++) {
+                if (array[j] == 0) {
+
+                    aux = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = aux;
+                    haycambios = true;
+                }
+            }
+        }
+    }
+    public static void BubbleSortRemoveNums(int[] array) {
+        boolean haycambios = true;
+        for (int i = 0; i < array.length && haycambios == true; i++) {
+            haycambios = false;
+            int aux;
+            for (int j = 0; j < array.length - 1 - i; j++) {
+                if (array[j] == -1) {
+
+                    aux = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = aux;
+                    haycambios = true;
+                }
+            }
+        }
+    }
 }
