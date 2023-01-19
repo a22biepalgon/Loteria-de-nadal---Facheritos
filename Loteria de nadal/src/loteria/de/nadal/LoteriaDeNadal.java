@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 package loteria.de.nadal;
 
 import java.util.Random;
@@ -9,8 +6,8 @@ import java.util.Scanner;
 import static utils.Utils.*;
 
 /**
- *
- * @author ausias
+ *Simulación lotería de Navidad y comprovación de premios
+ * @author Facheritos
  */
 public class LoteriaDeNadal {
 
@@ -24,26 +21,34 @@ public class LoteriaDeNadal {
     }
 
     public static void main(String[] args) {
-        // TODO code application logic here
-        Sorteig();
         String[] menu = {"Trobar Premis", "Veure Premis"};
         int numcupon;
         int menusurtida, premio;
         boolean sortir = false;
-
+        NumPremiado[] numeros_premiados = Sorteig(); //ERROR
         while (!sortir) {
+            System.out.println("Qué deseas consultar:");
             menusurtida = Menu(menu);
             switch (menusurtida) {
                 case 1:
                     numcupon = LlegirInt(scan, "Introduce tu número: ", 0, 99999);
-                    Comprovar(numcupon, numeros_premiats);
+                    
                     break;
                 case 2:
+                    MostrarPremios(numeros_premiados);
                     break;
                 case 3:
                     sortir = true;
                     break;
             }
+        }
+    }
+    public static void MostrarPremios(NumPremiado[] num_premi) {
+        System.out.println("Gordo de Navidad");
+        System.out.println("****************");
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Número: "+num_premi[i].numero+"Premio: "+num_premi[i].premio);
+            
         }
     }
     
