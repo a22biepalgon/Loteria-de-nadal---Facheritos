@@ -22,7 +22,6 @@ public class LoteriaDeNadal {
     static final int QUARTPREMI = 200000;
     static final int QUINTOPREMI = 60000;
     static final int PEDREADA = 1000;
-    
 
     public static int getPremio(NumPremiado num) {
         return num.premio;
@@ -34,6 +33,8 @@ public class LoteriaDeNadal {
         int menusurtida, premio;
         boolean sortir = false;
         NumPremiado[] numeros_premiados = Sorteig();
+        BubbleSortPremis(numeros_premiados);
+
         while (!sortir) {
             System.out.println("Qué deseas consultar:");
             menusurtida = Menu(menu);
@@ -52,26 +53,27 @@ public class LoteriaDeNadal {
             }
         }
     }
+
     public static void BubbleSortPremis(NumPremiado[] array) {
         boolean haycambios = true;
         for (int i = 0; i < array.length && haycambios == true; i++) {
             haycambios = false;
             NumPremiado aux = new NumPremiado();
             for (int j = 0; j < array.length - 1 - i; j++) {
-                if (array[j].premio < array[j+1].premio) {
+                if (array[j].premio < array[j + 1].premio) {
                     aux.numero = array[j].numero;
                     aux.premio = array[j].premio;
-                    array[j].numero = array[j+1].numero;
+                    array[j].numero = array[j + 1].numero;
                     array[j].premio = array[j + 1].premio;
-                    array[j+1].numero = aux.numero;
+                    array[j + 1].numero = aux.numero;
                     array[j + 1].premio = aux.premio;
                     haycambios = true;
                 }
             }
         }
     }
+
     public static void MostrarPremios(NumPremiado[] num_premi) {
-        BubbleSortPremis(num_premi);
         System.out.println("\nLoteria de Navidad");
         System.out.println("****************");
         for (int i = 0; i < num_premi.length; i++) {
@@ -123,7 +125,7 @@ public class LoteriaDeNadal {
         }
         return bomboNumeros;
     }
-     
+
     public static NumPremiado[] Sorteig() { //Cada premio
         Random rnd = new Random();
         int[] bomboPremios = CrearBomboPremios();
@@ -148,38 +150,95 @@ public class LoteriaDeNadal {
         }
         return numeros_premiats;
     }
+
     public static int ComprobarPremio(int cupon, NumPremiado[] premiados) {
         int premio = 0;
-        boolean ganador = false;
-        for (int i = 0; i < premiados.length && ganador == false; i++) {
-            if (cupon == premiados[i].numero) {
-                premio = premiados[i].premio;
-                ganador = true;
-            } else if ((cupon == premiados[i].numero+1 || cupon == premiados[i].numero-1) && premiados[i].premio >= TERCERPREMI) {
-                if (premiados[i].premio == GORDO) {
-                    premio = 20000;
-                } else if (premiados[i].premio == SEGONPREMI) {
-                    premio = 12500;
-                } else if (premiados[i].premio == TERCERPREMI) {
-                    premio = 9600;
-                }
-                ganador = true;
-            } else if (cupon >= (premiados[i].numero/100)*100 && cupon <= (premiados[i].numero/100)*100+99
-                    && premiados[i].premio >= QUARTPREMI) {
-                premio = 1000;
-                ganador = true;
-            } else if (cupon%100 == premiados[i].numero%100 && premiados[i].premio>=TERCERPREMI) {
-                premio = 1000;
-                ganador = true;
-            } else if (cupon%10 == premiados[i].numero%10 && premiados[i].premio == GORDO) {
-                premio = 200;
-            }
 
+        premio = ComprovarBombo(cupon, premiados);
+
+        if (premio == 0) {
+            premio = ComprovarAproximacion(cupon, premiados);
+        }
+        if (premio == 0) {
+            ComprovarCentena(cupon, premiados);
+        }
+        if (premio == 0){
+            premio = ComprovarUltimas(cupon, premiados);
+        }
+        if (premio == 0){
+            premio = ComprovarReintegro(cupon, premiados);
         }
         return premio;
     }
 
+    public static int ComprovarReintegro(int cupon, NumPremiado[] premiados){
+        int premio = 0;
+        if (cupon%10 == premiados[1].numero%10){
+            premio = 200;
+        }
+        return premio;
+    }
+    
+    public static int ComprovarUltimas(int cupon, NumPremiado[] premiados){
+        int premio = 0;
+        int ultimas2 = cupon%100;
+        
+        if (ultimas2 == premiados[0].numero%100){
+            premio = 1000;
+        }else if (ultimas2 == premiados[1].numero%100){
+            premio = 1000;
+        }else if (ultimas2 == premiados[2].numero%100){
+            premio = 1000;
+        }
+        return premio;
+    }
+    
+    public static int ComprovarCentena(int cupon, NumPremiado[] premiados) {
+        int premio = 0;
+        if (cupon >= (premiados[0].numero / 100) * 100 && cupon <= (premiados[0].numero / 100) * 100 + 99) {
+            premio = 1000;
+        } else if (cupon >= (premiados[1].numero / 100) * 100 && cupon <= (premiados[1].numero / 100) * 100 + 99) {
+            premio = 1000;
+        } else if (cupon >= (premiados[2].numero / 100) * 100 && cupon <= (premiados[2].numero / 100) * 100 + 99) {
+            premio = 1000;
+        } else if (cupon >= (premiados[3].numero / 100) * 100 && cupon <= (premiados[3].numero / 100) * 100 + 99) {
+            premio = 1000;
+        } else if (cupon >= (premiados[4].numero / 100) * 100 && cupon <= (premiados[4].numero / 100) * 100 + 99) {
+            premio = 1000;
+        } 
+            return premio;
+        }
+    
+    public static int ComprovarAproximacion(int cupon, NumPremiado[] premiados) {
+        int premio = 0;
+        if (cupon == premiados[0].premio - 1 || cupon == premiados[0].premio + 1) {
+            premio = 20000;
+        } else if (cupon == premiados[1].premio - 1 || cupon == premiados[1].premio + 1) {
+            premio = 12500;
+        } else if (cupon == premiados[2].premio - 1 || cupon == premiados[2].premio + 1) {
+            premio = 9600;
+        }
+        return premio;
+    }
+
+    public static int ComprovarBombo(int cupon, NumPremiado[] premiados) {
+        boolean ganador = false;
+        int premio = 0;
+
+        for (int i = 0; i < premiados.length && ganador == false; i++) {
+            if (cupon == premiados[i].numero) {
+                premio = premiados[i].premio;
+                ganador = true;
+            }
+
+            return premio;
+        }
+
+        return premio;
+    }
+
     public static class NumPremiado {
+
         int numero;
         int premio;
     }
