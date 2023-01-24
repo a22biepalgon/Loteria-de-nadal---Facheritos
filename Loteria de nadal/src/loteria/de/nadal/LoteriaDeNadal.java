@@ -16,12 +16,12 @@ public class LoteriaDeNadal {
      */
     static Scanner scan = new Scanner(System.in);
 
-    static final int gordo = 4000000;
-    static final int segonpremi = 1200000;
-    static final int tercerpremi = 500000;
-    static final int quartpremi = 200000;
-    static final int quintopremi = 60000;
-    static final int pedreada = 1000;
+    static final int GORDO = 4000000;
+    static final int SEGONPREMI = 1200000;
+    static final int TERCERPREMI = 500000;
+    static final int QUARTPREMI = 200000;
+    static final int QUINTOPREMI = 60000;
+    static final int PEDREADA = 1000;
 
     public static int getPremio(NumPremiado num) {
         return num.premio;
@@ -66,17 +66,17 @@ public class LoteriaDeNadal {
         for (int i = 0; i < bomboPremios.length; i++) {
             switch (i) {
                 case 1:
-                    bomboPremios[i] = gordo;
+                    bomboPremios[i] = GORDO;
                     break;
                 case 2:
-                    bomboPremios[i] = segonpremi;
+                    bomboPremios[i] = SEGONPREMI;
                     break;
                 case 3:
-                    bomboPremios[i] = tercerpremi;
+                    bomboPremios[i] = TERCERPREMI;
                     break;
                 case 4:
                 case 5:
-                    bomboPremios[i] = quartpremi;
+                    bomboPremios[i] = QUARTPREMI;
                     break;
                 case 6:
                 case 7:
@@ -86,10 +86,10 @@ public class LoteriaDeNadal {
                 case 11:
                 case 12:
                 case 13:
-                    bomboPremios[i] = quintopremi;
+                    bomboPremios[i] = QUINTOPREMI;
                     break;
                 default:
-                    bomboPremios[i] = pedreada;
+                    bomboPremios[i] = PEDREADA;
             }
 
         }
@@ -126,25 +126,31 @@ public class LoteriaDeNadal {
         }
         return numeros_premiats;
     }
-
     public static int ComprobarPremio(int cupon, NumPremiado[] premiados) {
         int premio = 0;
-        boolean premioprincipal = false;
-        for (int i = 0; i < premiados.length && premioprincipal == false; i++) {
+        boolean ganador = false;
+        for (int i = 0; i < premiados.length && ganador == false; i++) {
             if (cupon == premiados[i].numero) {
                 premio = premiados[i].premio;
-                premioprincipal = true;
-            } else if ((cupon + 1 == premiados[i].numero || cupon - 1 == premiados[i].numero) && premiados[i].numero >= tercerpremi) {
-                if (premiados[i].premio == gordo) {
+                ganador = true;
+            } else if ((cupon + 1 == premiados[i].numero || cupon - 1 == premiados[i].numero) && premiados[i].numero >= TERCERPREMI) {
+                if (premiados[i].premio == GORDO) {
                     premio = 20000;
-                } else if (premiados[i].premio == segonpremi) {
+                } else if (premiados[i].premio == SEGONPREMI) {
                     premio = 12500;
-                } else if (premiados[i].premio == tercerpremi) {
+                } else if (premiados[i].premio == TERCERPREMI) {
                     premio = 9600;
                 }
-            } else if (cupon >= premiados[i].numero && cupon <= premiados[i].numero
-                    && premiados[i].premio >= tercerpremi) {
-
+                ganador = true;
+            } else if (cupon >= (premiados[i].numero/100)*100 && cupon <= (premiados[i].numero/100)*100+99
+                    && premiados[i].premio >= QUARTPREMI) {
+                premio = 1000;
+                ganador = true;
+            } else if (cupon%100 == premiados[i].numero%100 && premiados[i].premio>=TERCERPREMI) {
+                premio = 1000;
+                ganador = true;
+            } else if (cupon%10 == premiados[i].numero%10 && premiados[i].premio == GORDO) {
+                premio = 200;
             }
 
         }
@@ -152,7 +158,6 @@ public class LoteriaDeNadal {
     }
 
     public static class NumPremiado {
-
         int numero;
         int premio;
     }
