@@ -281,8 +281,8 @@ public class Utils {
      * @return Retorna un numero enter depenent de la entrada seleccionada
      */
     public static int Menu(String[] array_opcions) {
-        Scanner scan = new Scanner(System.in);
         int resultat;
+        Scanner scan = new Scanner(System.in);
 
         for (int i = 0; i < array_opcions.length; i++) {
             System.out.println(i + 1 + ") " + array_opcions[i]);
@@ -490,13 +490,13 @@ public class Utils {
         
        return result;
    }
-    public static void BubbleSortRemove(int[] array) {
+    public static void BubbleSort(int[] array) {
         boolean haycambios = true;
         for (int i = 0; i < array.length && haycambios == true; i++) {
             haycambios = false;
             int aux;
             for (int j = 0; j < array.length - 1 - i; j++) {
-                if (array[j] == 0) {
+                if (array[j] < array[j+1]) {
 
                     aux = array[j];
                     array[j] = array[j + 1];
@@ -506,7 +506,8 @@ public class Utils {
             }
         }
     }
-    public static void BubbleSortRemoveNums(int[] array) {
+    
+    public static void BubbleSortRemove(int[] array) {
         boolean haycambios = true;
         for (int i = 0; i < array.length && haycambios == true; i++) {
             haycambios = false;
