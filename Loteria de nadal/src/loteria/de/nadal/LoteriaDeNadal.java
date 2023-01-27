@@ -22,6 +22,14 @@ public class LoteriaDeNadal {
     static final int QUARTPREMI = 200000;
     static final int QUINTOPREMI = 60000;
     static final int PEDREADA = 1000;
+    static final int MAXIMBITLLETS = 99999;
+    static final int PREMI2ULTIM = 1000;
+    static final int PREMICENTENA = 1000;
+    static final int PREMIREINTEGRO = 200;
+    static final int PREMIAPROX3 = 9600;
+    static final int PREMIAPROX2 = 12500;
+    static final int PREMIAPROX1 = 20000;
+
 
     public static int getPremio(NumPremiado num) {
         return num.premio;
@@ -40,7 +48,7 @@ public class LoteriaDeNadal {
             menusurtida = Menu(menu);
             switch (menusurtida) {
                 case 1:
-                    numcupon = LlegirInt(scan, "Introduce tu número: ", 0, 99999);
+                    numcupon = LlegirInt(scan, "Introduce tu número: ", 0, MAXIMBITLLETS);
                     premio = ComprobarPremio(numcupon, numeros_premiados);
                     System.out.println(premio);
                     break;
@@ -119,7 +127,7 @@ public class LoteriaDeNadal {
     }
 
     public static int[] CrearBomboNumeros() {
-        int[] bomboNumeros = new int[100000];
+        int[] bomboNumeros = new int[MAXIMBITLLETS + 1];
         for (int i = 0; i < bomboNumeros.length; i++) {
             bomboNumeros[i] = i;
         }
@@ -162,65 +170,65 @@ public class LoteriaDeNadal {
         if (premio == 0) {
             ComprovarCentena(cupon, premiados);
         }
-        if (premio == 0){
+        if (premio == 0) {
             premio = ComprovarUltimas(cupon, premiados);
         }
-        if (premio == 0){
+        if (premio == 0) {
             premio = ComprovarReintegro(cupon, premiados);
         }
         return premio;
     }
 
-    public static int ComprovarReintegro(int cupon, NumPremiado[] premiados){
+    public static int ComprovarReintegro(int cupon, NumPremiado[] premiados) {
         int premio = 0;
-        if (cupon%10 == premiados[1].numero%10){
-            premio = 200;
-        }
-        return premio;
-    }
-    
-    public static int ComprovarUltimas(int cupon, NumPremiado[] premiados){
-        int premio = 0;
-        int ultimas2 = cupon%100;
-        
-        if (ultimas2 == premiados[0].numero%100){
-            premio = 1000;
-        }else if (ultimas2 == premiados[1].numero%100){
-            premio = 1000;
-        }else if (ultimas2 == premiados[2].numero%100){
-            premio = 1000;
-        }
-        return premio;
-    }
-    
-    public static int ComprovarCentena(int cupon, NumPremiado[] premiados) {
-        int premio = 0;
-        if (cupon >= (premiados[0].numero / 100) * 100 && cupon <= (premiados[0].numero / 100) * 100 + 99) {
-            premio = 1000;
-        } else if (cupon >= (premiados[1].numero / 100) * 100 && cupon <= (premiados[1].numero / 100) * 100 + 99) {
-            premio = 1000;
-        } else if (cupon >= (premiados[2].numero / 100) * 100 && cupon <= (premiados[2].numero / 100) * 100 + 99) {
-            premio = 1000;
-        } else if (cupon >= (premiados[3].numero / 100) * 100 && cupon <= (premiados[3].numero / 100) * 100 + 99) {
-            premio = 1000;
-        } else if (cupon >= (premiados[4].numero / 100) * 100 && cupon <= (premiados[4].numero / 100) * 100 + 99) {
-            premio = 1000;
-        } 
-            return premio;
-        }
-    
-    public static int ComprovarAproximacion(int cupon, NumPremiado[] premiados) {
-        int premio = 0;
-        if (cupon == premiados[0].premio - 1 || cupon == premiados[0].premio + 1) {
-            premio = 20000;
-        } else if (cupon == premiados[1].premio - 1 || cupon == premiados[1].premio + 1) {
-            premio = 12500;
-        } else if (cupon == premiados[2].premio - 1 || cupon == premiados[2].premio + 1) {
-            premio = 9600;
+        if (cupon % 10 == premiados[1].numero % 10) {
+            premio = PREMIREINTEGRO;
         }
         return premio;
     }
 
+    public static int ComprovarUltimas(int cupon, NumPremiado[] premiados) {
+        int premio = 0;
+        int ultimas2 = cupon % 100;
+
+        if (ultimas2 == premiados[0].numero % 100) {
+            premio = PREMI2ULTIM;
+        } else if (ultimas2 == premiados[1].numero % 100) {
+            premio = PREMI2ULTIM;
+        } else if (ultimas2 == premiados[2].numero % 100) {
+            premio = PREMI2ULTIM;
+        }
+        return premio;
+    }
+
+    public static int ComprovarCentena(int cupon, NumPremiado[] premiados) {
+        int premio = 0;
+        if (cupon >= (premiados[0].numero / 100) * 100 && cupon <= (premiados[0].numero / 100) * 100 + 99) {
+            premio = PREMICENTENA;
+        } else if (cupon >= (premiados[1].numero / 100) * 100 && cupon <= (premiados[1].numero / 100) * 100 + 99) {
+            premio = PREMICENTENA;
+        } else if (cupon >= (premiados[2].numero / 100) * 100 && cupon <= (premiados[2].numero / 100) * 100 + 99) {
+            premio = PREMICENTENA;
+        } else if (cupon >= (premiados[3].numero / 100) * 100 && cupon <= (premiados[3].numero / 100) * 100 + 99) {
+            premio = PREMICENTENA;
+        } else if (cupon >= (premiados[4].numero / 100) * 100 && cupon <= (premiados[4].numero / 100) * 100 + 99) {
+            premio = PREMICENTENA;
+        }
+        return premio;
+    }
+
+    public static int ComprovarAproximacion(int cupon, NumPremiado[] premiados) {
+        int premio = 0;
+        if (cupon == premiados[0].premio - 1 || cupon == premiados[0].premio + 1) {
+            premio = PREMIAPROX1;
+        } else if (cupon == premiados[1].premio - 1 || cupon == premiados[1].premio + 1) {
+            premio = PREMIAPROX2;
+        } else if (cupon == premiados[2].premio - 1 || cupon == premiados[2].premio + 1) {
+            premio = PREMIAPROX3;
+        }
+        return premio;
+    }
+    
     public static int ComprovarBombo(int cupon, NumPremiado[] premiados) {
         boolean ganador = false;
         int premio = 0;
