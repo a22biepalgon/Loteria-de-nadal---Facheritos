@@ -288,7 +288,7 @@ public class Utils {
             System.out.println(i + 1 + ") " + array_opcions[i]);
         }
         System.out.println(array_opcions.length + 1 + ") Sortir");
-        resultat = LlegirInt(scan, "Opció seleccionada: ", 1, array_opcions.length+1);
+        resultat = LlegirInt(scan, "Opción seleccionada: ", 1, array_opcions.length+1);
 
         return resultat;
     }
@@ -513,7 +513,7 @@ public class Utils {
             haycambios = false;
             int aux;
             for (int j = 0; j < array.length - 1 - i; j++) {
-                if (array[j] == -1) {
+                if (array[j] == 0) {
 
                     aux = array[j];
                     array[j] = array[j + 1];

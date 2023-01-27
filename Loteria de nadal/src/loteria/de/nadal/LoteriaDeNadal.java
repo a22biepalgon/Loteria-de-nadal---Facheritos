@@ -15,7 +15,8 @@ public class LoteriaDeNadal {
      * @param args the command line arguments
      */
     static Scanner scan = new Scanner(System.in);
-
+    static Random rnd = new Random();
+    
     static final int GORDO = 4000000;
     static final int SEGONPREMI = 1200000;
     static final int TERCERPREMI = 500000;
@@ -31,12 +32,12 @@ public class LoteriaDeNadal {
     static final int PREMIAPROX1 = 20000;
 
 
-    public static int getPremio(NumPremiado num) {
-        return num.premio;
+    public static void main(String[] args) {
+        Simulacion();
     }
 
-    public static void main(String[] args) {
-        String[] menu = {"Trobar Premis", "Veure Premis"};
+    public static void Simulacion() {
+        String[] menu = {"Revisar premio de cupón", "Consultar todos los premios"};
         int numcupon;
         int menusurtida, premio;
         boolean sortir = false;
@@ -82,10 +83,15 @@ public class LoteriaDeNadal {
     }
 
     public static void MostrarPremios(NumPremiado[] num_premi) {
+        String numeroS = "";
         System.out.println("\nLoteria de Navidad");
         System.out.println("****************");
         for (int i = 0; i < num_premi.length; i++) {
-            System.out.println("Número: " + num_premi[i].numero + " Premio: " + num_premi[i].premio);
+            numeroS = ""+num_premi[i].numero;
+            while (numeroS.length() < 5) {
+                numeroS = "0" + numeroS;
+            }
+            System.out.println((i + 1) + ". Número: " + numeroS + " Premio: " + num_premi[i].premio);
 
         }
     }
@@ -126,35 +132,38 @@ public class LoteriaDeNadal {
         return bomboPremios;
     }
 
-    public static int[] CrearBomboNumeros() {
-        int[] bomboNumeros = new int[MAXIMBITLLETS + 1];
-        for (int i = 0; i < bomboNumeros.length; i++) {
-            bomboNumeros[i] = i;
-        }
-        return bomboNumeros;
+    public static void ActualizarBomboPremios(int position, int[] bomboPremios) {
+        bomboPremios[position] = 0;
+        BubbleSortRemove(bomboPremios);
     }
 
     public static NumPremiado[] Sorteig() { //Cada premio
-        Random rnd = new Random();
         int[] bomboPremios = CrearBomboPremios();
-        int[] bomboNumeros = CrearBomboNumeros();
         NumPremiado[] numeros_premiats = new NumPremiado[1807];
-        int num_afegir, premi_afegir, posN, posP;
+        int num_afegir = 0;
+        int premi_afegir, posP;
         for (int i = 0; i < numeros_premiats.length; i++) { //Dentro del listado de premios
-            posN = rnd.nextInt(bomboNumeros.length - i);
+            boolean repeatnum = true;
+            while (repeatnum) {
+                num_afegir = rnd.nextInt(100000);
+                repeatnum = false;
+                for (int j = 0; j < i && !repeatnum; j++) {
+                    if (num_afegir == numeros_premiats[j].numero) {
+                        repeatnum = true;
+                    }
+                }
+            }
+            
+            //Escoger número del bombo
             posP = rnd.nextInt(bomboPremios.length - i);
-            num_afegir = bomboNumeros[posN]; //Escoger número del bombo
             premi_afegir = bomboPremios[posP]; //Escoger premio del bombo
             //Crear premio a partir de el número y premio sacados de los bombos
             numeros_premiats[i] = new NumPremiado();
             numeros_premiats[i].numero = num_afegir;
             numeros_premiats[i].premio = premi_afegir;
             //Eliminar premio del bombo
-            bomboPremios[posP] = 0;
-            BubbleSortRemove(bomboPremios);
-            //Eliminar número del bombo
-            bomboNumeros[posN] = -1;
-            BubbleSortRemove(bomboNumeros);
+            ActualizarBomboPremios(posP, bomboPremios);
+
         }
         return numeros_premiats;
     }
@@ -190,30 +199,23 @@ public class LoteriaDeNadal {
     public static int ComprovarUltimas(int cupon, NumPremiado[] premiados) {
         int premio = 0;
         int ultimas2 = cupon % 100;
-
-        if (ultimas2 == premiados[0].numero % 100) {
-            premio = PREMI2ULTIM;
-        } else if (ultimas2 == premiados[1].numero % 100) {
-            premio = PREMI2ULTIM;
-        } else if (ultimas2 == premiados[2].numero % 100) {
-            premio = PREMI2ULTIM;
+        for (int i = 0; i <= 2; i++) {
+            if (ultimas2 == premiados[i].numero % 100) {
+                premio = PREMI2ULTIM;
+            }
         }
+
         return premio;
     }
 
     public static int ComprovarCentena(int cupon, NumPremiado[] premiados) {
         int premio = 0;
-        if (cupon >= (premiados[0].numero / 100) * 100 && cupon <= (premiados[0].numero / 100) * 100 + 99) {
-            premio = PREMICENTENA;
-        } else if (cupon >= (premiados[1].numero / 100) * 100 && cupon <= (premiados[1].numero / 100) * 100 + 99) {
-            premio = PREMICENTENA;
-        } else if (cupon >= (premiados[2].numero / 100) * 100 && cupon <= (premiados[2].numero / 100) * 100 + 99) {
-            premio = PREMICENTENA;
-        } else if (cupon >= (premiados[3].numero / 100) * 100 && cupon <= (premiados[3].numero / 100) * 100 + 99) {
-            premio = PREMICENTENA;
-        } else if (cupon >= (premiados[4].numero / 100) * 100 && cupon <= (premiados[4].numero / 100) * 100 + 99) {
-            premio = PREMICENTENA;
+        for (int i = 0; i <= 4; i++) {
+            if (cupon >= (premiados[i].numero / 100) * 100 && cupon <= (premiados[i].numero / 100) * 100) {
+                premio = PREMICENTENA;
+            }
         }
+
         return premio;
     }
 
@@ -238,8 +240,6 @@ public class LoteriaDeNadal {
                 premio = premiados[i].premio;
                 ganador = true;
             }
-
-            return premio;
         }
 
         return premio;
@@ -249,5 +249,10 @@ public class LoteriaDeNadal {
 
         int numero;
         int premio;
+    }
+    public static class Numeros {
+        int numero;
+        int contadorDecimos = 0;
+
     }
 }
