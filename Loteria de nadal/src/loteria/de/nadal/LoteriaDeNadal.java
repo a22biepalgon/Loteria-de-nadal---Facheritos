@@ -67,7 +67,11 @@ public class LoteriaDeNadal {
             }
         }
     }
-
+// <editor-fold defaultstate="collapsed" desc="Mostrar Premios">    
+    /**
+     * Función para ordenar el listado de número premiados en base a su valor monetario (metodo de la burbuja).
+     * @param array listado de premios
+     */
     public static void BubbleSortPremis(NumPremiado[] array) {
         boolean haycambios = true;
         for (int i = 0; i < array.length && haycambios == true; i++) {
@@ -86,13 +90,17 @@ public class LoteriaDeNadal {
             }
         }
     }
-
+    /**
+     * Función para mostrar el listado completo de números premiados
+     * @param num_premi array de número premiados
+     */
     public static void MostrarPremios(NumPremiado[] num_premi) {
         String numeroS = "";
         System.out.println("\nLoteria de Navidad");
         System.out.println("****************");
         for (int i = 0; i < num_premi.length; i++) {
             numeroS = "" + num_premi[i].numero;
+            //Añadir ceros a los números de menos de 5 cifras
             while (numeroS.length() < 5) {
                 numeroS = "0" + numeroS;
             }
@@ -100,8 +108,12 @@ public class LoteriaDeNadal {
 
         }
     }
-
-    //Fem amb el rnd els numeros premiats
+    // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Sorteo Premios">
+    /**
+     * Generación de un bombo de premios monetarios
+     * @return bombo de premios
+     */
     public static int[] CrearBomboPremios() {
         final int GORDO = 4000000;
         final int SEGONPREMI = 1200000;
@@ -144,23 +156,30 @@ public class LoteriaDeNadal {
         }
         return bomboPremios;
     }
-
+    /**
+     * Función para desplazar premios sacados del bombo, al final del array
+     * @param position posición del premio sacado
+     * @param bomboPremios  bombo de premios
+     */
     public static void ActualizarBomboPremios(int position, int[] bomboPremios) {
         bomboPremios[position] = 0;
         BubbleSortRemove(bomboPremios);
     }
-
+    /**
+     * Función para generar el sorteo de los "1807" premios
+     * @return array de premios compuestos por el número del premio y el premio monetario
+     */
     public static NumPremiado[] Sorteo() { //Cada premio
         int[] bomboPremios = CrearBomboPremios();
         NumPremiado[] numeros_premiats = new NumPremiado[1807];
         int num_afegir = 0;
         int premi_afegir, posP;
-        for (int i = 0; i < numeros_premiats.length; i++) { //Dentro del listado de premios
+        for (int i = 0; i < numeros_premiats.length; i++) { //Crear todos los premios
             boolean repeatnum = true;
             while (repeatnum) {
-                num_afegir = rnd.nextInt(100000);
+                num_afegir = rnd.nextInt(100000); //Generar número aleatorio
                 repeatnum = false;
-                for (int j = 0; j < i && !repeatnum; j++) {
+                for (int j = 0; j < i && !repeatnum; j++) {//Comprobar que el número generado aleatoriamente no haya salido anteriormente
                     if (num_afegir == numeros_premiats[j].numero) {
                         repeatnum = true;
                     }
@@ -174,12 +193,14 @@ public class LoteriaDeNadal {
             numeros_premiats[i] = new NumPremiado();
             numeros_premiats[i].numero = num_afegir;
             numeros_premiats[i].premio = premi_afegir;
-            //Eliminar premio del bombo
+            //Eliminar premio monetario del bombo
             ActualizarBomboPremios(posP, bomboPremios);
 
         }
         return numeros_premiats;
     }
+    // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Comprobar Premios">
 
     /**
      * Esta función comprueba si el cupón ha sido premiado, primero de todo por premio mayor, seguidamente por aproximación,
@@ -275,7 +296,7 @@ public class LoteriaDeNadal {
     /**
      * Esta función comprueva si el cupón està en la misma centena que algún premio mayor
      * @param cupon Numero a comprovar
-     * @param premiados Array de los numeros premiasdos
+     * @param premiados Array de los numeros premiados
      * @return Devuelve el premio correspondiente al cupon
      */
     public static int ComprobarCentena(int cupon, NumPremiado[] premiados) {
@@ -383,7 +404,12 @@ public class LoteriaDeNadal {
         //Devolvemos el premio
         return premio;
     }
-
+    /**
+     * Función para informar sobre el tipo de premio que hemos ganado.
+     * @param premio dinero ganado
+     * @param premiados conjunto de premios
+     * @return  tipo de premio obtenido
+     */
     public static String nombrePremiado(int premio, NumPremiado[] premiados) {
         String resultat = "";
 
@@ -401,17 +427,15 @@ public class LoteriaDeNadal {
 
         return resultat;
     }
-
+    // </editor-fold>
+    /**
+     * Clase de números premiados
+     */
     public static class NumPremiado {
 
         int numero;
         int premio;
     }
 
-    public static class Numeros {
-
-        int numero;
-        int contadorDecimos = 0;
-
-    }
+    
 }
