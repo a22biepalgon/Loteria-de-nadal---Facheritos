@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"loteria.de.nadal","l":"LoteriaDeNadal"},{"p":"loteria.de.nadal","l":"LoteriaDeNadal.NumPremiado"},{"p":"utils","l":"Utils"}]
