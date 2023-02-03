@@ -36,18 +36,126 @@ public class LoteriaDeNadalTest {
     
 
     /**
-     * Test of ComprobarPremio method, of class LoteriaDeNadal.
+     * Test of ComprobarPremio method, of class LoteriaDeNadal. Premio Gordo
      */
     @Test
-    public void testComprobarPremio() {
-        System.out.println("ComprobarPremio");
+    public void testComprobarPremioGordo() {
+        System.out.println("ComprobarPremio Gordo");
         
         LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
+        LoteriaDeNadal.BubbleSortPremis(premiados);
         int cupon = premiados[0].numero;
-        int expResult = premiados[0].premio;
+        int expResult = LoteriaDeNadal.GORDO;
         int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
         assertEquals(expResult, result);
     }
+    
+    /**
+     * Test of ComprobarPremio method, of class LoteriaDeNadal. Premio segundo
+     */
+    @Test
+    public void testComprobarPremioSegundo() {
+        System.out.println("ComprobarPremio Segundo");
+        
+        LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
+        LoteriaDeNadal.BubbleSortPremis(premiados);
+        int cupon = premiados[1].numero;
+        int expResult;
+        if (cupon%10 == premiados[0].numero%10) {
+            expResult = LoteriaDeNadal.SEGONPREMI +200;
+        }
+        else {
+            expResult = LoteriaDeNadal.SEGONPREMI;
+        }
+        int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
+        assertEquals(expResult, result);
+    }
+    
+    
+    /**
+     * Test of ComprobarPremio method, of class LoteriaDeNadal. Premio tercero
+     */
+    @Test
+    public void testComprobarPremioTercero() {
+        System.out.println("ComprobarPremio Tercero");
+        
+        LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
+        LoteriaDeNadal.BubbleSortPremis(premiados);
+        int cupon = premiados[2].numero;
+        int expResult;
+        if (cupon%10 == premiados[0].numero%10) {
+            expResult = LoteriaDeNadal.TERCERPREMI +200;
+        }
+        else {
+            expResult = LoteriaDeNadal.TERCERPREMI;
+        }
+        int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of ComprobarPremio method, of class LoteriaDeNadal. Premio cuarto
+     */
+    @Test
+    public void testComprobarPremioCuarto() {
+        System.out.println("ComprobarPremio Cuarto");
+        
+        LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
+        LoteriaDeNadal.BubbleSortPremis(premiados);
+        int cupon = premiados[3].numero;
+        int expResult;
+        if (cupon%10 == premiados[0].numero%10) {
+            expResult = LoteriaDeNadal.QUARTPREMI +200;
+        }
+        else {
+            expResult = LoteriaDeNadal.QUARTPREMI;
+        }
+        int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of ComprobarPremio method, of class LoteriaDeNadal. Premio quinto
+     */
+    @Test
+    public void testComprobarPremioQuinto() {
+        System.out.println("ComprobarPremio Quinto");
+        
+        LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
+        LoteriaDeNadal.BubbleSortPremis(premiados);
+        int cupon = premiados[5].numero;
+        int expResult;
+        if (cupon%10 == premiados[0].numero%10) {
+            expResult = LoteriaDeNadal.QUINTOPREMI +200;
+        }
+        else {
+            expResult = LoteriaDeNadal.QUINTOPREMI;
+        }
+        int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
+        assertEquals(expResult, result);
+    }
+    /**
+     * Test of ComprobarPremio method, of class LoteriaDeNadal. Premio pedrea
+     */
+    @Test
+    public void testComprobarPremioPedreada() {
+        System.out.println("ComprobarPremio Pedrea");
+        
+        LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
+        LoteriaDeNadal.BubbleSortPremis(premiados);
+        int cupon = premiados[20].numero;
+        int expResult;
+        if (cupon%10 == premiados[0].numero%10) {
+            expResult = LoteriaDeNadal.PEDREADA +200;
+        }
+        else {
+            expResult = LoteriaDeNadal.PEDREADA;
+        }
+        int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
+        assertEquals(expResult, result);
+    }
+    
+    
 
     
 }

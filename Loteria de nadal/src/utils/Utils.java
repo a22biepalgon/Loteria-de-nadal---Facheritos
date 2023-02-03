@@ -287,7 +287,7 @@ public class Utils {
         for (int i = 0; i < array_opcions.length; i++) {
             System.out.println(i + 1 + ") " + array_opcions[i]);
         }
-        System.out.println(array_opcions.length + 1 + ") Sortir");
+        System.out.println(array_opcions.length + 1 + ") Salir");
         resultat = LlegirInt(scan, "Opción seleccionada: ", 1, array_opcions.length+1);
 
         return resultat;

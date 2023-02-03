@@ -16,7 +16,13 @@ public class LoteriaDeNadal {
      */
     static Scanner scan = new Scanner(System.in);
     static Random rnd = new Random();
-    
+    static final int GORDO = 4000000;
+    static final int SEGONPREMI = 1200000;
+    static final int TERCERPREMI = 500000;
+    static final int QUARTPREMI = 200000;
+    static final int QUINTOPREMI = 60000;
+    static final int PEDREADA = 1000;
+    static final int QUANTITATPREMIS = 1807;
     static int quantGordo = 1;
     static int quantSegund = 1;
     static int quantTercer = 1;
@@ -155,13 +161,7 @@ public class LoteriaDeNadal {
      * @return bombo de premios
      */
     public static int[] CrearBomboPremios() {
-        final int GORDO = 4000000;
-        final int SEGONPREMI = 1200000;
-        final int TERCERPREMI = 500000;
-        final int QUARTPREMI = 200000;
-        final int QUINTOPREMI = 60000;
-        final int PEDREADA = 1000;
-        final int QUANTITATPREMIS = 1807;
+ 
 
         int[] bomboPremios = new int[QUANTITATPREMIS];
         for (int i = 0; i < bomboPremios.length; i++) {
