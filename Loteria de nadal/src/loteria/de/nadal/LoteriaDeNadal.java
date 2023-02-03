@@ -56,6 +56,10 @@ public class LoteriaDeNadal {
         boolean sortir = false;
         //Creeamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
         NumPremiado[] numeros_premiados = Sorteo();
+        boolean resultat = prova(numeros_premiados);
+        if (!resultat){
+            System.out.println("ASADASDFWFWFAWFAWFAW");
+        }
         BubbleSortPremis(numeros_premiados);
         //Creeamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
@@ -88,6 +92,15 @@ public class LoteriaDeNadal {
                     break;
             }
         }
+    }
+    
+    public static boolean prova(NumPremiado[] a){
+        for (int i = 0; i < a.length; i++){
+            if (a[i].premio == 0){
+                return false;
+            }
+        }
+        return true;
     }
 // <editor-fold defaultstate="collapsed" desc="Mostrar Premios">    
 
@@ -142,7 +155,7 @@ public class LoteriaDeNadal {
      * @return bombo de premios
      */
     public static int[] CrearBomboPremios() {
-        inal int GORDO = 4000000;
+        final int GORDO = 4000000;
         final int SEGONPREMI = 1200000;
         final int TERCERPREMI = 500000;
         final int QUARTPREMI = 200000;
@@ -199,8 +212,10 @@ public class LoteriaDeNadal {
      * monetario
      */
     public static NumPremiado[] Sorteo() { //Cada premio
+        final int PEDREA = 1000;
+        final int NUMPREMIS = 1807;
         int[] bomboPremios = CrearBomboPremios();
-        NumPremiado[] numeros_premiats = new NumPremiado[1807];
+        NumPremiado[] numeros_premiats = new NumPremiado[NUMPREMIS];
         int num_afegir = 0;
         int premi_afegir, posP;
         for (int i = 0; i < numeros_premiats.length; i++) { //Crear todos los premios
@@ -218,6 +233,9 @@ public class LoteriaDeNadal {
             //Escoger número del bombo
             posP = rnd.nextInt(bomboPremios.length - i);
             premi_afegir = bomboPremios[posP]; //Escoger premio del bombo
+            if (premi_afegir == 0){
+                premi_afegir = PEDREA;
+            }
             //Crear premio a partir de el número y premio sacados de los bombos
             numeros_premiats[i] = new NumPremiado();
             numeros_premiats[i].numero = num_afegir;
