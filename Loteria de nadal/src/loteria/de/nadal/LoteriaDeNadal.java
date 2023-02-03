@@ -16,6 +16,13 @@ public class LoteriaDeNadal {
      */
     static Scanner scan = new Scanner(System.in);
     static Random rnd = new Random();
+    
+    static int quantGordo = 1;
+    static int quantSegund = 1;
+    static int quantTercer = 1;
+    static int quantCuart = 2;
+    static int quantQuint = 8;
+    static int quantPremis = quantGordo+quantSegund+quantTercer+quantCuart+quantQuint;
 
     /**
      * Variable per al nom del premi
@@ -135,7 +142,7 @@ public class LoteriaDeNadal {
      * @return bombo de premios
      */
     public static int[] CrearBomboPremios() {
-        final int GORDO = 4000000;
+        inal int GORDO = 4000000;
         final int SEGONPREMI = 1200000;
         final int TERCERPREMI = 500000;
         final int QUARTPREMI = 200000;
@@ -145,34 +152,31 @@ public class LoteriaDeNadal {
 
         int[] bomboPremios = new int[QUANTITATPREMIS];
         for (int i = 0; i < bomboPremios.length; i++) {
-            switch (i) {
-                case 1:
+            if (i < quantPremis) {
+                for (int j = 0; j < quantGordo; j++) {
                     bomboPremios[i] = GORDO;
-                    break;
-                case 2:
+                    i++;
+                }
+                for (int j = 0; j < quantSegund; j++) {
                     bomboPremios[i] = SEGONPREMI;
-                    break;
-                case 3:
+                    i++;
+                }
+                for (int j = 0; j < quantTercer; j++) {
                     bomboPremios[i] = TERCERPREMI;
-                    break;
-                case 4:
-                case 5:
+                    i++;
+                }
+                for (int j = 0; j < quantCuart; j++) {
                     bomboPremios[i] = QUARTPREMI;
-                    break;
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                case 10:
-                case 11:
-                case 12:
-                case 13:
+                    i++;
+                }
+                for (int j = 0; j < quantQuint; j++) {
                     bomboPremios[i] = QUINTOPREMI;
-                    break;
-                default:
-                    bomboPremios[i] = PEDREADA;
-            }
 
+                    i++;
+                }
+            } else {
+                bomboPremios[i] = PEDREADA;
+            }
         }
         return bomboPremios;
     }
