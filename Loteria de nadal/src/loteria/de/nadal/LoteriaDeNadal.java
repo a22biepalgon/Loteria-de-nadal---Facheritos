@@ -14,8 +14,10 @@ public class LoteriaDeNadal {
     /**
      * @param args the command line arguments
      */
+    //Definimosn los objetos scanner y random
     static Scanner scan = new Scanner(System.in);
     static Random rnd = new Random();
+    //Definimos las constantes de los premios
     static final int GORDO = 4000000;
     static final int SEGONPREMI = 1200000;
     static final int TERCERPREMI = 500000;
@@ -24,12 +26,20 @@ public class LoteriaDeNadal {
     static final int PEDREADA = 1000;
     static final int QUANTITATPREMIS = 1807;
     static final int REINTEGRO = 200;
+    static final int PREMICENTENA = 1000;
+    static final int PREMI2ULTIMAS = 1000;
+    static final int PREMIAPROX3 = 9600;
+    static final int PREMIAPROX2 = 12500;
+    static final int PREMIAPROX1 = 20000;
+    //Definimos las constantes de cuantos premios hay
     static int quantGordo = 1;
     static int quantSegund = 1;
     static int quantTercer = 1;
     static int quantCuart = 2;
     static int quantQuint = 8;
     static int quantPremis = quantGordo + quantSegund + quantTercer + quantCuart + quantQuint;
+
+    //Definimos los colores
     static String rojo = "\033[31m";
     static String verde = "\033[32m";
     static String celeste = "\033[36m";
@@ -39,9 +49,6 @@ public class LoteriaDeNadal {
      * Variable per al nom del premi 1 = Primer premi 2 = Segon premi 3 = Tercer
      * premi 4 = 4t premi 5 = Cinqué premi 6 = Reintegro 7 = 2últimas 8 =
      * Centena 9 = Aprox Gordo 10 = Aprox 2ndo 11 = Aprox 3r 12 = Pedrea
-     *
-     *
-     * Pedrea = 7
      */
     static int nompremi = 0;
 
@@ -50,15 +57,15 @@ public class LoteriaDeNadal {
         final int MAXIMBITLLETS = 99999;
         //Creamos un string con las opciones del menu
         String[] menu = {"Revisar premio de cupón", "Consultar todos los premios"};
-        //Creeamos los integers del premio, numero de cupon, i la opcion seleccionada
+        //Creamos los integers del premio, numero de cupon, i la opcion seleccionada
         int numcupon;
         int menusurtida, premio;
-        //Creeamos la variable para salir del programa
+        //Creamos la variable para salir del programa
         boolean sortir = false;
-        //Creeamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
+        //Creamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
         NumPremiado[] numeros_premiados = Sorteo();
         BubbleSortPremis(numeros_premiados);
-        //Creeamos un bucle para ejecutar el programa hasta que el usuario quiera salir
+        //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
             //Imprimimos el menu
             System.out.println("Qué deseas consultar:");
@@ -75,7 +82,7 @@ public class LoteriaDeNadal {
                     //Imprimimos el resultado
                     String nomDelPremi = darNombre(nompremi);
                     nompremi = 0;
-                    System.out.println(verde + "Has ganado " + nomDelPremi + " con una cantidad de " + premio / 10 + " al décimo" + reset);
+                    System.out.println(verde + "Has ganado " + nomDelPremi + " con una cantidad de " + premio / 10 + "€ al décimo" + reset);
                     break;
                 //Mostramos los premios y su numero correspondiente
                 case 2:
@@ -264,7 +271,7 @@ public class LoteriaDeNadal {
                 resultat = "el premio a las 2 últimas cifras";
                 break;
             case 8:
-                resultat = "el premio a la centena del gordo";
+                resultat = "el premio a la centena de un premio mayor";
                 break;
             case 9:
                 resultat = "el premio a la aproximación del gordo";
@@ -293,8 +300,8 @@ public class LoteriaDeNadal {
      *
      * @param cupon Necesita el numero de cupon a comprovar
      * @param premiados Necesita el array de los numeros premiados ya ordenado
-     * @return Devuelve un integer con la cantidad que ha ganado el cupona
-     * comprovar
+     * @return Devuelve un integer con la cantidad que ha ganado el cupon a
+     * comprobar
      */
     public static int ComprobarPremio(int cupon, NumPremiado[] premiados) {
         //Creamos la variable premio
@@ -333,27 +340,26 @@ public class LoteriaDeNadal {
      * @param cupon Integer con el numero a comprobar
      * @param premiados Array con los numeros premiados ya ordenado de mayor a
      * menor
-     * @param premioactual El premio aumulado hasta ahora por dicho cupón
+     * @param premioactual El premio acumulado hasta ahora por dicho cupón
      * @return Devuelve el valor del reintegro, o 0, dependiendo de si el cupon
      * és premiado o no
      */
     public static int ComprobarReintegro(int cupon, NumPremiado[] premiados, int premioactual) {
-        //Creeamos la constante con el valor del premio
         //Creamos la variable premio
         int premio = 0;
         //Miramos si el útlimo numero coincide con el último numero del gordo
         if (cupon % 10 == premiados[0].numero % 10) {
             //Miramos que el numero no sea el gordo
             if (cupon != premiados[0].numero) {
-                //Assignamos el valor de la constante a premio
+                //Asignamos el valor de la constante a premio
                 premio = REINTEGRO;
-                //Si todavía no habia ningún premio ponemos la vairable nompremi con reintegro
+                //Si todavía no habia ningún premio ponemos la variable nompremi con reintegro
                 if (premioactual == 0) {
                     nompremi = 6;
                 }
             }
         }
-        //Devlvemos la variable premio
+        //Devolvemos la variable premio
         return premio;
     }
 
@@ -366,14 +372,11 @@ public class LoteriaDeNadal {
      * @return Devuelve un integer con el premio que le toca al cupón
      */
     public static int ComprobarUltimas(int cupon, NumPremiado[] premiados) {
-        //Creamos la constante del premio a las 2 útlimas cifras
-        final int PREMI2ULTIMAS = 1000;
-
-        //Cramos la variablre premio
+        //Creamos la variable premio
         int premio = 0;
         //Creamos una variable con las 2 últimas cifras de cupón
         int ultimas2 = cupon % 100;
-        //Miramos si coinciden las 2 últimas cifras con las 2 ultimas de un premio mayor
+        //Miramos si coinciden las 2 últimas cifras con las 2 últimas de un premio mayor
         for (int i = 0; i <= 2; i++) {
             if (ultimas2 == premiados[i].numero % 100) {
                 premio = PREMI2ULTIMAS;
@@ -386,21 +389,19 @@ public class LoteriaDeNadal {
     }
 
     /**
-     * Esta función comprueva si el cupón està en la misma centena que algún
+     * Esta función comprueba si el cupón està en la misma centena que algún
      * premio mayor
      *
-     * @param cupon Numero a comprovar
+     * @param cupon Numero a comprobar
      * @param premiados Array de los numeros premiados
      * @return Devuelve el premio correspondiente al cupon
      */
     public static int ComprobarCentena(int cupon, NumPremiado[] premiados) {
-        //Creamos la constante del valor del premio
-        final int PREMICENTENA = 1000;
         //Creamos la variable a devolver
         int premio = 0;
-        //Comprovamos si la centena correspo0nde a alguna de ls 4 premios mayores
+        //Comprobamos si la centena corresponde a alguna de los 4 premios mayores
         for (int i = 0; i <= 4; i++) {
-            if (cupon >= (premiados[i].numero / 100) * 100 && cupon <= (premiados[i].numero / 100) * 100) {
+            if ((cupon / 100) % 10 == (premiados[i].numero / 100) % 10) {
                 premio = PREMICENTENA;
                 nompremi = 8;
             }
@@ -411,7 +412,7 @@ public class LoteriaDeNadal {
     }
 
     /**
-     * Esta función comprueva si el numero del cupon és un numero inferior o
+     * Esta función comprueba si el numero del cupon és un numero inferior o
      * superior a uno de los 3 primeros premios
      *
      * @param cupon Numero a comprobar
@@ -420,23 +421,18 @@ public class LoteriaDeNadal {
      * @return Devuelve el valor del premio correspondiente al cupon
      */
     public static int ComprobarAproximacion(int cupon, NumPremiado[] premiados) {
-        //Creamos las constantes con los valores de los premios
-        final int PREMIAPROX3 = 9600;
-        final int PREMIAPROX2 = 12500;
-        final int PREMIAPROX1 = 20000;
-
-        //Creamos la avriable a devolver
+        //Creamos la variable a devolver
         int premio = 0;
         //Miramos si el cupon se aproxima al primer premio
-        if (cupon == premiados[0].premio - 1 || cupon == premiados[0].premio + 1) {
+        if (cupon == premiados[0].numero - 1 || cupon == premiados[0].numero + 1) {
             premio = PREMIAPROX1;
             nompremi = 9;
             //Miramos si el cupon se aproxima al 2do premio
-        } else if (cupon == premiados[1].premio - 1 || cupon == premiados[1].premio + 1) {
+        } else if (cupon == premiados[1].numero - 1 || cupon == premiados[1].numero + 1) {
             premio = PREMIAPROX2;
             nompremi = 10;
             //Miramos si el cupon se aproxima al 3er premio
-        } else if (cupon == premiados[2].premio - 1 || cupon == premiados[2].premio + 1) {
+        } else if (cupon == premiados[2].numero - 1 || cupon == premiados[2].numero + 1) {
             premio = PREMIAPROX3;
             nompremi = 11;
         }
@@ -456,7 +452,7 @@ public class LoteriaDeNadal {
         /*Creamos la constante con al cantidad de numeros mayores que hay - 1
         1 primer premio
         1 segundo premio
-        1 terceer premio
+        1 tercer premio
         2 cuartos premios
         8 quintos premios
          */
@@ -465,7 +461,7 @@ public class LoteriaDeNadal {
         boolean ganador = false;
         int premio = 0;
 
-        //Mirmos si el cupon corresponde con alguno de estos premios y le assignamos el premio si és asi
+        //Miramos si el cupon corresponde con alguno de estos premios y le assignamos el premio si és asi
         for (int i = 0; i <= TOTALGUANYADORS && ganador == false; i++) {
             if (cupon == premiados[i].numero) {
                 premio = premiados[i].premio;
