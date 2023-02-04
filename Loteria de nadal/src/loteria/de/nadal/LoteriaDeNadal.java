@@ -29,24 +29,18 @@ public class LoteriaDeNadal {
     static int quantTercer = 1;
     static int quantCuart = 2;
     static int quantQuint = 8;
-    static int quantPremis = quantGordo+quantSegund+quantTercer+quantCuart+quantQuint;
+    static int quantPremis = quantGordo + quantSegund + quantTercer + quantCuart + quantQuint;
+    static String rojo = "\033[31m";
+    static String verde = "\033[32m";
+    static String celeste = "\033[36m";
+    static String reset = "\u001B[0m";
 
     /**
-     * Variable per al nom del premi
-     * 1 = Primer premi
-     * 2 = Segon premi
-     * 3 = Tercer premi
-     * 4 = 4t premi
-     * 5 = Cinqué premi
-     * 6 = Reintegro
-     * 7 = 2últimas
-     * 8 = Centena
-     * 9 = Aprox Gordo
-     * 10 = Aprox 2ndo
-     * 11 = Aprox 3r
-     * 12 = Pedrea
-     * 
-     * 
+     * Variable per al nom del premi 1 = Primer premi 2 = Segon premi 3 = Tercer
+     * premi 4 = 4t premi 5 = Cinqué premi 6 = Reintegro 7 = 2últimas 8 =
+     * Centena 9 = Aprox Gordo 10 = Aprox 2ndo 11 = Aprox 3r 12 = Pedrea
+     *
+     *
      * Pedrea = 7
      */
     static int nompremi = 0;
@@ -81,24 +75,24 @@ public class LoteriaDeNadal {
                     //Imprimimos el resultado
                     String nomDelPremi = darNombre(nompremi);
                     nompremi = 0;
-                    System.out.println("Has ganado " + nomDelPremi + " con una cantidad de " + premio / 10 + " al décimo"); 
+                    System.out.println(verde + "Has ganado " + nomDelPremi + " con una cantidad de " + premio / 10 + " al décimo" + reset);
                     break;
                 //Mostramos los premios y su numero correspondiente
                 case 2:
-                    System.out.println("\nLoteria de Navidad");
-                    System.out.println("****************");
+                    System.out.println(verde + "\nLoteria de Navidad" + reset);
+                    System.out.println(celeste + "****************" + reset);
                     MostrarPremios(numeros_premiados, "Numero", "Premio");
                     break;
                 //Salimos del programa
                 case 3:
                     sortir = true;
+                    System.out.println(verde + "MUCHAS GRACIAS POR PARTICIPAR" + reset);
                     break;
             }
         }
     }
-    
-// <editor-fold defaultstate="collapsed" desc="Mostrar Premios">    
 
+// <editor-fold defaultstate="collapsed" desc="Mostrar Premios">    
     /**
      * Función para ordenar el listado de número premiados en base a su valor
      * monetario (metodo de la burbuja).
@@ -137,7 +131,7 @@ public class LoteriaDeNadal {
             while (numeroS.length() < 5) {
                 numeroS = "0" + numeroS;
             }
-            System.out.println((i + 1) + ". " + paraulaNumero + ": " + numeroS + " " + paraulaPremio + ": " + num_premi[i].premio);
+            System.out.println(rojo + (i + 1) + ". " + reset + celeste + paraulaNumero + ": " + numeroS + reset + " " + verde + paraulaPremio + ": " + num_premi[i].premio + reset);
 
         }
     }
@@ -150,7 +144,6 @@ public class LoteriaDeNadal {
      * @return bombo de premios
      */
     public static int[] CrearBomboPremios() {
- 
 
         int[] bomboPremios = new int[QUANTITATPREMIS];
         for (int i = 0; i < bomboPremios.length; i++) {
@@ -222,7 +215,7 @@ public class LoteriaDeNadal {
             //Escoger número del bombo
             posP = rnd.nextInt(bomboPremios.length - i);
             premi_afegir = bomboPremios[posP]; //Escoger premio del bombo
-            if (premi_afegir == 0){
+            if (premi_afegir == 0) {
                 premi_afegir = PEDREA;
             }
             //Crear premio a partir de el número y premio sacados de los bombos
@@ -235,16 +228,20 @@ public class LoteriaDeNadal {
         }
         return numeros_premiats;
     }
+
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Comprobar Premios">
     /**
-     * Esta función sirve para comparar el numero en un switch i dependiendo cada caso devolver un string distinto
-     * @param nombre necesita la variable global nompremi para saber que premio ha tocado
+     * Esta función sirve para comparar el numero en un switch i dependiendo
+     * cada caso devolver un string distinto
+     *
+     * @param nombre necesita la variable global nompremi para saber que premio
+     * ha tocado
      * @return Devuelve un string del premio que nos ha tocado
      */
-    public static String darNombre(int nombre){
+    public static String darNombre(int nombre) {
         String resultat = "";
-        switch (nombre){
+        switch (nombre) {
             case 1:
                 resultat = "el gordo";
                 break;
@@ -263,10 +260,10 @@ public class LoteriaDeNadal {
             case 6:
                 resultat = "el reintegro";
                 break;
-            case 7: 
+            case 7:
                 resultat = "el premio a las 2 últimas cifras";
                 break;
-            case 8: 
+            case 8:
                 resultat = "el premio a la centena del gordo";
                 break;
             case 9:
@@ -275,7 +272,7 @@ public class LoteriaDeNadal {
             case 10:
                 resultat = "el premio a la aproximación del 2ndo premio";
                 break;
-            case 11: 
+            case 11:
                 resultat = "el premio a la aproximación del 3er premio";
                 break;
             case 12:
@@ -433,7 +430,7 @@ public class LoteriaDeNadal {
         //Miramos si el cupon se aproxima al primer premio
         if (cupon == premiados[0].premio - 1 || cupon == premiados[0].premio + 1) {
             premio = PREMIAPROX1;
-            nompremi =9;
+            nompremi = 9;
             //Miramos si el cupon se aproxima al 2do premio
         } else if (cupon == premiados[1].premio - 1 || cupon == premiados[1].premio + 1) {
             premio = PREMIAPROX2;
