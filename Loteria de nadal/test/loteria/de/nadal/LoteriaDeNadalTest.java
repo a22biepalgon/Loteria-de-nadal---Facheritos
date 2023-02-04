@@ -46,26 +46,26 @@ public class LoteriaDeNadalTest {
         LoteriaDeNadal.BubbleSortPremis(premiados);
         int cupon = premiados[0].numero;
         int expResult = LoteriaDeNadal.GORDO;
-        int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
+        int result = LoteriaDeNadal.ComprobarBombo(cupon, premiados);
         assertEquals(expResult, result);
     }
     
     /**
-     * Test of ComprobarPremio method, of class LoteriaDeNadal. Premio segundo
+     * Test of ComprobarBombo method, of class LoteriaDeNadal. Premio segundo
      */
     @Test
     public void testComprobarPremioSegundo() {
-        System.out.println("ComprobarPremio Segundo");
-        
         LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
         LoteriaDeNadal.BubbleSortPremis(premiados);
         int cupon = premiados[1].numero;
         int expResult;
-        if (cupon%10 == premiados[0].numero%10) {
-            expResult = LoteriaDeNadal.SEGONPREMI +200;
+        if (LoteriaDeNadal.ComprobarReintegro(cupon, premiados, LoteriaDeNadal.SEGONPREMI) == LoteriaDeNadal.REINTEGRO) {
+            expResult = LoteriaDeNadal.SEGONPREMI +LoteriaDeNadal.REINTEGRO;
+            System.out.println("ComprobarPremio Segundo con Reintegro");
         }
         else {
             expResult = LoteriaDeNadal.SEGONPREMI;
+            System.out.println("ComprobarPremio Segundo");
         }
         int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
         assertEquals(expResult, result);
@@ -77,17 +77,18 @@ public class LoteriaDeNadalTest {
      */
     @Test
     public void testComprobarPremioTercero() {
-        System.out.println("ComprobarPremio Tercero");
         
         LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
         LoteriaDeNadal.BubbleSortPremis(premiados);
         int cupon = premiados[2].numero;
         int expResult;
-        if (cupon%10 == premiados[0].numero%10) {
-            expResult = LoteriaDeNadal.TERCERPREMI +200;
+        if (LoteriaDeNadal.ComprobarReintegro(cupon, premiados, LoteriaDeNadal.TERCERPREMI) == LoteriaDeNadal.REINTEGRO) {
+            expResult = LoteriaDeNadal.TERCERPREMI +LoteriaDeNadal.REINTEGRO;
+            System.out.println("ComprobarPremio Tercero con Reintegro");
         }
         else {
             expResult = LoteriaDeNadal.TERCERPREMI;
+            System.out.println("ComprobarPremio Tercero");
         }
         int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
         assertEquals(expResult, result);
@@ -98,17 +99,19 @@ public class LoteriaDeNadalTest {
      */
     @Test
     public void testComprobarPremioCuarto() {
-        System.out.println("ComprobarPremio Cuarto");
+        
         
         LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
         LoteriaDeNadal.BubbleSortPremis(premiados);
         int cupon = premiados[3].numero;
         int expResult;
-        if (cupon%10 == premiados[0].numero%10) {
-            expResult = LoteriaDeNadal.QUARTPREMI +200;
+        if (LoteriaDeNadal.ComprobarReintegro(cupon, premiados, LoteriaDeNadal.QUARTPREMI) == LoteriaDeNadal.REINTEGRO) {
+            expResult = LoteriaDeNadal.QUARTPREMI +LoteriaDeNadal.REINTEGRO;
+            System.out.println("ComprobarPremio Cuarto con Reintegro");
         }
         else {
             expResult = LoteriaDeNadal.QUARTPREMI;
+            System.out.println("ComprobarPremio Cuarto");
         }
         int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
         assertEquals(expResult, result);
@@ -119,17 +122,19 @@ public class LoteriaDeNadalTest {
      */
     @Test
     public void testComprobarPremioQuinto() {
-        System.out.println("ComprobarPremio Quinto");
+        
         
         LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
         LoteriaDeNadal.BubbleSortPremis(premiados);
         int cupon = premiados[5].numero;
         int expResult;
-        if (cupon%10 == premiados[0].numero%10) {
-            expResult = LoteriaDeNadal.QUINTOPREMI +200;
+        if (LoteriaDeNadal.ComprobarReintegro(cupon, premiados, LoteriaDeNadal.QUINTOPREMI) == LoteriaDeNadal.REINTEGRO) {
+            expResult = LoteriaDeNadal.QUINTOPREMI +LoteriaDeNadal.REINTEGRO;
+            System.out.println("ComprobarPremio Quinto con Reintegro");
         }
         else {
             expResult = LoteriaDeNadal.QUINTOPREMI;
+            System.out.println("ComprobarPremio Quinto");
         }
         int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
         assertEquals(expResult, result);
@@ -139,21 +144,24 @@ public class LoteriaDeNadalTest {
      */
     @Test
     public void testComprobarPremioPedreada() {
-        System.out.println("ComprobarPremio Pedrea");
         
         LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
         LoteriaDeNadal.BubbleSortPremis(premiados);
         int cupon = premiados[20].numero;
         int expResult;
-        if (cupon%10 == premiados[0].numero%10) {
+        if (LoteriaDeNadal.ComprobarReintegro(cupon, premiados, LoteriaDeNadal.PEDREADA) == LoteriaDeNadal.REINTEGRO) {
             expResult = LoteriaDeNadal.PEDREADA +200;
+            System.out.println("ComprobarPremio Pedreada con Reintegro");
         }
         else {
             expResult = LoteriaDeNadal.PEDREADA;
+            System.out.println("ComprobarPremio Pedreada");
         }
         int result = LoteriaDeNadal.ComprobarPremio(cupon, premiados);
         assertEquals(expResult, result);
     }
+    
+
     
     
 

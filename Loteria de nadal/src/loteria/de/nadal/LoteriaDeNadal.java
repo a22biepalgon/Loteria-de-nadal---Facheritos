@@ -23,6 +23,7 @@ public class LoteriaDeNadal {
     static final int QUINTOPREMI = 60000;
     static final int PEDREADA = 1000;
     static final int QUANTITATPREMIS = 1807;
+    static final int REINTEGRO = 200;
     static int quantGordo = 1;
     static int quantSegund = 1;
     static int quantTercer = 1;
@@ -62,10 +63,6 @@ public class LoteriaDeNadal {
         boolean sortir = false;
         //Creeamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
         NumPremiado[] numeros_premiados = Sorteo();
-        boolean resultat = prova(numeros_premiados);
-        if (!resultat){
-            System.out.println("ASADASDFWFWFAWFAWFAW");
-        }
         BubbleSortPremis(numeros_premiados);
         //Creeamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
@@ -100,14 +97,6 @@ public class LoteriaDeNadal {
         }
     }
     
-    public static boolean prova(NumPremiado[] a){
-        for (int i = 0; i < a.length; i++){
-            if (a[i].premio == 0){
-                return false;
-            }
-        }
-        return true;
-    }
 // <editor-fold defaultstate="collapsed" desc="Mostrar Premios">    
 
     /**
@@ -353,7 +342,6 @@ public class LoteriaDeNadal {
      */
     public static int ComprobarReintegro(int cupon, NumPremiado[] premiados, int premioactual) {
         //Creeamos la constante con el valor del premio
-        final int PREMIREINTEGRO = 200;
         //Creamos la variable premio
         int premio = 0;
         //Miramos si el útlimo numero coincide con el último numero del gordo
@@ -361,7 +349,7 @@ public class LoteriaDeNadal {
             //Miramos que el numero no sea el gordo
             if (cupon != premiados[0].numero) {
                 //Assignamos el valor de la constante a premio
-                premio = PREMIREINTEGRO;
+                premio = REINTEGRO;
                 //Si todavía no habia ningún premio ponemos la vairable nompremi con reintegro
                 if (premioactual == 0) {
                     nompremi = 6;
