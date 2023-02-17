@@ -38,6 +38,12 @@ public class LoteriaDeNadal {
     static int quantCuart = 2;
     static int quantQuint = 8;
     static int quantPremis = quantGordo + quantSegund + quantTercer + quantCuart + quantQuint;
+    //Definición de nombres para los ficheros binarios y de texto
+    public static final String SEPARADOR = "#SEP#";
+    public static final String NOM_FITXER = "./datos.txt";
+    public static final String NOM_FTX_CLIENTS = "./clientes.txt";
+    public static final String NOM_FTX_CLIENTS_BIN = "./clientes.bin";
+    public static final String NOM_FTX_CLIENTS_SEP = "./clientes_sep.txt";
 
     //Definimos los colores
     static String rojo = "\033[31m";
@@ -247,48 +253,15 @@ public class LoteriaDeNadal {
      * @return Devuelve un string del premio que nos ha tocado
      */
     public static String darNombre(int nombre) {
-        String resultat = "";
-        switch (nombre) {
-            case 1:
-                resultat = "el gordo";
-                break;
-            case 2:
-                resultat = "el segundo premio";
-                break;
-            case 3:
-                resultat = "el tercer premio";
-                break;
-            case 4:
-                resultat = "el cuarto premio";
-                break;
-            case 5:
-                resultat = "el quinto premio";
-                break;
-            case 6:
-                resultat = "el reintegro";
-                break;
-            case 7:
-                resultat = "el premio a las 2 últimas cifras";
-                break;
-            case 8:
-                resultat = "el premio a la centena de un premio mayor";
-                break;
-            case 9:
-                resultat = "el premio a la aproximación del gordo";
-                break;
-            case 10:
-                resultat = "el premio a la aproximación del 2ndo premio";
-                break;
-            case 11:
-                resultat = "el premio a la aproximación del 3er premio";
-                break;
-            case 12:
-                resultat = "la pedrea";
-                break;
-            default:
-                resultat = "un abrazo";
-                break;
+        String resultat = "un abrazo";
+        String[] resultatsArr = {"el gordo", "el segundo premio", "el tercer premio", "el cuarto premio",
+            "el quinto premio", "el reintegro", "el premio a las 2 últimas cifras", "el premio a la centena de un premio mayor",
+            "el premio a la aproximación del gordo", "el premio a la aproximación del 2ndo premio",
+            "el premio a la aproximación del 3er premio", "la pedrea"};
+        if (nombre > 0 && nombre < resultatsArr.length) {
+            resultat = resultatsArr[nombre - 1];
         }
+
         return resultat;
     }
 
