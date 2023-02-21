@@ -1,0 +1,11 @@
+Revisar premi de cupó
+Consultar tots els premis
+Que desitges consultar: 
+Introdueix el teu número: 
+Has guanyat 
+ amb una quantitat de 
+€ al décim
+\nLoteria de Nadal
+Número
+Premi
+MOLTES GRÁCIES PER PARTICIPAR

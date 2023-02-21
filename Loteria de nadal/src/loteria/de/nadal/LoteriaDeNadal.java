@@ -1,7 +1,10 @@
 package loteria.de.nadal;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
+import utils.Utils;
 import static utils.Utils.*;
 
 /**
@@ -58,23 +61,27 @@ public class LoteriaDeNadal {
      */
     static int nompremi = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        String idioma = EscogerIdioma();
+
         //Creamos la constante para el numero maximo de billete
         final int MAXIMBITLLETS = 99999;
+
         //Creamos un string con las opciones del menu
-        String[] menu = {"Revisar premio de cupón", "Consultar todos los premios"};
+        String[] menu = {RetornarLinia(idioma, 1), RetornarLinia(idioma, 2)};
         //Creamos los integers del premio, numero de cupon, i la opcion seleccionada
         int numcupon;
         int menusurtida, premio;
         //Creamos la variable para salir del programa
         boolean sortir = false;
-        //Creamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
+        //Creamos el resultado del sorteo en unsa variable de tipo NumPremiado llamando a la funcion Sorteo()
         NumPremiado[] numeros_premiados = Sorteo();
         BubbleSortPremis(numeros_premiados);
         //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
             //Imprimimos el menu
-            System.out.println("Qué deseas consultar:");
+            System.out.println(RetornarLinia(idioma, 3));
             menusurtida = Menu(menu);
 
             //Hacemos lo que pide dependiendo de la entrada del usuario
@@ -82,29 +89,90 @@ public class LoteriaDeNadal {
                 //Comprovamos un numero
                 case 1:
                     //Leemos el numero del cupon
-                    numcupon = LlegirInt(scan, "Introduce tu número: ", 0, MAXIMBITLLETS);
+                    numcupon = LlegirInt(scan, RetornarLinia(idioma, 4), 0, MAXIMBITLLETS);
                     //Comprovamos cuanto ha ganado
                     premio = ComprobarPremio(numcupon, numeros_premiados);
                     //Imprimimos el resultado
-                    String nomDelPremi = darNombre(nompremi);
+                    String nomDelPremi = darNombre(nompremi, idioma);
                     nompremi = 0;
-                    System.out.println(verde + "Has ganado " + nomDelPremi + " con una cantidad de " + premio / 10 + "€ al décimo" + reset);
+                    System.out.println(verde + RetornarLinia(idioma, 5) + nomDelPremi + RetornarLinia(idioma, 6) + premio / 10 + RetornarLinia(idioma, 7) + reset);
                     break;
                 //Mostramos los premios y su numero correspondiente
                 case 2:
-                    System.out.println(verde + "\nLoteria de Navidad" + reset);
+                    System.out.println(verde + RetornarLinia(idioma, 8) + reset);
                     System.out.println(celeste + "****************" + reset);
-                    MostrarPremios(numeros_premiados, "Numero", "Premio");
+                    MostrarPremios(numeros_premiados, RetornarLinia(idioma, 9), RetornarLinia(idioma, 10));
                     break;
                 //Salimos del programa
                 case 3:
                     sortir = true;
-                    System.out.println(verde + "MUCHAS GRACIAS POR PARTICIPAR" + reset);
+                    System.out.println(verde + RetornarLinia(idioma, 11) + reset);
                     break;
             }
         }
     }
 
+// <editor-fold defaultstate="collapsed" desc="Escoger Idioma">    
+    /**
+     * Funcion para mostrar un menu y escoger un idioma
+     *
+     * @return devuelve el nombre del fitxero del idioma seleccionado
+     */
+    public static String EscogerIdioma() {
+        String resultat = "";
+        String[] opcions_menu = {"Catala", "Castella"};
+        int seleccio = Utils.Menu(opcions_menu);
+        resultat = GestionMenuIdioma(seleccio);
+        return resultat;
+    }
+
+    /**
+     * Función para gestionar la selección del menu de idioma
+     *
+     * @param seleccio opción seleccionada por el usuario
+     * @return devuelve el nombre del idioma en fitxero
+     */
+    public static String GestionMenuIdioma(int seleccio) {
+        String resultat = "";
+        switch (seleccio) {
+            case 1:
+                resultat = "ca.txt";
+                break;
+            case 2:
+                resultat = "es.txt";
+                break;
+            default:
+                resultat = " es.txt";
+                break;
+        }
+        return resultat;
+    }
+
+    /**
+     * Función para devolver una linia exacta de un fichero txt
+     *
+     * @param nomfitxer nombre del fichero
+     * @param numlinia numero de la linia a devolver
+     * @return devuelve la linia escogida de x fichero
+     * @throws IOException
+     */
+    public static String RetornarLinia(String nomfitxer, int numlinia) throws IOException {
+        String resultat = "";
+        BufferedReader buffer = Utils.AbrirFicheroLectura(nomfitxer, false);
+        boolean acabat = false;
+        for (int i = 1; !acabat; i++) {
+            String liniaactual = buffer.readLine();
+            if (i == numlinia) {
+                resultat = liniaactual;
+                acabat = true;
+            }
+
+        }
+        buffer.close();
+        return resultat;
+    }
+
+    // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Mostrar Premios">    
     /**
      * Función para ordenar el listado de número premiados en base a su valor
@@ -252,16 +320,16 @@ public class LoteriaDeNadal {
      * ha tocado
      * @return Devuelve un string del premio que nos ha tocado
      */
-    public static String darNombre(int nombre) {
-        String resultat = "un abrazo";
-        String[] resultatsArr = {"el gordo", "el segundo premio", "el tercer premio", "el cuarto premio",
-            "el quinto premio", "el reintegro", "el premio a las 2 últimas cifras", "el premio a la centena de un premio mayor",
-            "el premio a la aproximación del gordo", "el premio a la aproximación del 2ndo premio",
-            "el premio a la aproximación del 3er premio", "la pedrea"};
-        if (nombre > 0 && nombre < resultatsArr.length) {
-            resultat = resultatsArr[nombre - 1];
-        }
+    public static String darNombre(int nombre, String nomfitxer) throws IOException {
+        String resultat = "";
+        nomfitxer = "p" + nomfitxer;
+        if (nombre == 0) {
+            resultat = RetornarLinia(nomfitxer, 13);
 
+        } else {
+            resultat = RetornarLinia(nomfitxer, nombre);
+
+        }
         return resultat;
     }
 

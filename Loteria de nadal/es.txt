@@ -1,0 +1,11 @@
+Revisar premio de cupón
+Consultar todos los premios
+Que deseas consultar: 
+Introduce tu numero: 
+Has ganado 
+ con una cantidad de 
+€ al décimo
+\nLoteria de Navidad
+Numero
+Premio
+MUCHAS GRACIAS POR PARTICIPAR
