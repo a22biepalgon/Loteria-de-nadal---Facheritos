@@ -53,6 +53,19 @@ public class LoteriaDeNadal {
     static String verde = "\033[32m";
     static String celeste = "\033[36m";
     static String reset = "\u001B[0m";
+    
+    //Numeros de linias del fichero por frase
+    static int PRIMERAOPCIONMENU = 1;
+    static int SEGUNDAOPCIONMENU = 2;
+    static int TERCERALINIA = 3;
+    static int CUARTALINIA = 4;
+    static int QUINTALINIA = 5;
+    static int SEXTALINIA = 6;
+    static int SEPTIMALINIA = 7;
+    static int OCTAVALINIA = 8;
+    static int NOVENALINIA = 9;
+    static int DECIMALINIA = 10;
+    static int ONCEAVALINIA = 11;
 
     /**
      * Variable per al nom del premi 1 = Primer premi 2 = Segon premi 3 = Tercer
@@ -69,7 +82,7 @@ public class LoteriaDeNadal {
         final int MAXIMBITLLETS = 99999;
 
         //Creamos un string con las opciones del menu
-        String[] menu = {RetornarLinia(idioma, 1), RetornarLinia(idioma, 2)};
+        String[] menu = {RetornarLinia(idioma, PRIMERAOPCIONMENU), RetornarLinia(idioma, SEGUNDAOPCIONMENU)};
         //Creamos los integers del premio, numero de cupon, i la opcion seleccionada
         int numcupon;
         int menusurtida, premio;
@@ -81,7 +94,7 @@ public class LoteriaDeNadal {
         //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
             //Imprimimos el menu
-            System.out.println(RetornarLinia(idioma, 3));
+            System.out.println(RetornarLinia(idioma, TERCERALINIA));
             menusurtida = Menu(menu);
 
             //Hacemos lo que pide dependiendo de la entrada del usuario
@@ -89,24 +102,24 @@ public class LoteriaDeNadal {
                 //Comprovamos un numero
                 case 1:
                     //Leemos el numero del cupon
-                    numcupon = LlegirInt(scan, RetornarLinia(idioma, 4), 0, MAXIMBITLLETS);
+                    numcupon = LlegirInt(scan, RetornarLinia(idioma, CUARTALINIA), 0, MAXIMBITLLETS);
                     //Comprovamos cuanto ha ganado
                     premio = ComprobarPremio(numcupon, numeros_premiados);
                     //Imprimimos el resultado
                     String nomDelPremi = darNombre(nompremi, idioma);
                     nompremi = 0;
-                    System.out.println(verde + RetornarLinia(idioma, 5) + nomDelPremi + RetornarLinia(idioma, 6) + premio / 10 + RetornarLinia(idioma, 7) + reset);
+                    System.out.println(verde + RetornarLinia(idioma, QUINTALINIA) + nomDelPremi + RetornarLinia(idioma, SEXTALINIA) + premio / 10 + RetornarLinia(idioma, SEPTIMALINIA) + reset);
                     break;
                 //Mostramos los premios y su numero correspondiente
                 case 2:
-                    System.out.println(verde + RetornarLinia(idioma, 8) + reset);
+                    System.out.println(verde + RetornarLinia(idioma, OCTAVALINIA) + reset);
                     System.out.println(celeste + "****************" + reset);
-                    MostrarPremios(numeros_premiados, RetornarLinia(idioma, 9), RetornarLinia(idioma, 10));
+                    MostrarPremios(numeros_premiados, RetornarLinia(idioma, NOVENALINIA), RetornarLinia(idioma, DECIMALINIA));
                     break;
                 //Salimos del programa
                 case 3:
                     sortir = true;
-                    System.out.println(verde + RetornarLinia(idioma, 11) + reset);
+                    System.out.println(verde + RetornarLinia(idioma, ONCEAVALINIA) + reset);
                     break;
             }
         }
@@ -313,18 +326,18 @@ public class LoteriaDeNadal {
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Comprobar Premios">
     /**
-     * Esta función sirve para comparar el numero en un switch i dependiendo
-     * cada caso devolver un string distinto
-     *
-     * @param nombre necesita la variable global nompremi para saber que premio
-     * ha tocado
-     * @return Devuelve un string del premio que nos ha tocado
+     * Esta función sirve para devolver el nombre del premio que nos ha tocado, usando un fichero
+     * @param nombre numero de premio que nos ha tocado
+     * @param nomfitxer nombre dle fichero
+     * @return devuelve una lini con el premio que nos ha tocado
+     * @throws IOException 
      */
     public static String darNombre(int nombre, String nomfitxer) throws IOException {
+        final int LINIAREINTEGRO = 13;
         String resultat = "";
         nomfitxer = "p" + nomfitxer;
         if (nombre == 0) {
-            resultat = RetornarLinia(nomfitxer, 13);
+            resultat = RetornarLinia(nomfitxer, LINIAREINTEGRO);
 
         } else {
             resultat = RetornarLinia(nomfitxer, nombre);
