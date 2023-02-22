@@ -42,6 +42,7 @@ public class LoteriaDeNadal {
     static final int PREMIAPROX3 = 9600;
     static final int PREMIAPROX2 = 12500;
     static final int PREMIAPROX1 = 20000;
+    static final int MAXIMBITLLETS = 99999;
     //Definimos las constantes de cuantos premios hay
     static int quantGordo = 1;
     static int quantSegund = 1;
@@ -81,24 +82,17 @@ public class LoteriaDeNadal {
 
     public static void main(String[] args) throws IOException {
 
-        String idioma = EscogerIdioma();
-
-        //Creamos la constante para el numero maximo de billete
-        final int MAXIMBITLLETS = 99999;
-
         //Creamos un string con las opciones del menu
-        String[] menu = {RetornarLinia(idioma, PRIMERAOPCIONMENU), RetornarLinia(idioma, SEGUNDAOPCIONMENU)};
-        //Creamos los integers del premio, numero de cupon, i la opcion seleccionada
-        int numcupon;
-        int menusurtida, premio;
+        String[] loteriaTipo = {"Nuevo sorteo", "Sorteo anterior"};
+        String[] menu = {"Revisar premio de cupón", "Consultar todos los premios"};
         //Creamos la variable para salir del programa
         boolean sortir = false;
-        //Creamos el resultado del sorteo en unsa variable de tipo NumPremiado llamando a la funcion Sorteo()
-        NumPremiado[] numeros_premiados = Sorteo();
+        //Creamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
+        NumPremiado[] numeros_premiados = tipoLoteria(loteriaTipo);
         BubbleSortPremis(numeros_premiados);
         //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
-            sortir = BucleOpciones(menu, numeros_premiados, nuevosorteo);
+            sortir = BucleOpciones(menu, numeros_premiados);
         }
     }
 
@@ -154,7 +148,8 @@ public class LoteriaDeNadal {
         } else if (opcion == 2) {
             nuevosorteo = false;
             try ( RandomAccessFile raf = AbrirRAF("r")) {
-                while (!yearExists) {
+                year = LlegirInt("Introduce el año del sorteo");
+                while (!ComprobarValidezAnyo(year)) {
                     year = LlegirInt("Introduce el año del sorteo");
                 }
                 long posicion = LeerClientesCodigo();
