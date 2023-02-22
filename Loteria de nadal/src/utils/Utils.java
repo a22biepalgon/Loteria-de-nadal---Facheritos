@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -68,6 +69,24 @@ public class Utils {
         }
 
         return result;
+    }
+    public static DataOutputStream AbrirFicheroEscrituraBinario1(String nomFichero, boolean crear, boolean blnAnyadir) {
+        DataOutputStream dos = null;
+        File f = AbrirFichero(nomFichero, crear);
+
+        if (f != null) {
+            // Declarar el writer para poder escribir en el fichero¡
+            FileOutputStream writer;
+            try {
+                writer = new FileOutputStream(f, blnAnyadir);
+                // PrintWriter para poder escribir más comodamente
+                dos = new DataOutputStream(writer);
+            } catch (IOException ex) {
+                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return dos;
     }
     /**
      * Función que inicializa un fichero binario para su escritura
@@ -244,6 +263,7 @@ public class Utils {
     public static void EscribirLinea(PrintWriter pw, String linea) {
         pw.println(linea);
     }
+    
     
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Implementació de LlegirInt()">
@@ -746,4 +766,16 @@ public class Utils {
             }
         }
     }
+    public static int MenuBucle(String[] array_opcions) {
+        int resultat;
+        Scanner scan = new Scanner(System.in);
+
+        for (int i = 0; i < array_opcions.length; i++) {
+            System.out.println(i + 1 + ") " + array_opcions[i]);
+        }
+        resultat = LlegirInt(scan, "Opción seleccionada: ", 1, array_opcions.length);
+
+        return resultat;
+    }
 }
+
