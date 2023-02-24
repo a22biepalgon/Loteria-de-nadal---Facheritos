@@ -81,10 +81,10 @@ public class LoteriaDeNadal {
     static int nompremi = 0;
 
     public static void main(String[] args) throws IOException {
-
+        String idioma = EscogerIdioma();
         //Creamos un string con las opciones del menu
         String[] loteriaTipo = {"Nuevo sorteo", "Sorteo anterior"};
-        String[] menu = {"Revisar premio de cupón", "Consultar todos los premios"};
+        String[] menu = {RetornarLinia(idioma, PRIMERAOPCIONMENU), RetornarLinia(idioma, SEGUNDAOPCIONMENU)};
         //Creamos la variable para salir del programa
         boolean sortir = false;
         //Creamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
@@ -92,15 +92,17 @@ public class LoteriaDeNadal {
         BubbleSortPremis(numeros_premiados);
         //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
-            sortir = BucleOpciones(menu, numeros_premiados);
+            sortir = BucleOpciones(menu, numeros_premiados,nuevosorteo, idioma);
         }
     }
 
-    public static boolean BucleOpciones(String[] menu, NumPremiado[] premiados, boolean nuevosorteo) throws IOException {
+    
+
+    public static boolean BucleOpciones(String[] menu, NumPremiado[] premiados, boolean nuevosorteo, String idioma) throws IOException {
 
         boolean sortir = false;
         int menusurtida, numcupon, premio, year;
-        System.out.println("Qué deseas consultar:");
+        System.out.println(RetornarLinia(idioma, TERCERALINIA));
         menusurtida = Menu(menu);
 
         //Hacemos lo que pide dependiendo de la entrada del usuario
@@ -108,19 +110,19 @@ public class LoteriaDeNadal {
             //Comprovamos un numero
             case 1:
                 //Leemos el numero del cupon
-                numcupon = LlegirInt(scan, "Introduce tu número: ", 0, MAXIMBITLLETS);
+                numcupon = LlegirInt(scan, RetornarLinia(idioma, CUARTALINIA), 0, MAXIMBITLLETS);
                 //Comprovamos cuanto ha ganado
                 premio = ComprobarPremio(numcupon, premiados);
                 //Imprimimos el resultado
-                String nomDelPremi = darNombre(nompremi);
+                String nomDelPremi = darNombre(nompremi,idioma);
                 nompremi = 0;
-                System.out.println(verde + "Has ganado " + nomDelPremi + " con una cantidad de " + premio / 10 + "€ al décimo" + reset);
+                System.out.println(verde + RetornarLinia(idioma, QUINTALINIA) + nomDelPremi + RetornarLinia(idioma, SEXTALINIA) + premio / 10 + RetornarLinia(idioma, SEPTIMALINIA) + reset);
                 break;
             //Mostramos los premios y su numero correspondiente
             case 2:
-                System.out.println(verde + "\nLoteria de Navidad" + reset);
+                System.out.println(verde + RetornarLinia(idioma, OCTAVALINIA) + reset);
                 System.out.println(celeste + "****************" + reset);
-                MostrarPremios(premiados, "Numero", "Premio");
+                MostrarPremios(premiados, RetornarLinia(idioma, NOVENALINIA), RetornarLinia(idioma, DECIMALINIA));
                 break;
             //Salimos del programa
             case 3:
@@ -129,14 +131,15 @@ public class LoteriaDeNadal {
                     year = LlegirInt("Introduce el año de este sorteo: ");
                     ComprobarValidezAnyo(year);
                 }
-                System.out.println(verde + "MUCHAS GRACIAS POR PARTICIPAR" + reset);
-                
+                System.out.println(verde + RetornarLinia(idioma, ONCEAVALINIA) + reset);
+
                 break;
         }
         return sortir;
     }
 
-    public static NumPremiado[] tipoLoteria(String[] tipos) {
+    public static NumPremiado[] tipoLoteria(String[] tipos) throws FileNotFoundException, IOException {
+        
         int year = 0;
         boolean yearExists = false;
         NumPremiado[] arrayPremios = new NumPremiado[QUANTITATPREMIS];
@@ -147,37 +150,32 @@ public class LoteriaDeNadal {
             nuevosorteo = true;
         } else if (opcion == 2) {
             nuevosorteo = false;
-            try ( RandomAccessFile raf = AbrirRAF("r")) {
-                year = LlegirInt("Introduce el año del sorteo");
-                while (!ComprobarValidezAnyo(year)) {
+           year = LlegirInt("Introduce el año del sorteo");
+            while (!ComprobarValidezAnyo(year)) {
                     year = LlegirInt("Introduce el año del sorteo");
                 }
-                long posicion = LeerClientesCodigo();
-                raf.seek(posicion);
-                arrayPremios = ExtraerDatos(year);
-                EscribirDatosCliente1(cli);
-                CerrarRAF(raf);
-            } catch (IOException e) {
-                System.out.println("BOOM!");
-            }
+            long posicion = BuscarPosicionIndice(year);
+            arrayPremios = ExtraerDatos(posicion);
+            
         }
         return arrayPremios;
     }
-    public static RandomAccessFile BuscarAnyo(long posicion) {
-        RandomAccessFile raf = AbrirRAF("r");
+
+    public static RandomAccessFile BuscarAnyo(long posicion) throws FileNotFoundException {
+        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_LOTERIAS_BIN,"r");
         try {
             raf.seek(posicion);
         } catch (IOException ex) {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return raf;   
+        return raf;
     }
 
     public static boolean ComprobarValidezAnyo(int anyo) {
         DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
         boolean valido = true;
         indice index = LeerIndice(dis);
-        while (index!=null) {
+        while (index != null) {
             if (index.year == anyo) {
                 valido = false;
             }
@@ -187,7 +185,20 @@ public class LoteriaDeNadal {
         return valido;
 
     }
-    
+
+    public static long BuscarPosicionIndice(int anyo) {
+        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
+        long posicion = -1;
+        indice index = LeerIndice(dis);
+        while (index != null) {
+            if (index.year == anyo) {
+                posicion = index.pos;
+            }
+            LeerIndice(dis);
+        }
+        CerrarFicheroBinario(dis);
+        return posicion;
+    }
 
 // <editor-fold defaultstate="collapsed" desc="Escoger Idioma">    
     /**
@@ -647,30 +658,28 @@ public class LoteriaDeNadal {
     }
 
     // </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="Guardar Datos">
-    // <editor-fold defaultstate="collapsed" desc="GuardarPremios"> 
-    public static RandomAccessFile AbrirRAF(String mode) {
-        RandomAccessFile raf = null;
-        try {
-            raf = new RandomAccessFile(NOM_FTX_LOTERIAS_BIN, mode);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return raf;
-    }
+// <editor-fold defaultstate="collapsed" desc="GuardarPremios"> 
+   
     public static void GuardarDatos(NumPremiado[] premios, int codigo) throws FileNotFoundException, IOException {
         DataOutputStream dos = AbrirFicheroEscrituraBinario1(NOM_FTX_LOTERIASINDEX_BIN, true, true);
         indice index = new indice();
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_LOTERIAS_BIN, "rw");
         index.year = codigo;
-        index.pos = raf.getFilePointer()+1;
+        index.pos = raf.getFilePointer();
         EscribirIndices(true, index);
         for (int i = 0; i < premios.length; i++) {
             raf.writeInt(premios[i].numero);
             raf.writeInt(premios[i].premio);
         }
         CerrarFicheroBinario(dos);
+        raf.close();
     }
+
+    /**
+     * Escribir nuevo índice en fichero de índices
+     * @param blnAnyadir 
+     * @param index parámetro del código añadido y su posición
+     */
     public static void EscribirIndices(boolean blnAnyadir, indice index) {
         // Creamos el enlace con el fichero en el disco
         DataOutputStream dos = AbrirFicheroEscrituraBinario(NOM_FTX_LOTERIASINDEX_BIN, true, blnAnyadir);
@@ -681,7 +690,8 @@ public class LoteriaDeNadal {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public static indice LeerIndice (DataInputStream dis) {
+
+    public static indice LeerIndice(DataInputStream dis) {
         indice index = new indice();
         try {
             index.year = dis.readInt();
@@ -691,8 +701,10 @@ public class LoteriaDeNadal {
         }
         return index;
     }
-    public static NumPremiado[] ExtraerDatos(RandomAccessFile raf) {
+
+    public static NumPremiado[] ExtraerDatos(long posicion) throws IOException {
         NumPremiado[] premios = new NumPremiado[QUANTITATPREMIS];
+        RandomAccessFile raf = BuscarAnyo(posicion);
         try {
             for (int i = 0; i < QUANTITATPREMIS; i++) {
                 premios[i].numero = raf.readInt();
@@ -703,8 +715,6 @@ public class LoteriaDeNadal {
         }
         return premios;
     }
-    
-    
 
 }
 //</editor-fold>    
@@ -713,12 +723,13 @@ public class LoteriaDeNadal {
  * Clase de números premiados
  */
 class NumPremiado {
+
     int numero;
     int premio;
 }
+
 class indice {
+
     int year;
     long pos;
 }
-
-
