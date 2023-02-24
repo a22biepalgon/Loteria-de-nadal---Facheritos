@@ -50,6 +50,7 @@ public class LoteriaDeNadal {
     static int quantCuart = 2;
     static int quantQuint = 8;
     static int quantPremis = quantGordo + quantSegund + quantTercer + quantCuart + quantQuint;
+    public static int arrayByteLength = 8*QUANTITATPREMIS; 
     //Definición de nombres para los ficheros binarios y de texto
     public static final String NOM_FTX_LOTERIAS_BIN = "./loterias.dat";
     public static final String NOM_FTX_LOTERIASINDEX_BIN = "./loteriasindx.dat";
@@ -126,7 +127,10 @@ public class LoteriaDeNadal {
             case 3:
                 sortir = true;
                 if (nuevosorteo) {
-                    year = LlegirInt("Introduce el año de este sorteo: ");
+                    year = IntroducirAnyo(); 
+                    while (!ComprobarValidezAnyo(year)) {
+                        year = IntroducirAnyo();
+                    }
                     ComprobarValidezAnyo(year);
                     GuardarDatos(premiados, year);
                 }
@@ -150,10 +154,10 @@ public class LoteriaDeNadal {
                 noArray = true;
             } else if (opcion == 2) {
                 nuevosorteo = false;
-                year = LlegirInt("Introduce el año del sorteo: ");
-                while (!ComprobarValidezAnyo(year)) {
-                    year = LlegirInt("Introduce el año del sorteo: ");
-                }
+                year = IntroducirAnyo(); 
+                    while (ComprobarValidezAnyo(year)) {
+                        year = IntroducirAnyo();
+                    }
                 long posicion = BuscarPosicionIndice(year);
                 if (posicion != -1) {
                     noArray = true;
@@ -164,6 +168,11 @@ public class LoteriaDeNadal {
         return arrayPremios;
     }
 
+    public static int IntroducirAnyo() {
+        int year = LlegirInt("Introduce el año del sorteo: ");
+        return year;
+    }
+
     public static boolean ComprobarValidezAnyo(int anyo) {
         DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
         boolean valido = true;
@@ -171,7 +180,7 @@ public class LoteriaDeNadal {
         if (index == null) {
             valido = true;
         } else {
-            while (valido||index!=null) {
+            while (valido && index != null) {
                 if (index.year == anyo) {
                     valido = false;
                 }
