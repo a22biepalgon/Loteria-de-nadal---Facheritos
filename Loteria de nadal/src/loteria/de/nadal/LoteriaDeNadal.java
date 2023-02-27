@@ -3,6 +3,7 @@ package loteria.de.nadal;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,10 +51,12 @@ public class LoteriaDeNadal {
     static int quantCuart = 2;
     static int quantQuint = 8;
     static int quantPremis = quantGordo + quantSegund + quantTercer + quantCuart + quantQuint;
-    public static int arrayByteLength = 8*QUANTITATPREMIS; 
+    public static int arrayByteLength = 8 * QUANTITATPREMIS;
     //Definición de nombres para los ficheros binarios y de texto
     public static final String NOM_FTX_LOTERIAS_BIN = "./loterias.dat";
     public static final String NOM_FTX_LOTERIASINDEX_BIN = "./loteriasindx.dat";
+    public static final String NOM_FTX_COLLAS = "./colles.dat";
+    public static final String NOM_FTX_USR = ".usuariscolles.dat";
     public static boolean nuevosorteo = false;
     //Definimos los colores
     static String rojo = "\033[31m";
@@ -64,15 +67,16 @@ public class LoteriaDeNadal {
     //Numeros de linias del fichero por frase
     static int PRIMERAOPCIONMENU = 1;
     static int SEGUNDAOPCIONMENU = 2;
-    static int TERCERALINIA = 3;
-    static int CUARTALINIA = 4;
-    static int QUINTALINIA = 5;
-    static int SEXTALINIA = 6;
-    static int SEPTIMALINIA = 7;
-    static int OCTAVALINIA = 8;
-    static int NOVENALINIA = 9;
-    static int DECIMALINIA = 10;
-    static int ONCEAVALINIA = 11;
+    static int CREARCOLLA = 3;
+    static int TERCERALINIA = 4;
+    static int CUARTALINIA = 5;
+    static int QUINTALINIA = 6;
+    static int SEXTALINIA = 7;
+    static int SEPTIMALINIA = 8;
+    static int OCTAVALINIA = 9;
+    static int NOVENALINIA = 10;
+    static int DECIMALINIA = 11;
+    static int ONCEAVALINIA = 12;
 
     /**
      * Variable per al nom del premi 1 = Primer premi 2 = Segon premi 3 = Tercer
@@ -85,7 +89,7 @@ public class LoteriaDeNadal {
         String idioma = EscogerIdioma();
         //Creamos un string con las opciones del menu
         String[] loteriaTipo = {"Nuevo sorteo", "Sorteo anterior"};
-        String[] menu = {RetornarLinia(idioma, PRIMERAOPCIONMENU), RetornarLinia(idioma, SEGUNDAOPCIONMENU)};
+        String[] menu = {RetornarLinia(idioma, PRIMERAOPCIONMENU), RetornarLinia(idioma, SEGUNDAOPCIONMENU), RetornarLinia(idioma, CREARCOLLA)};
         //Creamos la variable para salir del programa
         boolean sortir = false;
         //Creamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
@@ -125,9 +129,12 @@ public class LoteriaDeNadal {
                 break;
             //Salimos del programa
             case 3:
+                CrearColla(idioma, premiados);
+                break;
+            case 4:
                 sortir = true;
                 if (nuevosorteo) {
-                    year = IntroducirAnyo(); 
+                    year = IntroducirAnyo();
                     while (!ComprobarValidezAnyo(year)) {
                         year = IntroducirAnyo();
                     }
@@ -137,6 +144,7 @@ public class LoteriaDeNadal {
                 System.out.println(verde + RetornarLinia(idioma, ONCEAVALINIA) + reset);
 
                 break;
+
         }
         return sortir;
     }
@@ -154,10 +162,10 @@ public class LoteriaDeNadal {
                 noArray = true;
             } else if (opcion == 2) {
                 nuevosorteo = false;
-                year = IntroducirAnyo(); 
-                    while (ComprobarValidezAnyo(year)) {
-                        year = IntroducirAnyo();
-                    }
+                year = IntroducirAnyo();
+                while (ComprobarValidezAnyo(year)) {
+                    year = IntroducirAnyo();
+                }
                 long posicion = BuscarPosicionIndice(year);
                 if (posicion != -1) {
                     noArray = true;
@@ -200,7 +208,7 @@ public class LoteriaDeNadal {
             if (index.year == anyo) {
                 posicion = index.pos;
             }
-            LeerIndice(dis);
+            index = LeerIndice(dis);
         }
         CerrarFicheroBinario(dis);
         return posicion;
@@ -723,9 +731,194 @@ public class LoteriaDeNadal {
         raf.close();
         return premios;
     }
+//</editor-fold>    
+
+    public static void CrearColla(String idioma, NumPremiado[] premiados) throws FileNotFoundException {
+        Colla colla = DadesColla(idioma);
+        System.out.print("Vols afegir usuari/s? ");
+        int quant = 0;
+        boolean sortir = Utils.YesOrNo();
+        while ( sortir == false) {
+            quant += AfegirUsuari(colla, premiados);
+            System.out.print("Vols seguir afegint usuaris? ");
+            sortir = Utils.YesOrNo();
+        }
+        colla.quantMembres = quant;
+        colla.premis = SumarPremis(colla.index_usuaris);
+        //Escriure Colla
+    }
+
+    public static int SumarPremis(int index) throws FileNotFoundException {
+        int resultat = 0;
+        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
+        Usuari usr = LlegirUsuari(raf);
+        while (usr != null) {
+            if (usr.numcolla == index) {
+                resultat += usr.diners;
+            }
+            usr = LlegirUsuari(raf);
+        }
+        CerrarRAF(raf);
+        return resultat;
+    }
+
+    public static Usuari LlegirUsuari(RandomAccessFile raf) {
+        Usuari usr = new Usuari();
+        try {
+            usr.numcolla = raf.readInt();
+            usr.nom = raf.readUTF();
+            usr.diners = raf.readInt();
+            usr.numero = raf.readInt();
+            usr.premi = raf.readInt();
+        } catch (IOException ex) {
+            usr = null;
+        }
+        return usr;
+    }
+
+    public static int AfegirUsuari(Colla colla, NumPremiado[] premiados) {
+        Usuari usr = DemanarDadesUsuari(colla, premiados);
+        EscriureUsuari(usr);
+        return 1;
+    }
+
+    public static void EscriureUsuari(Usuari usr) {
+        try {
+            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "rw");
+            raf.writeInt(usr.numcolla);
+            raf.writeUTF(usr.nom);
+            raf.writeInt(usr.diners);
+            raf.writeInt(usr.numero);
+            raf.writeInt(usr.premi);
+
+            CerrarRAF(raf);
+        } catch (IOException ex) {
+            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void CerrarRAF(RandomAccessFile raf) {
+        try {
+            raf.close();
+        } catch (IOException ex) {
+            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static Usuari DemanarDadesUsuari(Colla colla, NumPremiado[] premiados) {
+        Usuari usr = new Usuari();
+        usr.numcolla = colla.index_usuaris;
+        usr.nom = Utils.LlegirString("Digues el nom del usuari");
+        usr.diners = ComprobarDiners();
+        //Sorteig?
+        usr.numero = LlegirInt(scan, "Di el numero que compra el usuario: ", 0, MAXIMBITLLETS);
+        usr.premi = ComprobarPremio(usr.numero, premiados);
+        return usr;
+    }
+
+    public static int ComprobarDiners() {
+        int resultat = Utils.LlegirInt("Digues l'import de compra (5€ - 60€): ");
+        while (resultat % 5 != 0 && resultat >= 5 && resultat <= 60) {
+            resultat = Utils.LlegirInt("Digues l'import de compra (5€ - 60€): ");
+        }
+        return resultat;
+    }
+
+    public static Colla DadesColla(String idioma) {
+        Colla colla = new Colla();
+        try {
+            colla.nom = Utils.LlegirString("DIgues el nom de la colla: ");
+            while (!ComprobarNombre(colla.nom)) {
+                colla.nom = Utils.LlegirString("Aquesta colla ja exitseix, digues un nou nom: ");
+            }
+            colla.any = LlegirInt("Digues el any del sorteig: ");
+            colla.diners = 0;
+            colla.premis = 0;
+            colla.quantMembres = 0;
+            colla.index_usuaris = ComprovarIndex(colla);
+            //Demanr index_usuaris?
+        } catch (IOException ex) {
+            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return colla;
+
+    }
+
+    public static int ComprovarIndex(Colla colla) {
+        int resultat = Utils.LlegirInt("Digues un nou numero: ");
+        try {
+            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS, "r");
+            Colla colla2 = LlegirColla(raf);
+            boolean valid = false;
+            while (!valid) {
+                resultat = Utils.LlegirInt("Digues un nou numero: ");
+                valid = true;
+
+                while (colla2 != null) {
+                    if (colla2.index_usuaris == resultat) {
+                        valid = false;
+                    }
+                    colla2 = LlegirColla(raf);
+                }
+
+            }
+        } catch (FileNotFoundException ex) {
+            resultat = 0;
+        }
+        return resultat;
+    }
+
+    public static Colla LlegirColla(RandomAccessFile raf) {
+        Colla colla = new Colla();
+        try {
+            colla.nom = raf.readUTF();
+            colla.any = raf.readInt();
+            colla.diners = raf.readInt();
+            colla.premis = raf.readInt();
+            colla.quantMembres = raf.readInt();
+            colla.index_usuaris = raf.readInt();
+        } catch (IOException ex) {
+            colla = null;
+        }
+        return colla;
+    }
+
+    public static boolean ComprobarNombre(String nom) throws FileNotFoundException, IOException {
+        boolean resultat = true;
+        File f = new File(NOM_FTX_COLLAS);
+        if (!f.exists()) {
+            f.createNewFile();
+        }
+        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS, "r");
+        Colla colla = LlegirColla(raf);
+        while (colla != null) {
+            if (colla.nom.equals(nom)) {
+                resultat = false;
+            }
+        }
+        return resultat;
+    }
 
 }
-//</editor-fold>    
+
+class Usuari {
+
+    int numcolla;
+    String nom;
+    int numero;
+    int diners;
+    int premi;
+}
+
+class Colla {
+
+    String nom;
+    int quantMembres;
+    int any;
+    int diners;
+    int premis;
+    int index_usuaris;
+}
 
 /**
  * Clase de números premiados
