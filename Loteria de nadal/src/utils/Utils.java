@@ -561,14 +561,74 @@ public class Utils {
         return result;
     }
 // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Implementació de LlegirLong()">
 
-    public static boolean YesOrNo() {
+     public static long LlegirLong() {
+       long result;
+
+        if (scan == null) {
+            scan = new Scanner(System.in);
+        }
+        result = LlegirLong(scan);
+
+        return result;
+    }
+
+
+    public static long LlegirLong(String missatge) {
+        long result;
+
+        if (scan == null) {
+            scan = new Scanner(System.in);
+        }
+        result = LlegirLong(scan, missatge);
+
+        return result;
+    }
+
+
+    public static long LlegirLong(Scanner scan) {
+        return LlegirLong(scan, null);
+    }
+
+    public static long LlegirLong(Scanner scan, String missatge, int valorMin, int valorMax) {
+        long result = 0;
+        do {
+            result = LlegirLong(scan, missatge);
+        } while (result < valorMin || result > valorMax);
+
+        return result;
+    }
+
+    public static long LlegirLong(Scanner scan, String missatge) {
+        boolean dadesCorrectes;
+        long result = 0;
+        do {
+            if (missatge != null) {
+                System.out.print(missatge);
+            }
+            dadesCorrectes = scan.hasNextLong();
+            if (dadesCorrectes) {
+                result = scan.nextLong();
+            } else if (scan.hasNext()) {
+                scan.nextLine();
+            }
+        } while (!dadesCorrectes);
+
+        return result;
+    }
+// </editor-fold>
+
+    public static boolean YesOrNo(String message) {
         Scanner scan = new Scanner(System.in);
         boolean resultat = true;
-
+        System.out.print(message);
         String paraula = scan.nextLine();
+        System.out.println("");
         while (!paraula.equalsIgnoreCase("y") && !paraula.equalsIgnoreCase("n")) {
+            System.out.print(message);
             paraula = scan.nextLine();
+            System.out.println("");
         }
         if (paraula.equalsIgnoreCase("n")) {
             resultat = false;
