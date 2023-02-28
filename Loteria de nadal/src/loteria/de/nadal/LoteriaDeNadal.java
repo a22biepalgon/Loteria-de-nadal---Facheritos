@@ -901,7 +901,7 @@ public class LoteriaDeNadal {
 
     public static float CalcularPremioPersonal(int total, int aportacio) {
         float resultat = 0;
-        float aportat = aportacio / 20;
+        float aportat = aportacio / 20f;
         resultat = total * aportat;
         return resultat;
     }
