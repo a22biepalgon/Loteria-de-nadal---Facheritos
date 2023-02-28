@@ -93,7 +93,6 @@ public class LoteriaDeNadal {
         boolean sortir = false;
         //Creamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
         NumPremiado[] numeros_premiados = tipoLoteria(loteriaTipo);
-        BubbleSortPremis(numeros_premiados);
         //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
             sortir = BucleOpciones(menu, numeros_premiados, idioma);
@@ -140,35 +139,50 @@ public class LoteriaDeNadal {
         return sortir;
     }
 
+    public static boolean ComprobarIndexVacio() {
+        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
+        indice index = LeerIndex(dis);
+        boolean noArray = false;
+        if (index == null) {
+            noArray = true;
+        }
+        return noArray;
+    }
+
     public static NumPremiado[] tipoLoteria(String[] tipos) throws FileNotFoundException, IOException {
         int year = 0;
-        boolean noArray = false;
+        boolean noArray = true;
         NumPremiado[] arrayPremios = new NumPremiado[QUANTITATPREMIS];
-        while (!noArray) {
+
+        while (noArray) {
             System.out.println("Qué deseas consultar:");
             int opcion = MenuBucle(tipos);
+            noArray = ComprobarIndexVacio();
             if (opcion == 1) {
+
+                MostrarAnyos(); //Muestra los años guardados
                 arrayPremios = Sorteo();
-                year = IntroducirAnyo();
+                BubbleSortPremis(arrayPremios);
+                year = IntroducirAnyo(); //Añades una nuevo sorteo al fichero, requerido un año no repetido
                 while (!ComprobarValidezAnyo(year)) {
                     year = IntroducirAnyo();
                 }
                 ComprobarValidezAnyo(year);
                 GuardarDatos(arrayPremios, year);
-                noArray = true;
-            } else if (opcion == 2) {
-                MostrarAnyos();
+                noArray = false;
+            } else if (opcion == 2 && !noArray) {
+                MostrarAnyos(); //Muestra los años guardados
                 year = IntroducirAnyo();
                 while (ComprobarValidezAnyo(year)) {
                     year = IntroducirAnyo();
                 }
                 long posicion = BuscarPosicionIndice(year);
                 if (posicion != -1) {
-                    noArray = true;
                     arrayPremios = ExtraerDatos(posicion);
                 }
             }
         }
+
         return arrayPremios;
     }
 
@@ -702,7 +716,8 @@ public class LoteriaDeNadal {
         indice index = new indice();
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_LOTERIAS_BIN, "rw");
         index.year = codigo;
-        index.pos = raf.getFilePointer();
+        index.pos = raf.length();
+        raf.seek(index.pos);
         EscribirIndices(true, index);
         for (int i = 0; i < premios.length; i++) {
             raf.writeInt(premios[i].numero);
@@ -746,8 +761,10 @@ public class LoteriaDeNadal {
         raf.seek(posicion);
         try {
             for (int i = 0; i < QUANTITATPREMIS; i++) {
-                premios[i].numero = raf.readInt();
-                premios[i].premio = raf.readInt();
+                NumPremiado premio = new NumPremiado();
+                premio.numero = raf.readInt();
+                premio.premio = raf.readInt();
+                premios[i] = premio;
             }
         } catch (IOException ex) {
             premios = null;
