@@ -57,7 +57,6 @@ public class LoteriaDeNadal {
     public static final String NOM_FTX_LOTERIASINDEX_BIN = "./loteriasindx.dat";
     public static final String NOM_FTX_COLLAS = "./colles.dat";
     public static final String NOM_FTX_USR = ".usuariscolles.dat";
-    public static boolean nuevosorteo = false;
     //Definimos los colores
     static String rojo = "\033[31m";
     static String verde = "\033[32m";
@@ -97,11 +96,11 @@ public class LoteriaDeNadal {
         BubbleSortPremis(numeros_premiados);
         //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
-            sortir = BucleOpciones(menu, numeros_premiados, nuevosorteo, idioma);
+            sortir = BucleOpciones(menu, numeros_premiados, idioma);
         }
     }
 
-    public static boolean BucleOpciones(String[] menu, NumPremiado[] premiados, boolean nuevosorteo, String idioma) throws IOException {
+    public static boolean BucleOpciones(String[] menu, NumPremiado[] premiados, String idioma) throws IOException {
 
         boolean sortir = false;
         int menusurtida, numcupon, premio, year;
@@ -133,14 +132,6 @@ public class LoteriaDeNadal {
                 break;
             case 4:
                 sortir = true;
-                if (nuevosorteo) {
-                    year = IntroducirAnyo();
-                    while (!ComprobarValidezAnyo(year)) {
-                        year = IntroducirAnyo();
-                    }
-                    ComprobarValidezAnyo(year);
-                    GuardarDatos(premiados, year);
-                }
                 System.out.println(verde + RetornarLinia(idioma, ONCEAVALINIA) + reset);
 
                 break;
@@ -158,10 +149,15 @@ public class LoteriaDeNadal {
             int opcion = MenuBucle(tipos);
             if (opcion == 1) {
                 arrayPremios = Sorteo();
-                nuevosorteo = true;
+                year = IntroducirAnyo();
+                while (!ComprobarValidezAnyo(year)) {
+                    year = IntroducirAnyo();
+                }
+                ComprobarValidezAnyo(year);
+                GuardarDatos(arrayPremios, year);
                 noArray = true;
             } else if (opcion == 2) {
-                nuevosorteo = false;
+                MostrarAnyos();
                 year = IntroducirAnyo();
                 while (ComprobarValidezAnyo(year)) {
                     year = IntroducirAnyo();
@@ -179,6 +175,34 @@ public class LoteriaDeNadal {
     public static int IntroducirAnyo() {
         int year = LlegirInt("Introduce el año del sorteo: ");
         return year;
+    }
+
+    public static void MostrarAnyos() {
+        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
+        indice index = LeerIndex(dis);
+        while (index != null && index.year > 0) {
+            MostrarAnyo(index);
+            index = LeerIndex(dis);
+        }
+
+        CerrarFicheroBinario(dis);
+
+    }
+
+    public static indice LeerIndex(DataInputStream dis) {
+        indice id = new indice();
+        try {
+            id.year = dis.readInt();
+            id.pos = dis.readLong();
+
+        } catch (IOException ex) {
+            id = null;
+        }
+        return id;
+    }
+
+    public static void MostrarAnyo(indice index) {
+        System.out.println("Año: " + index.year);
     }
 
     public static boolean ComprobarValidezAnyo(int anyo) {
@@ -738,7 +762,7 @@ public class LoteriaDeNadal {
         System.out.print("Vols afegir usuari/s? ");
         int quant = 0;
         boolean sortir = Utils.YesOrNo();
-        while ( sortir == false) {
+        while (sortir == false) {
             quant += AfegirUsuari(colla, premiados);
             System.out.print("Vols seguir afegint usuaris? ");
             sortir = Utils.YesOrNo();
