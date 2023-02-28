@@ -563,10 +563,11 @@ public class Utils {
 // </editor-fold>
 
     public static boolean YesOrNo() {
+        Scanner scan = new Scanner(System.in);
         boolean resultat = true;
 
         String paraula = scan.nextLine();
-        while (!paraula.equalsIgnoreCase("y") || !paraula.equalsIgnoreCase("n")) {
+        while (!paraula.equalsIgnoreCase("y") && !paraula.equalsIgnoreCase("n")) {
             paraula = scan.nextLine();
         }
         if (paraula.equalsIgnoreCase("n")) {
