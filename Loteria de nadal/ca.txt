@@ -1,6 +1,6 @@
 Revisar premi de cupó
 Consultar tots els premis
-Crear colla
+Operacions amb colles
 Que desitges consultar: 
 Introdueix el teu número: 
 Has guanyat 

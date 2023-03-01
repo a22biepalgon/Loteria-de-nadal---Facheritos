@@ -1,6 +1,6 @@
 Revisar premio de cupón
 Consultar todos los premios
-Crear una colla
+Operaciones con Peñas
 Que deseas consultar: 
 Introduce tu numero: 
 Has ganado 
