@@ -62,6 +62,7 @@ public class LoteriaDeNadal {
     public static final String NOM_FTX_COLLAS = "./colles.dat";
     public static final String NOM_FTX_USR = "./usuariscolles.dat";
     public static long LONG2BYTE = 16;
+    public static long LLARGADAUSUARI = 34;
     //Definimos los colores
     static String rojo = "\033[31m";
     static String verde = "\033[32m";
@@ -850,6 +851,7 @@ public class LoteriaDeNadal {
             usr.numero = raf.readInt();
             usr.premiPersonal = raf.readFloat();
             usr.premiTotal = raf.readInt();
+            usr.premiRepartit = raf.readFloat();
         } catch (IOException ex) {
             usr = null;
         }
@@ -862,6 +864,21 @@ public class LoteriaDeNadal {
         return 1;
     }
 
+    public static void EscriureUsuariPosicioActual(Usuari usr, RandomAccessFile raf) {
+        try {
+            raf.writeLong(usr.numcolla);
+            raf.writeUTF(usr.nom);
+            raf.writeInt(usr.diners);
+            raf.writeInt(usr.numero);
+            raf.writeFloat(usr.premiPersonal);
+            raf.writeInt(usr.premiTotal);
+            raf.writeFloat(usr.premiRepartit);
+
+            CerrarRAF(raf);
+        } catch (IOException ex) {
+            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public static void EscriureUsuari(Usuari usr) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "rw");
@@ -872,6 +889,7 @@ public class LoteriaDeNadal {
             raf.writeInt(usr.numero);
             raf.writeFloat(usr.premiPersonal);
             raf.writeInt(usr.premiTotal);
+            raf.writeFloat(usr.premiRepartit);
 
             CerrarRAF(raf);
         } catch (IOException ex) {
@@ -896,6 +914,7 @@ public class LoteriaDeNadal {
         usr.numero = LlegirInt(scan, "Di el numero que compra el usuario: ", 0, MAXIMBITLLETS);
         usr.premiTotal = ComprobarPremio(usr.numero, premiados) / 10;
         usr.premiPersonal = CalcularPremioPersonal(usr.premiTotal, usr.diners);
+        usr.premiRepartit = 0;
         return usr;
     }
 
@@ -1042,13 +1061,34 @@ public class LoteriaDeNadal {
             }
             CerrarRAF(raf);
             Colla colla = ActualitzarColla(posicion);
+            ActualitzarUsuari(colla);
             ImprimirTaula(colla);
         } catch (IOException ex) {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static void ImprimirTaula( Colla colla) throws IOException {
+    public static void ActualitzarUsuari(Colla colla) throws FileNotFoundException, IOException {
+        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "rw");
+        Usuari usr = LlegirUsuari(raf);
+        int contador = 0;
+        while (usr != null) {
+            contador++;
+            if (usr.numcolla == colla.numcolla) {
+                usr.premiRepartit = CalcularPremiRepartit(colla,usr);
+                raf.seek((contador -1) * LLARGADAUSUARI);
+                EscriureUsuariPosicioActual(usr, raf);
+            }
+            usr = LlegirUsuari(raf);
+        }
+        CerrarRAF(raf);
+    }
+
+    public static float CalcularPremiRepartit(Colla colla, Usuari usr){
+        float divisor = colla.premis/ (float) colla.diners;
+        return usr.diners * divisor;
+    }
+    public static void ImprimirTaula(Colla colla) throws IOException {
         ImprimirCollaCamps();
         ImprimirCollaDades(colla);
         ImprimirUsuarisCamps();
@@ -1083,9 +1123,10 @@ public class LoteriaDeNadal {
         System.out.println("+------------------------------------------------------------------+");
     }
 
-    public static void ImprimirUltimaLinia(){
-                System.out.println("+==================================================================+");
+    public static void ImprimirUltimaLinia() {
+        System.out.println("+==================================================================+");
     }
+
     public static void ImprimirUsuarisCamps() {
         System.out.println("+==================================================================+");
         System.out.print("| ");
@@ -1113,7 +1154,7 @@ public class LoteriaDeNadal {
                     System.out.print(" | ");
                     System.out.printf("%12s", usr.diners);
                     System.out.print(" | ");
-                    System.out.printf("%15s", usr.premiPersonal);
+                    System.out.printf("%15s", usr.premiRepartit);
                     System.out.println("| ");
                 }
                 usr = LlegirUsuari(raf);
@@ -1174,6 +1215,7 @@ class Usuari {
     int diners;
     float premiPersonal;
     int premiTotal;
+    float premiRepartit;
 }
 
 class Colla {
