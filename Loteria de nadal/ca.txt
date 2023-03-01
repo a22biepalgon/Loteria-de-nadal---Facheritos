@@ -6,8 +6,14 @@ Introdueix el teu número:
 Has guanyat 
  amb una quantitat de 
 € al décim
-\nLoteria de Nadal
+Loteria de Nadal
 Número
 Premi
 MOLTES GRÁCIES PER PARTICIPAR
 Veure una colla
+Nou sorteig
+Sorteig anterior
+Opció seleccionada:
+Què voleu consultar: 
+Any: 
+Introdueix el any del sorteig:

@@ -70,6 +70,7 @@ public class LoteriaDeNadal {
     static String reset = "\u001B[0m";
 
     //Numeros de linias del fichero por frase
+    public static String IDIOMA;
     static int PRIMERAOPCIONMENU = 1;
     static int SEGUNDAOPCIONMENU = 2;
     static int TERCERAOPCIOMENU = 3;
@@ -83,6 +84,12 @@ public class LoteriaDeNadal {
     static int LINIANUMERO = 10;
     static int PREMIOTEXTO = 11;
     static int GRACIASXPARTICIPAR = 12;
+    static int NUEVOSORTEO = 14;
+    static int SORTEOANTERIOR = 15;
+    static int OPCIONSELECCIONADA = 16;
+    static int VOLEUCONSULTAR = 17;
+    static int ANY = 18;
+    static int CONSULTAANY = 19;
 
     /**
      * Variable per al nom del premi 1 = Primer premi 2 = Segon premi 3 = Tercer
@@ -92,17 +99,17 @@ public class LoteriaDeNadal {
     static int nompremi = 0;
 
     public static void main(String[] args) throws IOException {
-        String idioma = EscogerIdioma();
+        IDIOMA = EscogerIdioma();
         //Creamos un string con las opciones del menu
-        String[] loteriaTipo = {"Nuevo sorteo", "Sorteo anterior"};
-        String[] menu = {RetornarLinia(idioma, PRIMERAOPCIONMENU), RetornarLinia(idioma, SEGUNDAOPCIONMENU), RetornarLinia(idioma, TERCERAOPCIOMENU), RetornarLinia(idioma, CUARTAOPCIOMENU)};
+        String[] loteriaTipo = {RetornarLinia(IDIOMA, NUEVOSORTEO), RetornarLinia(IDIOMA, SORTEOANTERIOR)};
+        String[] menu = {RetornarLinia(IDIOMA, PRIMERAOPCIONMENU), RetornarLinia(IDIOMA, SEGUNDAOPCIONMENU), RetornarLinia(IDIOMA, TERCERAOPCIOMENU), RetornarLinia(IDIOMA, CUARTAOPCIOMENU)};
         //Creamos la variable para salir del programa
         boolean sortir = false;
         //Creamos el resultado del sorteo en una variable de tipo NumPremiado llamando a la funcion Sorteo()
         NumPremiado[] numeros_premiados = tipoLoteria(loteriaTipo);
         //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
-            sortir = BucleOpciones(menu, numeros_premiados, idioma);
+            sortir = BucleOpciones(menu, numeros_premiados, IDIOMA);
         }
     }
 
@@ -111,7 +118,7 @@ public class LoteriaDeNadal {
         boolean sortir = false;
         int menusurtida, numcupon, premio, year;
         System.out.println(RetornarLinia(idioma, PREGUNTARCONSULTA));
-        menusurtida = Menu(menu);
+        menusurtida = Menu(menu, RetornarLinia(idioma, OPCIONSELECCIONADA));
 
         //Hacemos lo que pide dependiendo de la entrada del usuario
         switch (menusurtida) {
@@ -164,8 +171,8 @@ public class LoteriaDeNadal {
         NumPremiado[] arrayPremios = new NumPremiado[QUANTITATPREMIS];
 
         while (noArray) {
-            System.out.println("Qué deseas consultar:");
-            int opcion = MenuBucle(tipos);
+            System.out.println(RetornarLinia(IDIOMA, VOLEUCONSULTAR));
+            int opcion = MenuBucle(tipos,RetornarLinia(IDIOMA,OPCIONSELECCIONADA));
             noArray = ComprobarIndexVacio();
             if (opcion == 1) {
 
@@ -195,12 +202,12 @@ public class LoteriaDeNadal {
         return arrayPremios;
     }
 
-    public static int IntroducirAnyo() {
-        int year = LlegirInt("Introduce el año del sorteo: ");
+    public static int IntroducirAnyo() throws IOException {
+        int year = LlegirInt(RetornarLinia(IDIOMA, CONSULTAANY));
         return year;
     }
 
-    public static void MostrarAnyos() {
+    public static void MostrarAnyos() throws IOException {
         DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
         indice index = LeerIndex(dis);
         while (index != null && index.year > 0) {
@@ -224,8 +231,8 @@ public class LoteriaDeNadal {
         return id;
     }
 
-    public static void MostrarAnyo(indice index) {
-        System.out.println("Año: " + index.year);
+    public static void MostrarAnyo(indice index) throws IOException {
+        System.out.println(RetornarLinia(IDIOMA, ANY )+ index.year);
     }
 
     public static boolean ComprobarValidezAnyo(int anyo) {
@@ -268,9 +275,10 @@ public class LoteriaDeNadal {
      * @return devuelve el nombre del fitxero del idioma seleccionado
      */
     public static String EscogerIdioma() {
+        
         String resultat = "";
         String[] opcions_menu = {"Catala", "Castella"};
-        int seleccio = Utils.Menu(opcions_menu);
+        int seleccio = Utils.MenuBucle(opcions_menu,"Opción: ");
         resultat = GestionMenuIdioma(seleccio);
         return resultat;
     }

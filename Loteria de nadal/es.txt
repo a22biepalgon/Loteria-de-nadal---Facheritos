@@ -6,8 +6,14 @@ Introduce tu numero:
 Has ganado 
  con una cantidad de 
 € al décimo
-\nLoteria de Navidad
+Loteria de Navidad
 Numero
 Premio
 MUCHAS GRACIAS POR PARTICIPAR
 Ver una colla
+Nuevo sorteo
+Sorteo anterior
+Opción seleccionada: 
+Qué desea consultar: 
+Año:
+Introduce el año del sorteo: 

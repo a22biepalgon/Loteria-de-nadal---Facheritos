@@ -653,7 +653,7 @@ public class Utils {
      * del menu
      * @return Retorna un numero enter depenent de la entrada seleccionada
      */
-    public static int Menu(String[] array_opcions) {
+    public static int Menu(String[] array_opcions, String mensaje) {
         int resultat;
         Scanner scan = new Scanner(System.in);
 
@@ -661,7 +661,7 @@ public class Utils {
             System.out.println(i + 1 + ") " + array_opcions[i]);
         }
         System.out.println(array_opcions.length + 1 + ") Salir");
-        resultat = LlegirInt(scan, "Opción seleccionada: ", 1, array_opcions.length + 1);
+        resultat = LlegirInt(scan, mensaje, 1, array_opcions.length + 1);
 
         return resultat;
     }
@@ -900,14 +900,14 @@ public class Utils {
         }
     }
 
-    public static int MenuBucle(String[] array_opcions) {
+    public static int MenuBucle(String[] array_opcions, String mensaje) {
         int resultat;
         Scanner scan = new Scanner(System.in);
 
         for (int i = 0; i < array_opcions.length; i++) {
             System.out.println(i + 1 + ") " + array_opcions[i]);
         }
-        resultat = LlegirInt(scan, "Opción seleccionada: ", 1, array_opcions.length);
+        resultat = LlegirInt(scan, mensaje, 1, array_opcions.length);
 
         return resultat;
     }
