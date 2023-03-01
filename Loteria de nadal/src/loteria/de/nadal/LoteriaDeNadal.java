@@ -879,6 +879,7 @@ public class LoteriaDeNadal {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public static void EscriureUsuari(Usuari usr) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "rw");
@@ -1070,24 +1071,27 @@ public class LoteriaDeNadal {
 
     public static void ActualitzarUsuari(Colla colla) throws FileNotFoundException, IOException {
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "rw");
+        long contador = 0;
+        contador = raf.getFilePointer();
         Usuari usr = LlegirUsuari(raf);
-        int contador = 0;
         while (usr != null) {
-            contador++;
+            
             if (usr.numcolla == colla.numcolla) {
-                usr.premiRepartit = CalcularPremiRepartit(colla,usr);
-                raf.seek((contador -1) * LLARGADAUSUARI);
+                usr.premiRepartit = CalcularPremiRepartit(colla, usr);
+                raf.seek(contador);
                 EscriureUsuariPosicioActual(usr, raf);
             }
+            contador = raf.getFilePointer();
             usr = LlegirUsuari(raf);
         }
         CerrarRAF(raf);
     }
 
-    public static float CalcularPremiRepartit(Colla colla, Usuari usr){
-        float divisor = colla.premis/ (float) colla.diners;
+    public static float CalcularPremiRepartit(Colla colla, Usuari usr) {
+        float divisor = colla.premis / (float) colla.diners;
         return usr.diners * divisor;
     }
+
     public static void ImprimirTaula(Colla colla) throws IOException {
         ImprimirCollaCamps();
         ImprimirCollaDades(colla);
