@@ -788,6 +788,13 @@ public class LoteriaDeNadal {
 //</editor-fold>    
 // <editor-fold defaultstate="collapsed" desc="Creacion Colla">    
 
+    /**
+     * Procediment per a Crear una colla
+     *
+     * @param idioma idioma en el que s'imprimiran els textos
+     * @param premiados sorteig de l'any seleccionat
+     * @throws FileNotFoundException
+     */
     public static void CrearColla(String idioma, NumPremiado[] premiados) throws FileNotFoundException {
         Colla colla = DadesColla(idioma);
         int quant = 0;
@@ -797,11 +804,16 @@ public class LoteriaDeNadal {
             sortir = Utils.YesOrNo("Vols seguir afegint usuaris? ");
         }
         colla.quantMembres = quant;
-        colla.premis = 0;
-        //Escriure Colla
         EscribirColla(colla);
     }
 
+    /**
+     * Procediment per a determinar el numero de colla i la posicio al fitxer
+     * index, també serveix per a Escriure les dades als fitxers colla index i
+     * colla
+     *
+     * @param colla Colla a escriure
+     */
     public static void EscribirColla(Colla colla) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "rw");
@@ -821,6 +833,13 @@ public class LoteriaDeNadal {
 
     }
 
+    /**
+     * Procediment per escriure al fitxer index les dades de la colla que
+     * s'escriura al fitxer collas
+     *
+     * @param id Objecte index amb les dades de la colla seleccionada
+     * @param raf Objecte RandomAccessFile per accedir al fitxer index
+     */
     public static void EscriureIndex(indice2 id, RandomAccessFile raf) {
         try {
             raf.seek(raf.length());
@@ -832,6 +851,13 @@ public class LoteriaDeNadal {
 
     }
 
+    /**
+     * Procediment per a escriure les dades de la colla al fitxer de collas
+     *
+     * @param colla Objecte colla a escriure al fitxer
+     * @param raf Objecte RandomAccessFile per a escriure al fitxer collas
+     * @param codi posicio on s'escriuran les dades
+     */
     public static void EscriureDades(Colla colla, RandomAccessFile raf, long codi) {
         try {
             raf.seek(codi);
@@ -846,6 +872,12 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Funcio que retorna un Usuari que s'ha llegit del fitxer usuaris
+     *
+     * @param raf Objecte RandomAccessFile per accedir al fitxer usuaris
+     * @return Retorna un objecte Usuari que ha llegit del fitxer
+     */
     public static Usuari LlegirUsuari(RandomAccessFile raf) {
         Usuari usr = new Usuari();
         try {
@@ -864,12 +896,27 @@ public class LoteriaDeNadal {
         return usr;
     }
 
+    /**
+     * Funció per a afegir un usuari a una colla
+     *
+     * @param colla Objecte colla on s'afegirá l'usuari
+     * @param premiados Array de NumPremiado[] del sorteig anual actual
+     * @return Retorna un 1, per al contador de usuaris afegits
+     */
     public static int AfegirUsuari(Colla colla, NumPremiado[] premiados) {
         Usuari usr = DemanarDadesUsuari(colla, premiados);
         EscriureUsuari(usr);
         return 1;
     }
 
+    /**
+     * Procediment que serveix per a escriure un usuair al punt que se s'ha
+     * situat el raf abans de cridar la funció
+     *
+     * @param usr Usuari a escriure
+     * @param raf Objecte RandomAccessFile amb un raf.seek() ja fet del fitxer
+     * usuaris
+     */
     public static void EscriureUsuariP(Usuari usr, RandomAccessFile raf) {
         try {
             raf.writeLong(usr.numcolla);
@@ -887,6 +934,11 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Procediment per a escriure un usuari al final del fitxer
+     *
+     * @param usr Usuari a escriure
+     */
     public static void EscriureUsuari(Usuari usr) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "rw");
@@ -907,6 +959,11 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Funció per a tancar el RandomAccessFile
+     *
+     * @param raf Objecte RandomAccessFile a tancar
+     */
     public static void CerrarRAF(RandomAccessFile raf) {
         try {
             raf.close();
@@ -915,6 +972,14 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Funció que demana al client les dades corresponents per a crear un usuari
+     * complet
+     *
+     * @param colla Colla on s'afegeix l'usuari
+     * @param premiados array de NumPremiado[] del sorteig anual actual
+     * @return Retorna un objecte usuari amb les dades que ha donat el client
+     */
     public static Usuari DemanarDadesUsuari(Colla colla, NumPremiado[] premiados) {
         Usuari usr = new Usuari();
         usr.numcolla = colla.numcolla;
@@ -930,24 +995,26 @@ public class LoteriaDeNadal {
         return usr;
     }
 
+    /**
+     * Funció per a comprovar que un nom no existeixi a la colla corresponent
+     *
+     * @param colla Objecte Colla on comprovar el nom
+     * @return Retorna un nom que no existeixi encara
+     */
     public static String ComprobarNom(Colla colla) {
         String resultat = Utils.LlegirString("Digues el nom del usuari: ");
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
             Usuari usr = LlegirUsuari(raf);
             while (usr != null) {
-                if (usr.numcolla == colla.numcolla) {
-                    if (usr.nom.equals(resultat)) {
+                if (usr.numcolla == colla.numcolla && usr.any == colla.any) {
+                    if (usr.nom.equals(resultat) || resultat.length() > 20) {
                         resultat = ComprobarNom(colla);
                     }
                 }
                 usr = LlegirUsuari(raf);
             }
-            for (int i = 0; i < 20; i++) {
-                if (resultat.length() < 20) {
-                    resultat = " " + resultat;
-                }
-            }
+            resultat = OmplirNomAmbEspais(resultat);
             CerrarRAF(raf);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
@@ -955,6 +1022,29 @@ public class LoteriaDeNadal {
         return resultat;
     }
 
+    /**
+     * Funció per omplir un string amb espais fins que el .length sigui 20
+     *
+     * @param resultat String a alterar
+     * @return Retorna el string ocupant 20 espais
+     */
+    public static String OmplirNomAmbEspais(String resultat) {
+        for (int i = 0; i < 20; i++) {
+            if (resultat.length() < 20) {
+                resultat = " " + resultat;
+            }
+        }
+        return resultat;
+    }
+
+    /**
+     * Funció per a calcular el premi personal corresponent a la aportació de
+     * cada usuari
+     *
+     * @param total total guanyat per el seu numero
+     * @param aportacio Aportació de l'usuari en diners
+     * @return Retorna el premiPersonal corresponent
+     */
     public static float CalcularPremioPersonal(int total, int aportacio) {
         float resultat = 0;
         float aportat = aportacio / 20f;
@@ -962,6 +1052,12 @@ public class LoteriaDeNadal {
         return resultat;
     }
 
+    /**
+     * Funció per a comprobar els diners que aporta un usuari, entre 5 i 60, i
+     * múltiple de 5
+     *
+     * @return Retorna els diners que aporta l'usuari
+     */
     public static int ComprobarDiners() {
         int resultat = Utils.LlegirInt("Digues l'import de compra (5€ - 60€): ");
         while (resultat % 5 != 0 || resultat < 5 || resultat > 60) {
@@ -970,6 +1066,12 @@ public class LoteriaDeNadal {
         return resultat;
     }
 
+    /**
+     * Funció per a demanar les dades de una colla a l'hora de crearla
+     *
+     * @param idioma idioma en que imprimir els textos
+     * @return retorna la colla amb les Dades que ha posat l'usuari
+     */
     public static Colla DadesColla(String idioma) {
         Colla colla = new Colla();
         File f = new File(NOM_FTX_USR);
@@ -995,31 +1097,26 @@ public class LoteriaDeNadal {
 
     }
 
+    /**
+     * Funció per a comprobar si el numero de una colla en aquell any existeix
+     *
+     * @return Retorna el numero de la colla correcte
+     */
     public static long ComprobarNumeroColla() {
         long resultat = 0;
         while (resultat == 0) {
             try {
-                System.out.print("Digues el numero de colla:");
-                File f = new File(NOM_FTX_COLLAS_INDEX);
-                if (!f.exists()) {
-                    try {
-                        f.createNewFile();
-                    } catch (IOException ex) {
-                        Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                CrearFitxer(NOM_FTX_COLLAS_INDEX);
+                CrearFitxer(NOM_FTX_COLLAS);
                 RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
+                RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
                 indice2 id = LlegirIndice2(raf);
-                resultat = LlegirInt();
-                while (id != null) {
-                    if (id.codiusuari == resultat) {
-                        resultat = 0;
-                        id = null;
-                    }
-                    id = LlegirIndice2(raf);
-                }
+                resultat = Utils.LlegirInt("Digues el numero de colla:");
+                resultat = ComprobarNumeroAno(id, raf2, resultat, raf);
                 CerrarRAF(raf);
             } catch (FileNotFoundException ex) {
+                Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -1027,6 +1124,50 @@ public class LoteriaDeNadal {
         return resultat;
     }
 
+    /**
+     * Funció per a comprovar el numero de colla i l'any
+     *
+     * @param id Objecte indice on comença la primera colla
+     * @param raf2 Objecte RandomAccessFile del fitxer Collas
+     * @param resultat Resultat actual
+     * @param raf Objecte RandomAccessFile del fitxer d'indexos
+     * @return retorna un codi de colla disponible
+     * @throws IOException
+     */
+    public static long ComprobarNumeroAno(indice2 id, RandomAccessFile raf2, long resultat, RandomAccessFile raf) throws IOException {
+        while (id != null) {
+            raf2.seek(id.pos);
+            Colla colla = LlegirColla(raf2);
+            if (id.codiusuari == resultat && colla.any == year) {
+                resultat = 0;
+                id = null;
+            }
+            id = LlegirIndice2(raf);
+        }
+        return resultat;
+    }
+
+    /**
+     * Procediment per a crear un fitxer si no existeix
+     *
+     * @param nom nom del fitxer a crear
+     */
+    public static void CrearFitxer(String nom) {
+        File f = new File(nom);
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    /**
+     * Funció per a llegir un objecte de tipus indice2 d'un fitxer
+     * @param raf Objecte RandomAccessFile del fitxer del cual llegir l''objecte
+     * @return retorna el objecte indice2
+     */
     public static indice2 LlegirIndice2(RandomAccessFile raf) {
         indice2 id = new indice2();
         try {
@@ -1039,6 +1180,11 @@ public class LoteriaDeNadal {
 
     }
 
+    /**
+     * Funció per a llegir un objecte de tipus indice d'un fitxer
+     * @param raf Objecte RandomAccessFile del fitxer del cual llegir l''objecte
+     * @return retorna el objecte indice
+     */
     public static indice LlegirIndice(RandomAccessFile raf) {
         indice id = new indice();
         try {
@@ -1050,6 +1196,11 @@ public class LoteriaDeNadal {
         return id;
     }
 
+    /**
+     * Funció per a llegir l'objecte colla d'un fitxer
+     * @param raf Objecte RandomAccessFile del fitxer d'on llegir la colla
+     * @return retorna l'objecte colla llegit
+     */
     public static Colla LlegirColla(RandomAccessFile raf) {
         Colla colla = new Colla();
         try {
@@ -1065,12 +1216,15 @@ public class LoteriaDeNadal {
         return colla;
     }
 
-    public static boolean ComprobarNombre(String nom) throws FileNotFoundException, IOException {
+    /**
+     * Funció per a comprovar que el nom de la colla no es repeteixi
+     * @param nom nom a comprovar
+     * @return retorna si el nom ja existeix o no en un boolean
+     * @throws IOException 
+     */
+    public static boolean ComprobarNombre(String nom) throws IOException {
         boolean resultat = true;
-        File f = new File(NOM_FTX_COLLAS);
-        if (!f.exists()) {
-            f.createNewFile();
-        }
+        CrearFitxer(NOM_FTX_COLLAS);
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS, "r");
         Colla colla = LlegirColla(raf);
         while (colla != null) {
@@ -1082,8 +1236,14 @@ public class LoteriaDeNadal {
         return resultat;
     }
 // </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="Ver Colla">    
+// <editor-fold defaultstate="collapsed" desc="Modifiacio Colla">    
 
+    /**
+     * Procediment per a imprimir el submenu de les colles
+     * @param idioma idioma en que imprimir els textos
+     * @param premiados Array de NumPremiado[] del sorteig anual actual
+     * @throws FileNotFoundException 
+     */
     public static void SubmenuColles(String idioma, NumPremiado[] premiados) throws FileNotFoundException {
         String[] opcions_menu = {"Crear colla", "Mostrar una colla", "Mostrar totes les colles", "Afegir usuaris a una colla", "Modificar un usuari", "Esborrar usuaris"};
         int seleccio = Utils.Menu(opcions_menu, "Quina opció vols seleccionar: ");
@@ -1117,17 +1277,18 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Procediment per a esborrar un usuari d'una colla
+     * @param codi codi de la colla on es troba l'usuari
+     * @param nom nom de l'usuari a esborrar
+     */
     public static void EsborrarUsuari(long codi, String nom) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
             RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
             RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "rw");
             indice2 id = LlegirIndice2(raf);
-            for (int i = 0; i < 20; i++) {
-                if (nom.length() < 20) {
-                    nom = " " + nom;
-                }
-            }
+            nom = OmplirNomAmbEspais(nom);
             long posiciocolla = 0;
             Colla colla = null;
             while (id != null) {
@@ -1138,7 +1299,7 @@ public class LoteriaDeNadal {
                         long posicio = raf3.getFilePointer();
                         Usuari usr = LlegirUsuari(raf3);
                         while (usr != null) {
-                            if (usr.nom.equals(nom) && usr.any == colla.any) {
+                            if (usr.nom.equals(nom) && usr.numcolla == colla.numcolla && usr.any == year) {
                                 usr.borrat = true;
                                 raf3.seek(posicio);
                                 EscriureUsuariP(usr, raf3);
@@ -1175,11 +1336,7 @@ public class LoteriaDeNadal {
             RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
             RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "rw");
             indice2 id = LlegirIndice2(raf);
-            for (int i = 0; i < 20; i++) {
-                if (nom.length() < 20) {
-                    nom = " " + nom;
-                }
-            }
+            nom = OmplirNomAmbEspais(nom);
             while (id != null) {
                 if (id.codiusuari == codi) {
                     raf2.seek(id.pos);
@@ -1235,7 +1392,7 @@ public class LoteriaDeNadal {
             RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
             indice2 id = LlegirIndice2(raf);
             Colla colla = null;
-            long posicioColla= 0;
+            long posicioColla = 0;
             while (id != null) {
                 if (id.codiusuari == codi) {
                     raf2.seek(id.pos);
@@ -1386,7 +1543,7 @@ public class LoteriaDeNadal {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
             Usuari usr = LlegirUsuari(raf);
             while (usr != null) {
-                if (usr.numcolla == codi && !usr.borrat) {
+                if (usr.numcolla == codi && !usr.borrat && usr.any == year) {
                     System.out.print("| ");
                     System.out.printf("%20s", usr.nom);
                     System.out.print(" | ");
