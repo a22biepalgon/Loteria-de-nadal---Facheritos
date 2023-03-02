@@ -4,6 +4,11 @@
  */
 package loteria.de.nadal;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,7 +24,7 @@ public class LoteriaDeNadalTest {
 
     public LoteriaDeNadalTest() {
     }
-    static LoteriaDeNadal.NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
+    static NumPremiado[] premiados = LoteriaDeNadal.Sorteo();
 
     @BeforeClass
     public static void setUpClass() {
@@ -32,6 +37,139 @@ public class LoteriaDeNadalTest {
 
     @Before
     public void setUp() {
+    }
+
+    @Test
+    public void testLecturaUsuari() {
+        Usuari usr = null;
+        boolean expResult = true;
+        boolean result = false;
+        File f = new File(LoteriaDeNadal.NOM_FTX_USR);
+        if (f.exists()) {
+
+            try {
+                RandomAccessFile raf = new RandomAccessFile(LoteriaDeNadal.NOM_FTX_USR, "r");
+                usr = LoteriaDeNadal.LlegirUsuari(raf);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(LoteriaDeNadalTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (usr != null) {
+                result = true;
+            }
+        }
+        //Si dona error probablement no exiteixi el fitxer
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testComprobarIdiomaCastella() {
+        final int NUMEROPROVA = 1;
+        System.out.println("Comprobar menu idioma castella");
+        String expResult = "ca.txt";
+        String result = LoteriaDeNadal.GestionMenuIdioma(NUMEROPROVA);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testComprobarIdiomaCatala() {
+        final int NUMEROPROVA = 1;
+        System.out.println("Comprobar menu idioma catala");
+        String expResult = "ca.txt";
+        String result = LoteriaDeNadal.GestionMenuIdioma(NUMEROPROVA);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testComprobarIdiomadefault() {
+        final int NUMEROPROVA = 80;
+        System.out.println("Comprobar menu idioma default");
+        String expResult = "es.txt";
+        String result = LoteriaDeNadal.GestionMenuIdioma(NUMEROPROVA);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testComprobarSorteOrdenado() {
+        boolean result = false;
+        System.out.println("Comprobar Ordenación del sorteo");
+        if (premiados[0].premio == LoteriaDeNadal.GORDO) {
+            if (premiados[1].premio == LoteriaDeNadal.SEGONPREMI) {
+                if (premiados[2].premio == LoteriaDeNadal.TERCERPREMI) {
+                    if (premiados[3].premio == LoteriaDeNadal.QUARTPREMI && premiados[4].premio == LoteriaDeNadal.QUARTPREMI) {
+                        if (premiados[5].premio == LoteriaDeNadal.QUINTOPREMI && premiados[6].premio == LoteriaDeNadal.QUINTOPREMI && premiados[7].premio == LoteriaDeNadal.QUINTOPREMI && premiados[8].premio == LoteriaDeNadal.QUINTOPREMI && premiados[9].premio == LoteriaDeNadal.QUINTOPREMI && premiados[10].premio == LoteriaDeNadal.QUINTOPREMI && premiados[11].premio == LoteriaDeNadal.QUINTOPREMI && premiados[12].premio == LoteriaDeNadal.QUINTOPREMI) {
+                            if (premiados[198].premio == LoteriaDeNadal.PEDREADA) {
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        boolean expResult = true;
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testComprobarCantidadPremios() {
+        System.out.println("Comprobar quantitat de premis");
+        boolean result = false;
+        int[] temp = new int[6];
+
+        for (int i = 0; i < premiados.length; i++) {
+            switch (premiados[i].premio) {
+                case LoteriaDeNadal.GORDO:
+                    temp[0]++;
+                    break;
+                case LoteriaDeNadal.SEGONPREMI:
+                    temp[1]++;
+                    break;
+                case LoteriaDeNadal.TERCERPREMI:
+                    temp[2]++;
+                    break;
+                case LoteriaDeNadal.QUARTPREMI:
+                    temp[3]++;
+                    break;
+                case LoteriaDeNadal.QUINTOPREMI:
+                    temp[4]++;
+                    break;
+                case LoteriaDeNadal.PEDREADA:
+                    temp[5]++;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (temp[0] == LoteriaDeNadal.quantGordo) {
+            if (temp[1] == LoteriaDeNadal.quantSegund) {
+                if (temp[2] == LoteriaDeNadal.quantTercer) {
+                    if (temp[3] == LoteriaDeNadal.quantCuart) {
+                        if (temp[4] == LoteriaDeNadal.quantQuint) {
+                            if (temp[5] == LoteriaDeNadal.QUANTITATPREMIS - LoteriaDeNadal.quantPremis) {
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        boolean expResult = true;
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testComprobarNumeroRepetidos() {
+        System.out.println("");
+        boolean result = true;
+        int[] temp = new int[99999];
+        for (int i = 0; i < premiados.length; i++) {
+            temp[premiados[i].numero]++;
+            if (temp[premiados[i].numero] > 1) {
+                result = false;
+            }
+        }
+        boolean expResult = true;
+        assertEquals(expResult, result);
+
     }
 
     /**
