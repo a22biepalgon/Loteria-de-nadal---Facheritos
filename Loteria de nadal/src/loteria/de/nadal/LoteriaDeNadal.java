@@ -18,7 +18,7 @@ import utils.Utils;
 import static utils.Utils.*;
 
 /**
- * Simulación lotería de Navidad y comprovación de premios
+ * Simulación lotería de Navidad, comprovación de premios, creación de colles
  *
  * @author Facheritos
  */
@@ -1165,6 +1165,7 @@ public class LoteriaDeNadal {
 
     /**
      * Funció per a llegir un objecte de tipus indice2 d'un fitxer
+     *
      * @param raf Objecte RandomAccessFile del fitxer del cual llegir l''objecte
      * @return retorna el objecte indice2
      */
@@ -1182,6 +1183,7 @@ public class LoteriaDeNadal {
 
     /**
      * Funció per a llegir un objecte de tipus indice d'un fitxer
+     *
      * @param raf Objecte RandomAccessFile del fitxer del cual llegir l''objecte
      * @return retorna el objecte indice
      */
@@ -1198,6 +1200,7 @@ public class LoteriaDeNadal {
 
     /**
      * Funció per a llegir l'objecte colla d'un fitxer
+     *
      * @param raf Objecte RandomAccessFile del fitxer d'on llegir la colla
      * @return retorna l'objecte colla llegit
      */
@@ -1218,9 +1221,10 @@ public class LoteriaDeNadal {
 
     /**
      * Funció per a comprovar que el nom de la colla no es repeteixi
+     *
      * @param nom nom a comprovar
      * @return retorna si el nom ja existeix o no en un boolean
-     * @throws IOException 
+     * @throws IOException
      */
     public static boolean ComprobarNombre(String nom) throws IOException {
         boolean resultat = true;
@@ -1240,12 +1244,13 @@ public class LoteriaDeNadal {
 
     /**
      * Procediment per a imprimir el submenu de les colles
+     *
      * @param idioma idioma en que imprimir els textos
      * @param premiados Array de NumPremiado[] del sorteig anual actual
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      */
     public static void SubmenuColles(String idioma, NumPremiado[] premiados) throws FileNotFoundException {
-        String[] opcions_menu = {"Crear colla", "Mostrar una colla", "Mostrar totes les colles", "Afegir usuaris a una colla", "Modificar un usuari", "Esborrar usuaris"};
+        String[] opcions_menu = {"Crear colla", "Mostrar una colla", "Mostrar totes les colles", "Afegir usuaris a una colla", "Modificar un usuari", "Esborrar usuaris", "Recuperar usuari"};
         int seleccio = Utils.Menu(opcions_menu, "Quina opció vols seleccionar: ");
         switch (seleccio) {
             case 1:
@@ -1273,16 +1278,110 @@ public class LoteriaDeNadal {
                 EsborrarUsuari(codiColla4, nomUser2);
                 break;
             case 7:
+                long codiColla5 = Utils.LlegirLong("Digues el codi de la colla on recuperar usuaris: ");
+                MostrarBorrados(codiColla5);
+                String nomUser3 = Utils.LlegirString("Digues el nom de l'usuari a recuperar: ");
+                RecuperarUsuaris(nomUser3);
+                break;
+
+            case 8:
                 break;
         }
     }
 
-    /**
-     * Procediment per a esborrar un usuari d'una colla
-     * @param codi codi de la colla on es troba l'usuari
-     * @param nom nom de l'usuari a esborrar
-     */
+    public static void MostrarBorrados(long codi) {
+        try {
+            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
+            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
+            
+            RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "r");
+            indice2 id = LlegirIndice2(raf);
+            long posiciocolla = 0;
+            Colla colla = null;
+            while (id != null) {
+                if (id.codiusuari == codi) {
+                    raf2.seek(id.pos);
+                    colla = LlegirColla(raf2);
+                    if (colla.any == year) {
+                        long posicio = raf3.getFilePointer();
+                        Usuari usr = LlegirUsuari(raf3);
+                        while (usr!=null) {
+                            if(usr.borrat && usr.numcolla == colla.numcolla && usr.any == year) {
+                                raf3.seek(posicio);
+                                EscriureUsuariP(usr, raf3);
+                            
+                            } else {
+                                posicio = raf3.getFilePointer();
+                                usr = LlegirUsuari(raf3);
+                            }
+                            usr = LlegirUsuari(raf3);
+                        }
+                    }
+                    
+                }
+                id = LlegirIndice2(raf);
+
+                CerrarRAF(raf);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+        /**
+         * Procediment per a esborrar un usuari d'una colla
+         *
+         * @param codi codi de la colla on es troba l'usuari
+         * @param nom nom de l'usuari a esborrar
+         */
     public static void EsborrarUsuari(long codi, String nom) {
+        try {
+            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
+            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
+            RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "rw");
+            indice2 id = LlegirIndice2(raf);
+            nom = OmplirNomAmbEspais(nom);
+            long posiciocolla = 0;
+            Colla colla = null;
+            while (id != null) {
+                if (id.codiusuari == codi) {
+                    raf2.seek(id.pos);
+                    colla = LlegirColla(raf2);
+                    if (colla.any == year) {
+                        long posicio = raf3.getFilePointer();
+                        Usuari usr = LlegirUsuari(raf3);
+                        while (usr != null) {
+                            if (usr.nom.equals(nom) && usr.numcolla == colla.numcolla && usr.any == year) {
+                                usr.borrat = true;
+                                raf3.seek(posicio);
+                                EscriureUsuariP(usr, raf3);
+                                posiciocolla = id.pos;
+                                colla.quantMembres--;
+                                usr = null;
+                                raf.seek(raf.length());
+                            } else {
+                                posicio = raf3.getFilePointer();
+                                usr = LlegirUsuari(raf3);
+                            }
+                        }
+
+                    }
+                }
+                id = LlegirIndice2(raf);
+            }
+            if (colla != null) {
+                EscriureDades(colla, raf2, posiciocolla);
+            }
+            CerrarRAF(raf);
+            CerrarRAF(raf2);
+            CerrarRAF(raf3);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void RecuperarUsuaris(String nom, int codi) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
             RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
