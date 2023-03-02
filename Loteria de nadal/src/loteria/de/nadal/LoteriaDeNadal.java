@@ -1280,41 +1280,45 @@ public class LoteriaDeNadal {
             case 7:
                 long codiColla5 = Utils.LlegirLong("Digues el codi de la colla on recuperar usuaris: ");
                 MostrarBorrados(codiColla5);
-                String nomUser3 = Utils.LlegirString("Digues el nom de l'usuari a recuperar: ");
-                RecuperarUsuaris(nomUser3);
+                String nomUser3 = COmprobarNom(codiColla5);
+                    
+                
+                RecuperarUsuaris(nomUser3, codiColla5);
                 break;
 
             case 8:
                 break;
         }
     }
-
+    public static void EscribirDatosUsr(Usuari u) {
+        System.out.println("Num Colla: " + u.numcolla);
+        System.out.println("Nom: " + u.nom);
+        System.out.println("Any: " + u.any);
+        System.out.println("Borrat: " + u.borrat);
+        System.out.println("---------------------");
+        
+    }
     public static void MostrarBorrados(long codi) {
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
+            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
             RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
             
             RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "r");
             indice2 id = LlegirIndice2(raf);
-            long posiciocolla = 0;
             Colla colla = null;
             while (id != null) {
                 if (id.codiusuari == codi) {
                     raf2.seek(id.pos);
                     colla = LlegirColla(raf2);
                     if (colla.any == year) {
-                        long posicio = raf3.getFilePointer();
                         Usuari usr = LlegirUsuari(raf3);
                         while (usr!=null) {
                             if(usr.borrat && usr.numcolla == colla.numcolla && usr.any == year) {
-                                raf3.seek(posicio);
-                                EscriureUsuariP(usr, raf3);
-                            
-                            } else {
-                                posicio = raf3.getFilePointer();
-                                usr = LlegirUsuari(raf3);
+                              
+                                EscribirDatosUsr(usr);
                             }
                             usr = LlegirUsuari(raf3);
+                            
                         }
                     }
                     
@@ -1322,6 +1326,8 @@ public class LoteriaDeNadal {
                 id = LlegirIndice2(raf);
 
                 CerrarRAF(raf);
+                CerrarRAF(raf2);
+                CerrarRAF(raf3);
             }
         } catch (IOException ex) {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1362,6 +1368,7 @@ public class LoteriaDeNadal {
                                 posicio = raf3.getFilePointer();
                                 usr = LlegirUsuari(raf3);
                             }
+                            
                         }
 
                     }
@@ -1381,11 +1388,11 @@ public class LoteriaDeNadal {
         }
     }
 
-    public static void RecuperarUsuaris(String nom, int codi) {
+    public static void RecuperarUsuaris(String nom, long codi) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
-            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
-            RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "rw");
+            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
+            RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "r");
             indice2 id = LlegirIndice2(raf);
             nom = OmplirNomAmbEspais(nom);
             long posiciocolla = 0;
@@ -1399,11 +1406,11 @@ public class LoteriaDeNadal {
                         Usuari usr = LlegirUsuari(raf3);
                         while (usr != null) {
                             if (usr.nom.equals(nom) && usr.numcolla == colla.numcolla && usr.any == year) {
-                                usr.borrat = true;
+                                usr.borrat = false;
                                 raf3.seek(posicio);
                                 EscriureUsuariP(usr, raf3);
                                 posiciocolla = id.pos;
-                                colla.quantMembres--;
+                                colla.quantMembres++;
                                 usr = null;
                                 raf.seek(raf.length());
                             } else {
