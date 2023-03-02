@@ -90,6 +90,29 @@ public class LoteriaDeNadal {
     static int VOLEUCONSULTAR = 17;
     static int ANY = 18;
     static int CONSULTAANY = 19;
+    static int SEGUIRAFEGINT = 20;
+    static int NUMCOMPRAUSUARIO = 21;
+    static int NOMDELUSUARI = 22;
+    static int IMPORTDECOMPRA = 23;
+    static int NOMDECOLLA = 24;
+    static int NUMDECOLLA = 25;
+    static int CREARCOLLA = 26;
+    static int MOSTRARCOLLA = 27;
+    static int MOSTRARCOLLES = 28;
+    static int AFEGIRUNUSUARI = 29;
+    static int MODIFCARUNUSUARI = 30;
+    static int ESBORRARUNUSUARI = 31;
+    static int RECUPERARUNUSUARI = 32;
+    static int TEXTNOM = 33;
+    static int TEXTNUMERO = 34;
+    static int TEXTDINERS = 35;
+    static int TEXTTOT = 36;
+    static int TEXTPREMIS = 37;
+    static int TEXTCODI = 38;
+    static int TEXTNUMCOLLA = 39;
+    static int TEXTBORRAT = 40;
+    static int TEXTMEMBRES = 41;
+    static int NOCOLLA = 42;
 
     /**
      * Variable per al nom del premi 1 = Primer premi 2 = Segon premi 3 = Tercer
@@ -109,43 +132,43 @@ public class LoteriaDeNadal {
         NumPremiado[] numeros_premiados = tipoLoteria(loteriaTipo);
         //Creamos un bucle para ejecutar el programa hasta que el usuario quiera salir
         while (!sortir) {
-            sortir = BucleOpciones(menu, numeros_premiados, IDIOMA);
+            sortir = BucleOpciones(menu, numeros_premiados);
         }
     }
 
-    public static boolean BucleOpciones(String[] menu, NumPremiado[] premiados, String idioma) throws IOException {
+    public static boolean BucleOpciones(String[] menu, NumPremiado[] premiados) throws IOException {
 
         boolean sortir = false;
         int menusurtida, numcupon, premio, year;
-        System.out.println(RetornarLinia(idioma, PREGUNTARCONSULTA));
-        menusurtida = Menu(menu, RetornarLinia(idioma, OPCIONSELECCIONADA));
+        System.out.println(RetornarLinia(IDIOMA, PREGUNTARCONSULTA));
+        menusurtida = Menu(menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA));
 
         //Hacemos lo que pide dependiendo de la entrada del usuario
         switch (menusurtida) {
             //Comprovamos un numero
             case 1:
                 //Leemos el numero del cupon
-                numcupon = LlegirInt(scan, RetornarLinia(idioma, INTRODUCIRNUMERO), 0, MAXIMBITLLETS);
+                numcupon = LlegirInt(scan, RetornarLinia(IDIOMA, INTRODUCIRNUMERO), 0, MAXIMBITLLETS);
                 //Comprovamos cuanto ha ganado
                 premio = ComprobarPremio(numcupon, premiados);
                 //Imprimimos el resultado
-                String nomDelPremi = darNombre(nompremi, idioma);
+                String nomDelPremi = darNombre(nompremi, IDIOMA);
                 nompremi = 0;
-                System.out.println(verde + RetornarLinia(idioma, HASGANADO) + nomDelPremi + RetornarLinia(idioma, CANTIDADDE) + premio / 10 + RetornarLinia(idioma, EUROSALDECIMO) + reset);
+                System.out.println(verde + RetornarLinia(IDIOMA, HASGANADO) + nomDelPremi + RetornarLinia(IDIOMA, CANTIDADDE) + premio / 10 + RetornarLinia(IDIOMA, EUROSALDECIMO) + reset);
                 break;
             //Mostramos los premios y su numero correspondiente
             case 2:
-                System.out.println(verde + RetornarLinia(idioma, TITULOLOTERIA) + reset);
+                System.out.println(verde + RetornarLinia(IDIOMA, TITULOLOTERIA) + reset);
                 System.out.println(celeste + "****************" + reset);
-                MostrarPremios(premiados, RetornarLinia(idioma, LINIANUMERO), RetornarLinia(idioma, PREMIOTEXTO));
+                MostrarPremios(premiados, RetornarLinia(IDIOMA, LINIANUMERO), RetornarLinia(IDIOMA, PREMIOTEXTO));
                 break;
             //Salimos del programa
             case 3:
-                SubmenuColles(idioma, premiados);
+                SubmenuColles(premiados);
                 break;
             case 4:
                 sortir = true;
-                System.out.println(verde + RetornarLinia(idioma, GRACIASXPARTICIPAR) + reset);
+                System.out.println(verde + RetornarLinia(IDIOMA, GRACIASXPARTICIPAR) + reset);
                 break;
 
         }
@@ -724,6 +747,14 @@ public class LoteriaDeNadal {
 
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="GuardarPremios"> 
+    /**
+     * Procediment per a fuardar les dades de un nou sorteig a un fitxer
+     *
+     * @param premios Sorteig a guardar
+     * @param codigo coid del sorteig (any)
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static void GuardarDatos(NumPremiado[] premios, int codigo) throws FileNotFoundException, IOException {
         DataOutputStream dos = AbrirFicheroEscrituraBinario1(NOM_FTX_LOTERIASINDEX_BIN, true, true);
         indice index = new indice();
@@ -757,6 +788,12 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Funció que llegeix un objecte de tipus Indice
+     *
+     * @param dis Objecte DataInputStream per a llegir el fitxer
+     * @return
+     */
     public static indice LeerIndice(DataInputStream dis) {
         indice index = new indice();
         try {
@@ -768,6 +805,13 @@ public class LoteriaDeNadal {
         return index;
     }
 
+    /**
+     * Funció per a Llegir un sorteig ja creat, en base al codi
+     *
+     * @param posicion posicio on comença el sorteig
+     * @return Retorna un array de NumPremiado[] del sorteig buscat
+     * @throws IOException
+     */
     public static NumPremiado[] ExtraerDatos(long posicion) throws IOException {
         NumPremiado[] premios = new NumPremiado[QUANTITATPREMIS];
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_LOTERIAS_BIN, "r");
@@ -791,17 +835,16 @@ public class LoteriaDeNadal {
     /**
      * Procediment per a Crear una colla
      *
-     * @param idioma idioma en el que s'imprimiran els textos
      * @param premiados sorteig de l'any seleccionat
      * @throws FileNotFoundException
      */
-    public static void CrearColla(String idioma, NumPremiado[] premiados) throws FileNotFoundException {
-        Colla colla = DadesColla(idioma);
+    public static void CrearColla(NumPremiado[] premiados) throws FileNotFoundException, IOException {
+        Colla colla = DadesColla();
         int quant = 0;
         boolean sortir = true;
         while (sortir) {
             quant += AfegirUsuari(colla, premiados);
-            sortir = Utils.YesOrNo("Vols seguir afegint usuaris? ");
+            sortir = Utils.YesOrNo(RetornarLinia(IDIOMA, SEGUIRAFEGINT));
         }
         colla.quantMembres = quant;
         EscribirColla(colla);
@@ -903,7 +946,7 @@ public class LoteriaDeNadal {
      * @param premiados Array de NumPremiado[] del sorteig anual actual
      * @return Retorna un 1, per al contador de usuaris afegits
      */
-    public static int AfegirUsuari(Colla colla, NumPremiado[] premiados) {
+    public static int AfegirUsuari(Colla colla, NumPremiado[] premiados) throws IOException {
         Usuari usr = DemanarDadesUsuari(colla, premiados);
         EscriureUsuari(usr);
         return 1;
@@ -980,13 +1023,13 @@ public class LoteriaDeNadal {
      * @param premiados array de NumPremiado[] del sorteig anual actual
      * @return Retorna un objecte usuari amb les dades que ha donat el client
      */
-    public static Usuari DemanarDadesUsuari(Colla colla, NumPremiado[] premiados) {
+    public static Usuari DemanarDadesUsuari(Colla colla, NumPremiado[] premiados) throws IOException {
         Usuari usr = new Usuari();
         usr.numcolla = colla.numcolla;
         usr.nom = ComprobarNom(colla);
         usr.diners = ComprobarDiners();
         //Sorteig?
-        usr.numero = LlegirInt(scan, "Di el numero que compra el usuario: ", 0, MAXIMBITLLETS);
+        usr.numero = LlegirInt(scan, RetornarLinia(IDIOMA, NUMCOMPRAUSUARIO), 0, MAXIMBITLLETS);
         usr.premiTotal = ComprobarPremio(usr.numero, premiados) / 10;
         usr.premiPersonal = CalcularPremioPersonal(usr.premiTotal, usr.diners);
         usr.premiRepartit = 0;
@@ -1001,8 +1044,8 @@ public class LoteriaDeNadal {
      * @param colla Objecte Colla on comprovar el nom
      * @return Retorna un nom que no existeixi encara
      */
-    public static String ComprobarNom(Colla colla) {
-        String resultat = Utils.LlegirString("Digues el nom del usuari: ");
+    public static String ComprobarNom(Colla colla) throws IOException {
+        String resultat = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
             Usuari usr = LlegirUsuari(raf);
@@ -1059,9 +1102,18 @@ public class LoteriaDeNadal {
      * @return Retorna els diners que aporta l'usuari
      */
     public static int ComprobarDiners() {
-        int resultat = Utils.LlegirInt("Digues l'import de compra (5€ - 60€): ");
+        int resultat = 0;
+        try {
+            resultat = Utils.LlegirInt(RetornarLinia(IDIOMA, IMPORTDECOMPRA));
+        } catch (IOException ex) {
+            Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+        }
         while (resultat % 5 != 0 || resultat < 5 || resultat > 60) {
-            resultat = Utils.LlegirInt("Digues l'import de compra (5€ - 60€): ");
+            try {
+                resultat = Utils.LlegirInt(RetornarLinia(IDIOMA, IMPORTDECOMPRA));
+            } catch (IOException ex) {
+                Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return resultat;
     }
@@ -1069,10 +1121,9 @@ public class LoteriaDeNadal {
     /**
      * Funció per a demanar les dades de una colla a l'hora de crearla
      *
-     * @param idioma idioma en que imprimir els textos
      * @return retorna la colla amb les Dades que ha posat l'usuari
      */
-    public static Colla DadesColla(String idioma) {
+    public static Colla DadesColla() {
         Colla colla = new Colla();
         File f = new File(NOM_FTX_USR);
         try {
@@ -1080,7 +1131,7 @@ public class LoteriaDeNadal {
                 f.createNewFile();
             }
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
-            colla.nom = Utils.LlegirString("Digues el nom de la colla: ");
+            colla.nom = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDECOLLA));
             colla.any = year;
             colla.premis = 0;
             colla.diners = 0;
@@ -1111,7 +1162,7 @@ public class LoteriaDeNadal {
                 RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
                 RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
                 indice2 id = LlegirIndice2(raf);
-                resultat = Utils.LlegirInt("Digues el numero de colla:");
+                resultat = Utils.LlegirInt(RetornarLinia(IDIOMA, NUMDECOLLA));
                 resultat = ComprobarNumeroAno(id, raf2, resultat, raf);
                 CerrarRAF(raf);
             } catch (FileNotFoundException ex) {
@@ -1245,64 +1296,63 @@ public class LoteriaDeNadal {
     /**
      * Procediment per a imprimir el submenu de les colles
      *
-     * @param idioma idioma en que imprimir els textos
      * @param premiados Array de NumPremiado[] del sorteig anual actual
      * @throws FileNotFoundException
      */
-    public static void SubmenuColles(String idioma, NumPremiado[] premiados) throws FileNotFoundException {
-        String[] opcions_menu = {"Crear colla", "Mostrar una colla", "Mostrar totes les colles", "Afegir usuaris a una colla", "Modificar un usuari", "Esborrar usuaris", "Recuperar usuari"};
-        int seleccio = Utils.Menu(opcions_menu, "Quina opció vols seleccionar: ");
+    public static void SubmenuColles(NumPremiado[] premiados) throws FileNotFoundException, IOException {
+        String[] opcions_menu = {RetornarLinia(IDIOMA, CREARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLES), RetornarLinia(IDIOMA, AFEGIRUNUSUARI), RetornarLinia(IDIOMA, MODIFCARUNUSUARI), RetornarLinia(IDIOMA, ESBORRARUNUSUARI), RetornarLinia(IDIOMA, RECUPERARUNUSUARI)};
+        int seleccio = Utils.Menu(opcions_menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA));
         switch (seleccio) {
             case 1:
-                CrearColla(idioma, premiados);
+                CrearColla(premiados);
                 break;
             case 2:
-                long codiColla = Utils.LlegirLong("Digues el codi de colla a imprimir: ");
+                long codiColla = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
                 MostrarColla(codiColla);
                 break;
             case 3:
                 MostrarTotesLesColles();
                 break;
             case 4:
-                long codiColla2 = Utils.LlegirLong("Digues el codi de la colla on afegir usuaris: ");
+                long codiColla2 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
                 AfegirUsuaris(codiColla2, premiados);
                 break;
             case 5:
-                long codiColla3 = Utils.LlegirLong("Digues el codi de la colla on es troba l'usuari a modificar: ");
-                String nomUser = Utils.LlegirString("Digues el nom de l'usuari a modificar: ");
+                long codiColla3 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
+                String nomUser = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
                 ModificarUsuaris(codiColla3, premiados, nomUser);
                 break;
             case 6:
-                long codiColla4 = Utils.LlegirLong("Digues el codi de la colla on esborrar usuaris: ");
-                String nomUser2 = Utils.LlegirString("Digues el nom de l'usuari a esborrar: ");
+                long codiColla4 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
+                String nomUser2 = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
                 EsborrarUsuari(codiColla4, nomUser2);
                 break;
             case 7:
-                long codiColla5 = Utils.LlegirLong("Digues el codi de la colla on recuperar usuaris: ");
+                /*long codiColla5 = Utils.LlegirLong("Digues el codi de colla: ");
                 MostrarBorrados(codiColla5);
                 String nomUser3 = COmprobarNom(codiColla5);
-                    
-                
-                RecuperarUsuaris(nomUser3, codiColla5);
+                RecuperarUsuaris(nomUser3, codiColla5);*/
                 break;
 
             case 8:
                 break;
         }
     }
-    public static void EscribirDatosUsr(Usuari u) {
-        System.out.println("Num Colla: " + u.numcolla);
-        System.out.println("Nom: " + u.nom);
-        System.out.println("Any: " + u.any);
-        System.out.println("Borrat: " + u.borrat);
+
+    public static void EscribirDatosUsr(Usuari u) throws IOException {
+        System.out.println(RetornarLinia(IDIOMA, TEXTNUMCOLLA) + ": " + u.numcolla);
+        System.out.println(RetornarLinia(IDIOMA, TEXTNOM) + ": " + u.nom);
+        System.out.println(RetornarLinia(IDIOMA, ANY) + ": " + u.any);
+        System.out.println(RetornarLinia(IDIOMA, TEXTBORRAT) + ": " + u.borrat);
         System.out.println("---------------------");
-        
+
     }
+
     public static void MostrarBorrados(long codi) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
             RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
-            
+
             RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "r");
             indice2 id = LlegirIndice2(raf);
             Colla colla = null;
@@ -1312,16 +1362,16 @@ public class LoteriaDeNadal {
                     colla = LlegirColla(raf2);
                     if (colla.any == year) {
                         Usuari usr = LlegirUsuari(raf3);
-                        while (usr!=null) {
-                            if(usr.borrat && usr.numcolla == colla.numcolla && usr.any == year) {
-                              
+                        while (usr != null) {
+                            if (usr.borrat && usr.numcolla == colla.numcolla && usr.any == year) {
+
                                 EscribirDatosUsr(usr);
                             }
                             usr = LlegirUsuari(raf3);
-                            
+
                         }
                     }
-                    
+
                 }
                 id = LlegirIndice2(raf);
 
@@ -1333,12 +1383,13 @@ public class LoteriaDeNadal {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        /**
-         * Procediment per a esborrar un usuari d'una colla
-         *
-         * @param codi codi de la colla on es troba l'usuari
-         * @param nom nom de l'usuari a esborrar
-         */
+
+    /**
+     * Procediment per a esborrar un usuari d'una colla
+     *
+     * @param codi codi de la colla on es troba l'usuari
+     * @param nom nom de l'usuari a esborrar
+     */
     public static void EsborrarUsuari(long codi, String nom) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
@@ -1354,22 +1405,7 @@ public class LoteriaDeNadal {
                     colla = LlegirColla(raf2);
                     if (colla.any == year) {
                         long posicio = raf3.getFilePointer();
-                        Usuari usr = LlegirUsuari(raf3);
-                        while (usr != null) {
-                            if (usr.nom.equals(nom) && usr.numcolla == colla.numcolla && usr.any == year) {
-                                usr.borrat = true;
-                                raf3.seek(posicio);
-                                EscriureUsuariP(usr, raf3);
-                                posiciocolla = id.pos;
-                                colla.quantMembres--;
-                                usr = null;
-                                raf.seek(raf.length());
-                            } else {
-                                posicio = raf3.getFilePointer();
-                                usr = LlegirUsuari(raf3);
-                            }
-                            
-                        }
+                        posiciocolla = EsborrarUsuariEspecific(raf3, nom, colla, posicio, posiciocolla, id, raf);
 
                     }
                 }
@@ -1386,6 +1422,40 @@ public class LoteriaDeNadal {
         } catch (IOException ex) {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Funció per a esborrar un usuari específic
+     *
+     * @param raf3 Objecte RandomAccessFile del fitxer de usuaris
+     * @param nom nom del usuari a esborrar
+     * @param colla Objecte colla de on es troba l'usuari a esborrar
+     * @param posicio long amb la posicio on es troba l'usuari que es comença a
+     * llegir
+     * @param posiciocolla oisicio on es troba la colla de l'usuari
+     * @param id Objecte Indice2 de la colla
+     * @param raf Objecte RandomAccessFile del fitxer d'indexos
+     * @return retorna la poscio on comença la colla que s'ha modifcat
+     * @throws IOException
+     */
+    public static long EsborrarUsuariEspecific(RandomAccessFile raf3, String nom, Colla colla, long posicio, long posiciocolla, indice2 id, RandomAccessFile raf) throws IOException {
+        Usuari usr = LlegirUsuari(raf3);
+        while (usr != null) {
+            if (usr.nom.equals(nom) && usr.numcolla == colla.numcolla && usr.any == year) {
+                usr.borrat = true;
+                raf3.seek(posicio);
+                EscriureUsuariP(usr, raf3);
+                posiciocolla = id.pos;
+                colla.quantMembres--;
+                usr = null;
+                raf.seek(raf.length());
+            } else {
+                posicio = raf3.getFilePointer();
+                usr = LlegirUsuari(raf3);
+            }
+
+        }
+        return posiciocolla;
     }
 
     public static void RecuperarUsuaris(String nom, long codi) {
@@ -1436,6 +1506,13 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Procediment per a modificar un usuari especific
+     *
+     * @param codi codi de la colla on es troba l'usuari a modifcar
+     * @param premiados Array de NumPremiado[] amb el sorteig actual
+     * @param nom nom de l'usuari a modificar
+     */
     public static void ModificarUsuaris(long codi, NumPremiado[] premiados, String nom) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
@@ -1443,45 +1520,7 @@ public class LoteriaDeNadal {
             RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "rw");
             indice2 id = LlegirIndice2(raf);
             nom = OmplirNomAmbEspais(nom);
-            while (id != null) {
-                if (id.codiusuari == codi) {
-                    raf2.seek(id.pos);
-                    Colla colla = LlegirColla(raf2);
-                    if (colla.any == year) {
-                        long posicio = raf3.getFilePointer();
-                        Usuari usr = LlegirUsuari(raf3);
-                        while (usr != null) {
-                            if (usr.nom.equals(nom) && usr.any == colla.any) {
-                                String[] opcions_menu = {"Nom", "Numero", "Diners", "Tot"};
-                                int seleccio = Utils.MenuBucle(opcions_menu, "Modificar de l'usuari? ");
-                                switch (seleccio) {
-                                    case 1:
-                                        usr.nom = ComprobarNom(colla);
-                                        break;
-                                    case 2:
-                                        usr.numero = LlegirInt(scan, "Di el numero que compra el usuario: ", 0, MAXIMBITLLETS);
-                                        break;
-                                    case 3:
-                                        usr.diners = ComprobarDiners();
-                                        break;
-                                    case 4:
-                                        usr = DemanarDadesUsuari(colla, premiados);
-                                        break;
-                                }
-                                raf3.seek(posicio);
-                                EscriureUsuariP(usr, raf3);
-                                usr = null;
-                            } else {
-                                posicio = raf3.getFilePointer();
-                                usr = LlegirUsuari(raf3);
-                            }
-                        }
-
-                    }
-                }
-                id = LlegirIndice2(raf);
-
-            }
+            IterarId(id, codi, raf2, raf3, nom, premiados, raf);
             CerrarRAF(raf);
             CerrarRAF(raf2);
             CerrarRAF(raf3);
@@ -1492,6 +1531,95 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Procediment per a iterar per diferents Indexos de colles
+     *
+     * @param id Objecte Indice2 per a iterar amb ell
+     * @param codi codi de la colla a troabr
+     * @param raf2 Objecte RandomAccessFile del fitxer de collas
+     * @param raf3 Objecte RandomAccessFile del fitxer de usuaris
+     * @param nom nom de l'usuari a trobar
+     * @param premiados Array de NumPremiado[] amb el sorteig actual
+     * @param raf Objecte RandomAccessFile del fitxer de index collas
+     * @throws IOException
+     */
+    public static void IterarId(indice2 id, long codi, RandomAccessFile raf2, RandomAccessFile raf3, String nom, NumPremiado[] premiados, RandomAccessFile raf) throws IOException {
+        while (id != null) {
+            if (id.codiusuari == codi) {
+                raf2.seek(id.pos);
+                Colla colla = LlegirColla(raf2);
+                if (colla.any == year) {
+                    long posicio = raf3.getFilePointer();
+                    Usuari usr = LlegirUsuari(raf3);
+                    IteracioUsuari(usr, nom, colla, premiados, raf3, posicio);
+                }
+            }
+            id = LlegirIndice2(raf);
+
+        }
+    }
+
+    /**
+     * Procediment per a iterar usuaris fins trobar el que s'ha de esborrar
+     *
+     * @param usr usuari a iterar
+     * @param nom nom de l'usuari a trobar
+     * @param colla Objecte Colla on buscar l'usuari
+     * @param premiados Array de NumPremiado[] amb el sorteig actual
+     * @param raf3 Objecte RandomAccessFile del fitxer de usuaris
+     * @param posicio posicio on comença l'usuari que s'ha llegit
+     * @throws IOException
+     */
+    public static void IteracioUsuari(Usuari usr, String nom, Colla colla, NumPremiado[] premiados, RandomAccessFile raf3, long posicio) throws IOException {
+        while (usr != null) {
+            if (usr.nom.equals(nom) && usr.any == colla.any) {
+                String[] opcions_menu = {RetornarLinia(IDIOMA, TEXTNOM), RetornarLinia(IDIOMA, TEXTNUMERO), RetornarLinia(IDIOMA, TEXTDINERS), RetornarLinia(IDIOMA, TEXTTOT)};
+                int seleccio = Utils.MenuBucle(opcions_menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA));
+                usr = ExecutarMenuModificacio(seleccio, usr, colla, premiados);
+                raf3.seek(posicio);
+                EscriureUsuariP(usr, raf3);
+                usr = null;
+            } else {
+                posicio = raf3.getFilePointer();
+                usr = LlegirUsuari(raf3);
+            }
+        }
+    }
+
+    /**
+     * Funció que executa la selecció del menu i retorna el usuari modifcat
+     *
+     * @param seleccio seleccio feta del menu
+     * @param usr Usuari a modificar
+     * @param colla Colla de l0usuari a modificar
+     * @param premiados Array de NumPremiado[] amb el sorteig actual
+     * @return Retorna el usuari modificat
+     * @throws IOException
+     */
+    public static Usuari ExecutarMenuModificacio(int seleccio, Usuari usr, Colla colla, NumPremiado[] premiados) throws IOException {
+        switch (seleccio) {
+            case 1:
+                usr.nom = ComprobarNom(colla);
+                break;
+            case 2:
+                usr.numero = LlegirInt(scan, RetornarLinia(IDIOMA, NUMCOMPRAUSUARIO), 0, MAXIMBITLLETS);
+                break;
+            case 3:
+                usr.diners = ComprobarDiners();
+                break;
+            case 4:
+                usr = DemanarDadesUsuari(colla, premiados);
+                break;
+        }
+        return usr;
+    }
+
+    /**
+     * Procediment per a afegir un usuari a una colla
+     *
+     * @param codi Codi de la colla a on afegir l'usuari
+     * @param premiados Array de NumPremiado[] amb el sorteig actual
+     */
     public static void AfegirUsuaris(long codi, NumPremiado[] premiados) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
@@ -1522,6 +1650,9 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Procediment per mostarr totes les colles de l'any actual
+     */
     public static void MostrarTotesLesColles() {
         File f = new File(NOM_FTX_COLLAS_INDEX);
         if (f.exists()) {
@@ -1531,13 +1662,10 @@ public class LoteriaDeNadal {
                 while (id != null) {
                     Colla colla = ActualitzarColla(id.pos);
                     if (colla.any == year) {
-                        System.out.println("Codi:" + id.codiusuari);
+                        System.out.println(RetornarLinia(IDIOMA, TEXTCODI) + ":" + id.codiusuari);
                         ActualitzarUsuari(colla);
                         ImprimirTaula(colla);
-                        System.out.println("");
-                        System.out.println("");
-                        System.out.println("");
-                        System.out.println("");
+                        Imprimir4Linies();
                     }
                     id = LlegirIndice2(raf);
 
@@ -1548,30 +1676,61 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Procediment per a imprimir un espai de 4 linies
+     */
+    public static void Imprimir4Linies() {
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+    }
+
+    /**
+     * Procediment per a mostrar una colla específica de aquest any
+     *
+     * @param numero colla a imprimir
+     */
     public static void MostrarColla(long numero) {
         File f = new File(NOM_FTX_COLLAS_INDEX);
         if (f.exists()) {
             try {
                 RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
+                RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
                 indice2 id = LlegirIndice2(raf);
-                long posicion = 0;
+                long posicion = -1;
                 while (id != null) {
                     if (id.codiusuari == numero) {
-                        posicion = id.pos;
+                        raf2.seek(id.pos);
+                        Colla colla = LlegirColla(raf2);
+                        if (colla.any == year) {
+                            posicion = id.pos;
+                        }
                     }
                     id = LlegirIndice2(raf);
 
                 }
                 CerrarRAF(raf);
-                Colla colla = ActualitzarColla(posicion);
-                ActualitzarUsuari(colla);
-                ImprimirTaula(colla);
+                if (posicion != -1) {
+                    Colla colla = ActualitzarColla(posicion);
+                    ActualitzarUsuari(colla);
+                    ImprimirTaula(colla);
+                } else {
+                    System.out.println(RetornarLinia(IDIOMA, NOCOLLA));
+                }
             } catch (IOException ex) {
                 Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
+    /**
+     * Procediment per a actualitzar un usuari
+     *
+     * @param colla Objecte colla de on modificar l'usuari
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static void ActualitzarUsuari(Colla colla) throws FileNotFoundException, IOException {
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
         RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_USR, "rw");
@@ -1586,11 +1745,24 @@ public class LoteriaDeNadal {
         CerrarRAF(raf);
     }
 
+    /**
+     * Funció per a calcular el premi repartit
+     *
+     * @param colla Objecte Colla on calcular els premis
+     * @param usr Usuari on actualitzar el premi repartit
+     * @return Retorna el premi repartit
+     */
     public static float CalcularPremiRepartit(Colla colla, Usuari usr) {
         float divisor = colla.premis / (float) colla.diners;
         return usr.diners * divisor;
     }
 
+    /**
+     * Procediment per a imprimir les taules de colles
+     *
+     * @param colla Colla a imprimir
+     * @throws IOException
+     */
     public static void ImprimirTaula(Colla colla) throws IOException {
         ImprimirCollaCamps();
         ImprimirCollaDades(colla);
@@ -1599,6 +1771,11 @@ public class LoteriaDeNadal {
         ImprimirUltimaLinia();
     }
 
+    /**
+     * Procediment per a imprimir les dades de la colla
+     *
+     * @param colla Objecte colla a imprimir
+     */
     public static void ImprimirCollaDades(Colla colla) {
         System.out.print("| ");
         System.out.printf("%20s", colla.any);
@@ -1612,38 +1789,56 @@ public class LoteriaDeNadal {
         System.out.println("+==================================================================+");
     }
 
-    public static void ImprimirCollaCamps() {
+    /**
+     * Procediment per a imprimir els camps de la taula de colla
+     *
+     * @throws IOException
+     */
+    public static void ImprimirCollaCamps() throws IOException {
         System.out.println("+==================================================================+");
         System.out.print("| ");
-        System.out.printf("%20s", " ANY ");
+        System.out.printf("%20s", RetornarLinia(IDIOMA, ANY).toUpperCase());
         System.out.print(" | ");
-        System.out.printf("%9s", " MEMBRES ");
+        System.out.printf("%9s", RetornarLinia(IDIOMA, TEXTMEMBRES).toUpperCase());
         System.out.print(" | ");
-        System.out.printf("%12s", " DINERS ");
+        System.out.printf("%12s", RetornarLinia(IDIOMA, TEXTDINERS).toUpperCase());
         System.out.print(" | ");
-        System.out.printf("%15s", " PREMI ");
+        System.out.printf("%15s", RetornarLinia(IDIOMA, TEXTPREMIS).toUpperCase());
         System.out.println("| ");
         System.out.println("+------------------------------------------------------------------+");
     }
 
+    /**
+     * Procediment per a imprimir la ultima linia
+     */
     public static void ImprimirUltimaLinia() {
         System.out.println("+==================================================================+");
     }
 
-    public static void ImprimirUsuarisCamps() {
+    /**
+     * Procediment per a imprimir els camps de lña taula de usuaris
+     *
+     * @throws IOException
+     */
+    public static void ImprimirUsuarisCamps() throws IOException {
         System.out.println("+==================================================================+");
         System.out.print("| ");
-        System.out.printf("%20s", " NOM ");
+        System.out.printf("%20s", RetornarLinia(IDIOMA, TEXTNOM).toUpperCase());
         System.out.print(" | ");
-        System.out.printf("%9s", " NUMERO ");
+        System.out.printf("%9s", RetornarLinia(IDIOMA, TEXTNUMERO).toUpperCase());
         System.out.print(" | ");
-        System.out.printf("%12s", " DINERS ");
+        System.out.printf("%12s", RetornarLinia(IDIOMA, TEXTDINERS).toUpperCase());
         System.out.print(" | ");
-        System.out.printf("%15s", " PREMI ");
+        System.out.printf("%15s", RetornarLinia(IDIOMA, TEXTPREMIS).toUpperCase());
         System.out.println("| ");
         System.out.println("+------------------------------------------------------------------+");
     }
 
+    /**
+     * Procediment per a imprimir els usuaris de la colla i any seleccionats
+     *
+     * @param codi codi de la colla
+     */
     public static void ImprimirUsuaris(long codi) {
         try {
             RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
@@ -1667,6 +1862,14 @@ public class LoteriaDeNadal {
         }
     }
 
+    /**
+     * Funció per a actualitzar una colla especifica
+     *
+     * @param codi posicio al fitxer de la colla a atualitzar
+     * @return Retorna el Objecte colla actualitzat
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static Colla ActualitzarColla(long codi) throws FileNotFoundException, IOException {
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
         raf.seek(codi);
@@ -1678,12 +1881,19 @@ public class LoteriaDeNadal {
         return colla;
     }
 
+    /**
+     * Funció per a sumar els premis de tots els usuaris a un objecte colla
+     *
+     * @param colla Objecte a on sumar els premis
+     * @return Retorna la suma total dels premis
+     * @throws FileNotFoundException
+     */
     public static float SumarPremis(Colla colla) throws FileNotFoundException {
         float resultat = 0;
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
         Usuari usr = LlegirUsuari(raf);
         while (usr != null) {
-            if (usr.numcolla == colla.numcolla && !usr.borrat) {
+            if (usr.numcolla == colla.numcolla && !usr.borrat && usr.any == year) {
                 resultat += usr.premiPersonal;
             }
             usr = LlegirUsuari(raf);
@@ -1692,12 +1902,19 @@ public class LoteriaDeNadal {
         return resultat;
     }
 
+    /**
+     * Funció per a sumar els diners de tots els usuaris a un objecte colla
+     *
+     * @param colla Objecte cola on sumar els diners
+     * @return Retorna la suma total dels diners
+     * @throws FileNotFoundException
+     */
     public static int SumarDiners(Colla colla) throws FileNotFoundException {
         int resultat = 0;
         RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
         Usuari usr = LlegirUsuari(raf);
         while (usr != null) {
-            if (usr.numcolla == colla.numcolla && !usr.borrat) {
+            if (usr.numcolla == colla.numcolla && !usr.borrat && usr.any == year) {
                 resultat += usr.diners;
             }
             usr = LlegirUsuari(raf);

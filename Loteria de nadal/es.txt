@@ -2,12 +2,12 @@ Revisar premio de cupón
 Consultar todos los premios
 Operaciones con Peñas
 Que deseas consultar: 
-Introduce tu numero: 
+Introduce tú número: 
 Has ganado 
  con una cantidad de 
 € al décimo
-Loteria de Navidad
-Numero
+Lotería de Navidad
+Número
 Premio
 MUCHAS GRACIAS POR PARTICIPAR
 Ver una colla
@@ -15,5 +15,28 @@ Nuevo sorteo
 Sorteo anterior
 Opción seleccionada: 
 Qué desea consultar: 
-Año:
+Año
 Introduce el año del sorteo: 
+¿Quieres seguir añadiendo usuarios? 
+Di el número que compra el usuario: 
+Di el nombre del usuario: 
+Di el importe de la compra (5 € - 60 €): 
+Di el nombre de la peña: 
+Di el código de la peña: 
+Crear peña
+Mostrar una peña
+Mostrar todas las peñas
+Añadir usuarios a una peña
+Modificar un usuario
+Borrar un usuario
+Recuperar un usuario
+Nombre
+Número
+Dinero
+Todo
+Premios
+Código
+Núm peña
+Borrado
+Miembros
+No existe ninguna peña con esas caracteristicas para este año

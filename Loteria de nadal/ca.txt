@@ -3,8 +3,8 @@ Consultar tots els premis
 Operacions amb colles
 Que desitges consultar: 
 Introdueix el teu número: 
-Has guanyat 
- amb una quantitat de 
+Has guanyat
+ amb una quantitat de
 € al décim
 Loteria de Nadal
 Número
@@ -13,7 +13,29 @@ MOLTES GRÁCIES PER PARTICIPAR
 Veure una colla
 Nou sorteig
 Sorteig anterior
-Opció seleccionada:
+Opció seleccionada: 
 Què voleu consultar: 
-Any: 
-Introdueix el any del sorteig:
+Any
+Introdueix l'any del sorteig: 
+Vols seguir afegint usuaris? 
+Digues el número que compra l'usuari: 
+Digues el nom de l'usuari: 
+Digues l'import de compra (5€ - 60€): 
+Digues el nom de la colla: 
+Digues el codi de la colla: 
+Crear colla
+Mostrar una colla
+Mostrar totes les colles
+Afegir usuaris a una colla
+Modificar un usuari
+Esborrar un usuari
+Recuperar un usuari
+Nom
+Número
+Diners
+Tot
+Premis
+Codi
+Núm Colla
+Borrat
+Membres
