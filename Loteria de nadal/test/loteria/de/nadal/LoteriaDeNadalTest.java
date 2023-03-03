@@ -6,6 +6,7 @@ package loteria.de.nadal;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,23 +41,73 @@ public class LoteriaDeNadalTest {
     }
 
     @Test
+    public void testRetornarLinia() {
+        try {
+            System.out.println("Comprobar retornar linia");
+            String expResult = "Consultar tots els premis";
+            String result = LoteriaDeNadal.RetornarLinia("ca.txt", 2);
+            assertEquals(expResult, result);
+        } catch (IOException ex) {
+            Logger.getLogger(LoteriaDeNadalTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Test
+    public void testLecturaIndice2() {
+        System.out.println("Comprobar lectura indice2");
+        indice2 id = null;
+        boolean expResult = true;
+        boolean result = false;
+        try {
+            RandomAccessFile raf = LoteriaDeNadal.CrearFitxer(LoteriaDeNadal.NOM_FTX_COLLAS_INDEX, "r");
+            id = LoteriaDeNadal.LlegirIndice2(raf);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LoteriaDeNadalTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (id != null) {
+            result = true;
+        }
+
+        //Si dona error probablement no exiteixi el fitxer
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testLecturaColla() {
+        System.out.println("Comprobar lectura Colla");
+        Colla colla = null;
+        boolean expResult = true;
+        boolean result = false;
+        try {
+            RandomAccessFile raf = LoteriaDeNadal.CrearFitxer(LoteriaDeNadal.NOM_FTX_COLLAS, "r");
+            colla = LoteriaDeNadal.LlegirColla(raf);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LoteriaDeNadalTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (colla != null) {
+            result = true;
+        }
+
+        //Si dona error probablement no exiteixi el fitxer
+        assertEquals(expResult, result);
+    }
+
+    @Test
     public void testLecturaUsuari() {
+        System.out.println("Comprobar lectura usuari");
         Usuari usr = null;
         boolean expResult = true;
         boolean result = false;
-        File f = new File(LoteriaDeNadal.NOM_FTX_USR);
-        if (f.exists()) {
-
-            try {
-                RandomAccessFile raf = new RandomAccessFile(LoteriaDeNadal.NOM_FTX_USR, "r");
-                usr = LoteriaDeNadal.LlegirUsuari(raf);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(LoteriaDeNadalTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if (usr != null) {
-                result = true;
-            }
+        try {
+            RandomAccessFile raf = LoteriaDeNadal.CrearFitxer(LoteriaDeNadal.NOM_FTX_USR, "r");
+            usr = LoteriaDeNadal.LlegirUsuari(raf);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LoteriaDeNadalTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (usr != null) {
+            result = true;
+        }
+
         //Si dona error probablement no exiteixi el fitxer
         assertEquals(expResult, result);
     }

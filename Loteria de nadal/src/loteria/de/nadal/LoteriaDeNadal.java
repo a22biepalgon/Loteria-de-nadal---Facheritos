@@ -814,7 +814,7 @@ public class LoteriaDeNadal {
     public static void GuardarDatos(NumPremiado[] premios, int codigo) throws FileNotFoundException, IOException {
         DataOutputStream dos = AbrirFicheroEscrituraBinario1(NOM_FTX_LOTERIASINDEX_BIN, true, true);
         indice index = new indice();
-        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_LOTERIAS_BIN, "rw");
+        RandomAccessFile raf = CrearFitxer(NOM_FTX_LOTERIAS_BIN, "rw");
         index.year = codigo;
         index.pos = raf.length();
         raf.seek(index.pos);
@@ -870,8 +870,8 @@ public class LoteriaDeNadal {
      */
     public static NumPremiado[] ExtraerDatos(long posicion) throws IOException {
         NumPremiado[] premios = new NumPremiado[QUANTITATPREMIS];
-        CrearFitxer(NOM_FTX_LOTERIAS_BIN);
-        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_LOTERIAS_BIN, "r");
+
+        RandomAccessFile raf = CrearFitxer(NOM_FTX_LOTERIAS_BIN, "r");
         raf.seek(posicion);
         try {
             for (int i = 0; i < QUANTITATPREMIS; i++) {
@@ -916,10 +916,8 @@ public class LoteriaDeNadal {
      */
     public static void EscribirColla(Colla colla) {
         try {
-            CrearFitxer(NOM_FTX_COLLAS_INDEX);
-            CrearFitxer(NOM_FTX_COLLAS);
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "rw");
-            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "rw");
+            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "rw");
             indice2 id = new indice2();
             id.pos = raf2.length();
             id.codiusuari = colla.numcolla;
@@ -1043,8 +1041,7 @@ public class LoteriaDeNadal {
      */
     public static void EscriureUsuari(Usuari usr) {
         try {
-            CrearFitxer(NOM_FTX_USR);
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "rw");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_USR, "rw");
             raf.seek(raf.length());
             raf.writeLong(usr.numcolla);
             raf.writeUTF(usr.nom);
@@ -1106,9 +1103,9 @@ public class LoteriaDeNadal {
      */
     public static String ComprobarNom(Colla colla) throws IOException {
         String resultat = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
+        resultat = OmplirNomAmbEspais(resultat);
         try {
-            CrearFitxer(NOM_FTX_USR);
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_USR, "r");
             Usuari usr = LlegirUsuari(raf);
             while (usr != null) {
                 if (usr.numcolla == colla.numcolla && usr.any == colla.any) {
@@ -1186,10 +1183,8 @@ public class LoteriaDeNadal {
      */
     public static Colla DadesColla() {
         Colla colla = new Colla();
-        CrearFitxer(NOM_FTX_USR);
         try {
-
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_USR, "r");
             colla.nom = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDECOLLA));
             colla.any = year;
             colla.premis = 0;
@@ -1216,10 +1211,8 @@ public class LoteriaDeNadal {
         long resultat = 0;
         while (resultat == 0) {
             try {
-                CrearFitxer(NOM_FTX_COLLAS_INDEX);
-                CrearFitxer(NOM_FTX_COLLAS);
-                RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
-                RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
+                RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
+                RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "r");
                 indice2 id = LlegirIndice2(raf);
                 resultat = Utils.LlegirInt(RetornarLinia(IDIOMA, NUMDECOLLA));
                 resultat = ComprobarNumeroAno(id, raf2, resultat, raf);
@@ -1262,7 +1255,7 @@ public class LoteriaDeNadal {
      *
      * @param nom nom del fitxer a crear
      */
-    public static void CrearFitxer(String nom) {
+    public static RandomAccessFile CrearFitxer(String nom, String mode) throws FileNotFoundException {
         File f = new File(nom);
         if (!f.exists()) {
             try {
@@ -1271,6 +1264,9 @@ public class LoteriaDeNadal {
                 Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
+        RandomAccessFile raf = new RandomAccessFile(nom, mode);
+        return raf;
     }
 
     /**
@@ -1338,8 +1334,7 @@ public class LoteriaDeNadal {
      */
     public static boolean ComprobarNombre(String nom) throws IOException {
         boolean resultat = true;
-        CrearFitxer(NOM_FTX_COLLAS);
-        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS, "r");
+        RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS, "r");
         Colla colla = LlegirColla(raf);
         while (colla != null) {
             if (colla.nom.equals(nom)) {
@@ -1409,10 +1404,9 @@ public class LoteriaDeNadal {
 
     public static void MostrarBorrados(long codi) {
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
-            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
-
-            RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "r");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
+            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "r");
+            RandomAccessFile raf3 = CrearFitxer(NOM_FTX_USR, "r"); 
             indice2 id = LlegirIndice2(raf);
             Colla colla = null;
             while (id != null) {
@@ -1451,9 +1445,9 @@ public class LoteriaDeNadal {
      */
     public static void EsborrarUsuari(long codi, String nom) {
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
-            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
-            RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "rw");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
+            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "rw");
+            RandomAccessFile raf3 = CrearFitxer(NOM_FTX_USR, "rw");
             indice2 id = LlegirIndice2(raf);
             nom = OmplirNomAmbEspais(nom);
             long posiciocolla = 0;
@@ -1519,9 +1513,9 @@ public class LoteriaDeNadal {
 
     public static void RecuperarUsuaris(String nom, long codi) {
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
-            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
-            RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "r");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
+            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "r");
+            RandomAccessFile raf3 = CrearFitxer(NOM_FTX_USR, "r");
             indice2 id = LlegirIndice2(raf);
             nom = OmplirNomAmbEspais(nom);
             long posiciocolla = 0;
@@ -1574,9 +1568,9 @@ public class LoteriaDeNadal {
      */
     public static void ModificarUsuaris(long codi, NumPremiado[] premiados, String nom) {
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
-            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
-            RandomAccessFile raf3 = new RandomAccessFile(NOM_FTX_USR, "rw");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
+            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "r");
+            RandomAccessFile raf3 = CrearFitxer(NOM_FTX_USR, "rw");
             indice2 id = LlegirIndice2(raf);
             nom = OmplirNomAmbEspais(nom);
             IterarId(id, codi, raf2, raf3, nom, premiados, raf);
@@ -1681,8 +1675,8 @@ public class LoteriaDeNadal {
      */
     public static void AfegirUsuaris(long codi, NumPremiado[] premiados) {
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
-            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
+            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "rw");
             indice2 id = LlegirIndice2(raf);
             Colla colla = null;
             long posicioColla = 0;
@@ -1713,9 +1707,8 @@ public class LoteriaDeNadal {
      * Procediment per mostarr totes les colles de l'any actual
      */
     public static void MostrarTotesLesColles() {
-        CrearFitxer(NOM_FTX_COLLAS_INDEX);
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
             indice2 id = LlegirIndice2(raf);
             while (id != null) {
                 Colla colla = ActualitzarColla(id.pos);
@@ -1749,10 +1742,9 @@ public class LoteriaDeNadal {
      * @param numero colla a imprimir
      */
     public static void MostrarColla(long numero) {
-        CrearFitxer(NOM_FTX_COLLAS_INDEX);
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS_INDEX, "r");
-            RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_COLLAS, "r");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
+            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "r");
             indice2 id = LlegirIndice2(raf);
             long posicion = -1;
             while (id != null) {
@@ -1788,9 +1780,8 @@ public class LoteriaDeNadal {
      * @throws IOException
      */
     public static void ActualitzarUsuari(Colla colla) throws FileNotFoundException, IOException {
-        CrearFitxer(NOM_FTX_USR);
-        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
-        RandomAccessFile raf2 = new RandomAccessFile(NOM_FTX_USR, "rw");
+        RandomAccessFile raf = CrearFitxer(NOM_FTX_USR, "r");
+        RandomAccessFile raf2 = CrearFitxer(NOM_FTX_USR, "rw");
         Usuari usr = LlegirUsuari(raf);
         while (usr != null) {
             if (usr.numcolla == colla.numcolla) {
@@ -1898,7 +1889,7 @@ public class LoteriaDeNadal {
      */
     public static void ImprimirUsuaris(long codi) {
         try {
-            RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
+            RandomAccessFile raf = CrearFitxer(NOM_FTX_USR, "r");
             Usuari usr = LlegirUsuari(raf);
             while (usr != null) {
                 if (usr.numcolla == codi && !usr.borrat && usr.any == year) {
@@ -1928,7 +1919,7 @@ public class LoteriaDeNadal {
      * @throws IOException
      */
     public static Colla ActualitzarColla(long codi) throws FileNotFoundException, IOException {
-        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_COLLAS, "rw");
+        RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS, "rw");
         raf.seek(codi);
         Colla colla = LlegirColla(raf);
         colla.premis = SumarPremis(colla);
@@ -1947,7 +1938,7 @@ public class LoteriaDeNadal {
      */
     public static float SumarPremis(Colla colla) throws FileNotFoundException {
         float resultat = 0;
-        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
+        RandomAccessFile raf = CrearFitxer(NOM_FTX_USR, "r");
         Usuari usr = LlegirUsuari(raf);
         while (usr != null) {
             if (usr.numcolla == colla.numcolla && !usr.borrat && usr.any == year) {
@@ -1968,7 +1959,7 @@ public class LoteriaDeNadal {
      */
     public static int SumarDiners(Colla colla) throws FileNotFoundException {
         int resultat = 0;
-        RandomAccessFile raf = new RandomAccessFile(NOM_FTX_USR, "r");
+        RandomAccessFile raf = CrearFitxer(NOM_FTX_USR, "r");
         Usuari usr = LlegirUsuari(raf);
         while (usr != null) {
             if (usr.numcolla == colla.numcolla && !usr.borrat && usr.any == year) {
