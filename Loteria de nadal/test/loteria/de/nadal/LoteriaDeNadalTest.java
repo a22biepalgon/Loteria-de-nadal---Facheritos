@@ -41,6 +41,15 @@ public class LoteriaDeNadalTest {
     }
 
     @Test
+    public void textComprobarNomPremi() throws IOException {
+        System.out.println("ComporbarNomPremi");
+        int numero = 4;
+        String result = LoteriaDeNadal.darNombre(numero, "ca.txt");
+        String expResult = LoteriaDeNadal.RetornarLinia("p" + "ca.txt", numero);
+        assertEquals(expResult, result);
+    }
+
+    @Test
     public void testRetornarLinia() {
         try {
             System.out.println("Comprobar retornar linia");

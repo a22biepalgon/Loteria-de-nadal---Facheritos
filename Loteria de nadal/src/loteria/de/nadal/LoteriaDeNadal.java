@@ -110,6 +110,7 @@ public class LoteriaDeNadal {
     static int TEXTBORRAT = 40;
     static int TEXTMEMBRES = 41;
     static int NOCOLLA = 42;
+    static int TEXTSURTIR = 43;
 
     /**
      * Variable per al nom del premi 1 = Primer premi 2 = Segon premi 3 = Tercer
@@ -1371,7 +1372,7 @@ public class LoteriaDeNadal {
      */
     public static void SubmenuColles(NumPremiado[] premiados) throws FileNotFoundException, IOException {
         String[] opcions_menu = {RetornarLinia(IDIOMA, CREARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLES), RetornarLinia(IDIOMA, AFEGIRUNUSUARI), RetornarLinia(IDIOMA, MODIFCARUNUSUARI), RetornarLinia(IDIOMA, ESBORRARUNUSUARI), RetornarLinia(IDIOMA, RECUPERARUNUSUARI)};
-        int seleccio = Utils.Menu(opcions_menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA));
+        int seleccio = Utils.Menu(opcions_menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA),TEXTSURTIR,IDIOMA);
         switch (seleccio) {
             case 1:
                 CrearColla(premiados);

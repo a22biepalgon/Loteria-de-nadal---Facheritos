@@ -39,3 +39,5 @@ Codi
 Núm Colla
 Borrat
 Membres
+No hi ha cap colla amb aquestes característiques per aquest any.
+Sortir

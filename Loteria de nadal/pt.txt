@@ -40,3 +40,4 @@ Número do sindicato
 Excluído
 Membros
 Não há nenhum sindicato com essas características para este ano.
+SAIR

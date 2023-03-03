@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import loteria.de.nadal.LoteriaDeNadal;
 
 /**
  * Llibreria d'utilitats
@@ -563,6 +564,10 @@ public class Utils {
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Implementació de LlegirLong()">
 
+    /**
+     * Llegir un long 
+     * @return retorna un long
+     */
      public static long LlegirLong() {
        long result;
 
@@ -575,6 +580,11 @@ public class Utils {
     }
 
 
+     /**
+      * Llegir un long
+      * @param missatge Missatge a imprimir
+      * @return Retorna un long
+      */
     public static long LlegirLong(String missatge) {
         long result;
 
@@ -588,9 +598,23 @@ public class Utils {
     }
 
 
+    /**
+     * Llegir un long
+     * @param scan El teu propi escaner
+     * @return retorna un long
+     */
     public static long LlegirLong(Scanner scan) {
         return LlegirLong(scan, null);
     }
+    
+    /**
+     * Llegir un long
+     * @param scan el teu propi escaner
+     * @param missatge Missatge a imprimir
+     * @param valorMin Valor minim acceptable
+     * @param valorMax Valor màxima acceptable
+     * @return retorna un long
+     */
 
     public static long LlegirLong(Scanner scan, String missatge, int valorMin, int valorMax) {
         long result = 0;
@@ -601,6 +625,12 @@ public class Utils {
         return result;
     }
 
+    /**
+     * Funció per a llegir amb un long amb el teu scanner i un missatge
+     * @param scan Pots afegir el teu propi escàner
+     * @param missatge Missatge a imprimir
+     * @return retorna un long
+     */
     public static long LlegirLong(Scanner scan, String missatge) {
         boolean dadesCorrectes;
         long result = 0;
@@ -621,6 +651,11 @@ public class Utils {
     }
 // </editor-fold>
 
+    /**
+     * Funció per a fer una pregunta fins que es digui no
+     * @param message Missatge a imprimir
+     * @return retorna un boolean
+     */
     public static boolean YesOrNo(String message) {
         Scanner scan = new Scanner(System.in);
         boolean resultat = true;
@@ -639,6 +674,11 @@ public class Utils {
 
     }
 
+    /**
+     * Funció per a llegir un string amb un missatge
+     * @param missatge Missatge a imprimir
+     * @return Retorna un string
+     */
     public static String LlegirString(String missatge) {
         Scanner scan = new Scanner(System.in);
         String resultat = "";
@@ -647,6 +687,27 @@ public class Utils {
         return resultat;
     }
 
+    /**
+     * Serveix per a Imprimir un menú i recollir la selecció donant-li un array
+     * amb les opcions del menú
+     *
+     * @param array_opcions Demana un array String[] per a imprimir les opcions
+     * del menu
+     * @return Retorna un numero enter depenent de la entrada seleccionada
+     */
+    public static int Menu(String[] array_opcions, String mensaje, int numeroSortir, String nomfitxer) throws IOException {
+        int resultat;
+        Scanner scan = new Scanner(System.in);
+
+        for (int i = 0; i < array_opcions.length; i++) {
+            System.out.println(i + 1 + ") " + array_opcions[i]);
+        }
+        System.out.println(array_opcions.length + 1 + LoteriaDeNadal.RetornarLinia(nomfitxer, numeroSortir ) + ") Salir");
+        resultat = LlegirInt(scan, mensaje, 1, array_opcions.length + 1);
+
+        return resultat;
+    }
+    
     /**
      * Serveix per a Imprimir un menú i recollir la selecció donant-li un array
      * amb les opcions del menú

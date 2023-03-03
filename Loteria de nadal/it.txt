@@ -40,3 +40,4 @@ Numero del sindacato
 Eliminato
 Membri
 Non esiste un sindacato con queste caratteristiche per quest'anno.
+Uscire
