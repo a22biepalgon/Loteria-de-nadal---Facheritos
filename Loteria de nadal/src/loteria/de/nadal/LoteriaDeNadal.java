@@ -1609,7 +1609,11 @@ public class LoteriaDeNadal {
         }
         return posiciocolla;
     }
-
+    /**
+     * Recuperar usuarios borrados
+     * @param nom nombre del usuario
+     * @param codi código de la peña
+     */
     public static void RecuperarUsuaris(String nom, long codi) {
         try {
             RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
@@ -1644,7 +1648,19 @@ public class LoteriaDeNadal {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /**
+     * Buscar usuario para su recuperación
+     * @param usr clase tipo usuario
+     * @param nom nombre del usuario
+     * @param colla clase del tipo colla
+     * @param raf3
+     * @param posicio posición del usuario
+     * @param posiciocolla posición de la colla
+     * @param id índice donde se situa la colla
+     * @param raf
+     * @return posición en la colla
+     * @throws IOException 
+     */
     public static long RecuperarUsuarioEspecifico(Usuari usr, String nom, Colla colla, RandomAccessFile raf3, long posicio, long posiciocolla, indice2 id, RandomAccessFile raf) throws IOException {
         while (usr != null) {
             if (usr.nom.equals(nom) && usr.numcolla == colla.numcolla && usr.any == year) {
