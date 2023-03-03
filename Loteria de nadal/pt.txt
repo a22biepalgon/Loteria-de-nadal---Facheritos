@@ -1,0 +1,42 @@
+Verificar prêmio do cupom
+Verificar todos os prêmios
+Operações de sindicato
+O que você deseja verificar:
+Digite o seu número:
+Você ganhou
+com um valor de
+€ por décimo
+Loteria de Natal
+Número
+Prêmio
+MUITO OBRIGADO POR PARTICIPAR
+Ver um grupo
+Novo sorteio
+Sorteio anterior
+Opção selecionada:  
+O que você deseja verificar: 
+Ano
+Digite o ano do sorteio: 
+Deseja continuar adicionando usuários? (s/n)
+Digite o número de compra do usuário: 
+Digite o nome do usuário: 
+Digite o valor da compra (5 € - 60 €): 
+Digite o nome do sindicato: 
+Digite o código do sindicato: 
+Criar sindicato
+Mostrar um sindicato
+Mostrar todos os sindicatos
+Adicionar usuários a um sindicato
+Modificar um usuário
+Excluir um usuário
+Recuperar um usuário
+Nome
+Número
+Dinheiro
+Todos
+Prêmios
+Código
+Número do sindicato
+Excluído
+Membros
+Não há nenhum sindicato com essas características para este ano.

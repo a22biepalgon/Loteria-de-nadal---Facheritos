@@ -1,0 +1,42 @@
+Check coupon prize
+Check all prizes
+Syndicate operations
+What do you want to check: 
+Enter your number: 
+You have won
+with an amount of
+€ per tenth
+Christmas Lottery
+Number
+Prize
+THANK YOU VERY MUCH FOR PARTICIPATING
+View a group
+New draw
+Previous draw
+Selected option: 
+What do you want to check: 
+Year
+Enter the year of the draw: 
+Do you want to keep adding users? (y/n)
+Enter the user's buying number: 
+Enter the user's name:
+Enter the purchase amount (5 € - 60 €): 
+Enter the name of the syndicate: 
+Enter the syndicate code: 
+Create syndicate
+Show a syndicate
+Show all syndicates
+Add users to a syndicate
+Modify a user
+Delete a user
+Recover a user
+Name
+Number
+Money
+All
+Prizes
+Code
+Syndicate number
+Deleted
+Members
+There is no syndicate with these characteristics for this year.

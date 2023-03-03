@@ -1,0 +1,13 @@
+der erste Preis
+der zweite Preis
+der dritte Preis
+der vierte Preis
+der fünfte Preis
+die Rückerstattung
+der Preis für die letzten beiden Ziffern
+der Preis für die Hunderte
+die Annäherung an den ersten Preis
+die Annäherung an den zweiten Preis
+die Annäherung an den dritten Preis
+kleiner Preis für viele Zahlen
+eine Umarmung

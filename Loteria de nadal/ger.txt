@@ -1,0 +1,42 @@
+Überprüfen Sie den Gutscheinpreis
+Alle Preise überprüfen
+Syndikatsoperationen
+Was möchten Sie überprüfen:
+Geben Sie Ihre Nummer ein:
+Sie haben gewonnen
+mit einem Betrag von
+€ pro Zehntel
+Weihnachtslotterie
+Nummer
+Preis
+VIELEN DANK FÜR DIE TEILNAHME
+Eine Gruppe anzeigen
+Neue Ziehung
+Vorherige Ziehung
+Ausgewählte Option: 
+Was möchten Sie überprüfen: 
+Jahr
+Geben Sie das Jahr der Ziehung ein: 
+Möchten Sie Benutzer weiter hinzufügen? (j/n)
+Geben Sie die Kaufnummer des Benutzers ein: 
+Geben Sie den Namen des Benutzers ein: 
+Geben Sie den Kaufbetrag ein (5 € - 60 €): 
+Geben Sie den Namen des Syndikats ein: 
+Geben Sie den Syndikatscode ein: 
+Syndikat erstellen
+Ein Syndikat anzeigen
+Alle Syndikate anzeigen
+Benutzer zu einem Syndikat hinzufügen
+Benutzer bearbeiten
+Benutzer löschen
+Benutzer wiederherstellen
+Name
+Nummer
+Geld
+Alle
+Preise
+Code
+Syndikatsnummer
+Gelöscht
+Mitglieder
+Es gibt kein Syndikat mit diesen Merkmalen für dieses Jahr.

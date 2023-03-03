@@ -582,6 +582,7 @@ public class Utils {
             scan = new Scanner(System.in);
         }
         result = LlegirLong(scan, missatge);
+        
 
         return result;
     }
@@ -612,6 +613,7 @@ public class Utils {
                 result = scan.nextLong();
             } else if (scan.hasNext()) {
                 scan.nextLine();
+                scan.next();
             }
         } while (!dadesCorrectes);
 

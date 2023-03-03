@@ -1,0 +1,42 @@
+Verifica il premio del coupon
+Verifica tutti i premi
+Operazioni di sindacato
+Cosa vuoi verificare:
+Inserisci il tuo numero:
+Hai vinto
+con un importo di
+€ per decimo
+Lotteria di Natale
+Numero
+Premio
+GRAZIE MILLE PER AVER PARTECIPATO
+Visualizza un gruppo
+Nuova estrazione
+Estrazione precedente
+Opzione selezionata: 
+Cosa vuoi verificare: 
+Anno
+Inserisci l'anno dell'estrazione:
+Vuoi continuare ad aggiungere utenti? (s/n)
+Inserisci il numero di acquisto dell'utente: 
+Inserisci il nome dell'utente: 
+Inserisci l'importo dell'acquisto (5 € - 60 €): 
+Inserisci il nome del sindacato: 
+Inserisci il codice del sindacato: 
+Crea un sindacato
+Mostra un sindacato
+Mostra tutti i sindacati
+Aggiungi utenti a un sindacato
+Modifica un utente
+Elimina un utente
+Recupera un utente
+Nome
+Numero
+Denaro
+Tutto
+Premi
+Codice
+Numero del sindacato
+Eliminato
+Membri
+Non esiste un sindacato con queste caratteristiche per quest'anno.

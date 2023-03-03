@@ -1398,10 +1398,10 @@ public class LoteriaDeNadal {
                 EsborrarUsuari(codiColla4, nomUser2);
                 break;
             case 7:
-                /*long codiColla5 = Utils.LlegirLong("Digues el codi de colla: ");
+                long codiColla5 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
                 MostrarBorrados(codiColla5);
-                String nomUser3 = COmprobarNom(codiColla5);
-                RecuperarUsuaris(nomUser3, codiColla5);*/
+                String nomUser3 = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
+                RecuperarUsuaris(nomUser3, codiColla5);
                 break;
 
             case 8:
@@ -1475,7 +1475,6 @@ public class LoteriaDeNadal {
                     if (colla.any == year) {
                         long posicio = raf3.getFilePointer();
                         posiciocolla = EsborrarUsuariEspecific(raf3, nom, colla, posicio, posiciocolla, id, raf);
-
                     }
                 }
                 id = LlegirIndice2(raf);
@@ -1530,8 +1529,8 @@ public class LoteriaDeNadal {
     public static void RecuperarUsuaris(String nom, long codi) {
         try {
             RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
-            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "r");
-            RandomAccessFile raf3 = CrearFitxer(NOM_FTX_USR, "r");
+            RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "rw");
+            RandomAccessFile raf3 = CrearFitxer(NOM_FTX_USR, "rw");
             indice2 id = LlegirIndice2(raf);
             nom = OmplirNomAmbEspais(nom);
             long posiciocolla = 0;
