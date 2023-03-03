@@ -147,7 +147,7 @@ public class LoteriaDeNadal {
         boolean sortir = false;
         int menusurtida;
         System.out.println(RetornarLinia(IDIOMA, PREGUNTARCONSULTA));
-        menusurtida = Menu(menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA));
+        menusurtida = Menu(menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA), TEXTSURTIR, IDIOMA);
         sortir = ExecutarMenuBucleOpciones(menusurtida, premiados, sortir);
         return sortir;
     }
@@ -1486,12 +1486,15 @@ public class LoteriaDeNadal {
      * @throws IOException
      */
     public static void EscribirDatosUsr(Usuari u) throws IOException {
+        u.nom = u.nom.replace(" ","");
+        System.out.println("------------------------------");
         System.out.println(RetornarLinia(IDIOMA, TEXTNUMCOLLA) + ": " + u.numcolla);
         System.out.println(RetornarLinia(IDIOMA, TEXTNOM) + ": " + u.nom);
+        System.out.println(RetornarLinia(IDIOMA, TEXTDINERS) + ": " + u.diners);
+        System.out.println(RetornarLinia(IDIOMA, TEXTNUMERO) + ": " + u.numero);
         System.out.println(RetornarLinia(IDIOMA, ANY) + ": " + u.any);
-        System.out.println(RetornarLinia(IDIOMA, TEXTBORRAT) + ": " + u.borrat);
-        System.out.println("---------------------");
-
+        System.out.println("------------------------------");
+        
     }
 
     /**
