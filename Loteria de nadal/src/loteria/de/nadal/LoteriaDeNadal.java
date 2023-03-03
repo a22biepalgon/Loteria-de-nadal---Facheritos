@@ -1,14 +1,11 @@
 package loteria.de.nadal;
 
-import com.sun.tools.javac.util.StringUtils;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.Random;
 import java.util.Scanner;
@@ -280,7 +277,7 @@ public class LoteriaDeNadal {
     }
 
     public static void MostrarAnyo(indice index) throws IOException {
-        System.out.println(RetornarLinia(IDIOMA, ANY) + index.year);
+        System.out.println(RetornarLinia(IDIOMA, ANY) + ": " + index.year);
     }
 
     public static boolean ComprobarValidezAnyo(int anyo) {
@@ -324,8 +321,8 @@ public class LoteriaDeNadal {
      */
     public static String EscogerIdioma() {
         String resultat = "";
-        String[] opcions_menu = {"Catala", "Castella"};
-        int seleccio = Utils.MenuBucle(opcions_menu, "Opción/Opció: ");
+        String[] opcions_menu = {"Català", "Castellano", "English", "Deustch", "Português", "Italiano" , "Chino"};
+        int seleccio = Utils.MenuBucle(opcions_menu, "Opció/Opción/Option/Opção/Opzione/選項: ");
         resultat = GestionMenuIdioma(seleccio);
         return resultat;
     }
@@ -344,6 +341,21 @@ public class LoteriaDeNadal {
                 break;
             case 2:
                 resultat = "es.txt";
+                break;
+            case 3:
+                resultat = "en.txt";
+                break;
+            case 4:
+                resultat = "ger.txt";
+                break;
+            case 5:
+                resultat = "pt.txt";
+                break;
+            case 6:
+                resultat = "it.txt";
+                break;
+            case 7:
+                resultat = "ch.txt";
                 break;
             default:
                 resultat = "es.txt";
@@ -479,16 +491,14 @@ public class LoteriaDeNadal {
      * monetario
      */
     public static NumPremiado[] Sorteo() { //Cada premio
-        final int PEDREA = 1000;
-        final int NUMPREMIS = 1807;
         int[] bomboPremios = CrearBomboPremios();
-        NumPremiado[] numeros_premiats = new NumPremiado[NUMPREMIS];
+        NumPremiado[] numeros_premiats = new NumPremiado[QUANTITATPREMIS];
         int num_afegir = 0;
         int premi_afegir, posP;
         for (int i = 0; i < numeros_premiats.length; i++) { //Crear todos los premios
             boolean repeatnum = true;
             while (repeatnum) {
-                num_afegir = rnd.nextInt(100000); //Generar número aleatorio
+                num_afegir = rnd.nextInt(MAXIMBITLLETS + 1); //Generar número aleatorio
                 repeatnum = false;
                 for (int j = 0; j < i && !repeatnum; j++) {//Comprobar que el número generado aleatoriamente no haya salido anteriormente
                     if (num_afegir == numeros_premiats[j].numero) {
@@ -501,7 +511,7 @@ public class LoteriaDeNadal {
             posP = rnd.nextInt(bomboPremios.length - i);
             premi_afegir = bomboPremios[posP]; //Escoger premio del bombo
             if (premi_afegir == 0) {
-                premi_afegir = PEDREA;
+                premi_afegir = PEDREADA;
             }
             //Crear premio a partir de el número y premio sacados de los bombos
             numeros_premiats[i] = new NumPremiado();
@@ -619,12 +629,13 @@ public class LoteriaDeNadal {
      * @return Devuelve un integer con el premio que le toca al cupón
      */
     public static int ComprobarUltimas(int cupon, NumPremiado[] premiados) {
+        final int NUMPOSICIONSCOMPROBAR = 2;
         //Creamos la variable premio
         int premio = 0;
         //Creamos una variable con las 2 últimas cifras de cupón
         int ultimas2 = cupon % 100;
         //Miramos si coinciden las 2 últimas cifras con las 2 últimas de un premio mayor
-        for (int i = 0; i <= 2; i++) {
+        for (int i = 0; i <= NUMPOSICIONSCOMPROBAR; i++) {
             if (ultimas2 == premiados[i].numero % 100) {
                 premio = PREMI2ULTIMAS;
                 nompremi = 7;
@@ -646,8 +657,9 @@ public class LoteriaDeNadal {
     public static int ComprobarCentena(int cupon, NumPremiado[] premiados) {
         //Creamos la variable a devolver
         int premio = 0;
+        final int QUANTPREMIS = 4;
         //Comprobamos si la centena corresponde a alguna de los 4 premios mayores
-        for (int i = 0; i <= 4; i++) {
+        for (int i = 0; i <= QUANTPREMIS; i++) {
             if (cupon / 100 == premiados[i].numero / 100) {
                 premio = PREMICENTENA;
                 nompremi = 8;
@@ -1130,8 +1142,9 @@ public class LoteriaDeNadal {
      * @return Retorna el string ocupant 20 espais
      */
     public static String OmplirNomAmbEspais(String resultat) {
-        for (int i = 0; i < 20; i++) {
-            if (resultat.length() < 20) {
+        final int LLARGADASTRING = 20;
+        for (int i = 0; i < LLARGADASTRING; i++) {
+            if (resultat.length() < LLARGADASTRING) {
                 resultat = " " + resultat;
             }
         }
@@ -1161,12 +1174,15 @@ public class LoteriaDeNadal {
      */
     public static int ComprobarDiners() {
         int resultat = 0;
+        final int MAXIMDINERS = 60;
+        final int MINIMDINERS = 5;
+        final int MUTIPLEDE = 5;
         try {
             resultat = Utils.LlegirInt(RetornarLinia(IDIOMA, IMPORTDECOMPRA));
         } catch (IOException ex) {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        while (resultat % 5 != 0 || resultat < 5 || resultat > 60) {
+        while (resultat % MUTIPLEDE != 0 || resultat < MINIMDINERS || resultat > MAXIMDINERS) {
             try {
                 resultat = Utils.LlegirInt(RetornarLinia(IDIOMA, IMPORTDECOMPRA));
             } catch (IOException ex) {
@@ -1406,7 +1422,7 @@ public class LoteriaDeNadal {
         try {
             RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
             RandomAccessFile raf2 = CrearFitxer(NOM_FTX_COLLAS, "r");
-            RandomAccessFile raf3 = CrearFitxer(NOM_FTX_USR, "r"); 
+            RandomAccessFile raf3 = CrearFitxer(NOM_FTX_USR, "r");
             indice2 id = LlegirIndice2(raf);
             Colla colla = null;
             while (id != null) {
@@ -1974,8 +1990,12 @@ public class LoteriaDeNadal {
 // </editor-fold>
 }
 
+/**
+ * Clase de dades que conté un usuari
+ * @author palom
+ */
 class Usuari {
-
+    
     long numcolla;
     String nom;
     int numero;
@@ -1987,6 +2007,10 @@ class Usuari {
     boolean borrat;
 }
 
+/**
+ * Clase de dades que conté una colla
+ * @author palom
+ */
 class Colla {
 
     String nom;
@@ -1997,6 +2021,10 @@ class Colla {
     long numcolla;
 }
 
+/**
+ * Classe per a calcular les aproximacions d'un numero
+ * @author palom
+ */
 class Aproximacio {
 
     int dalt;
@@ -2012,12 +2040,20 @@ class NumPremiado {
     int premio;
 }
 
+/**
+ * Clase per a guardar els indexos dels sortejos
+ * @author palom
+ */
 class indice {
 
     int year;
     long pos;
 }
 
+/**
+ * Classe per a guardar els indexos de les  colles
+ * @author palom
+ */
 class indice2 {
 
     long codiusuari;
