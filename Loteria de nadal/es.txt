@@ -40,4 +40,5 @@ Núm peña
 Borrado
 Miembros
 No existe ninguna peña con esas caracteristicas para este año
-Salir
+Salir 
+Mostrar usuario específico 

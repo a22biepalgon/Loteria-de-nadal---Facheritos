@@ -41,3 +41,4 @@ Borrat
 Membres
 No hi ha cap colla amb aquestes característiques per aquest any.
 Sortir
+Mostrar usuari especific 

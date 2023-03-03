@@ -40,4 +40,5 @@ Syndikatsnummer
 Gelöscht
 Mitglieder
 Es gibt kein Syndikat mit diesen Merkmalen für dieses Jahr.
-Beenden
+Beenden 
+Bestimmten Benutzer anzeigen 
