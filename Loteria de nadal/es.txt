@@ -17,7 +17,7 @@ Opción seleccionada:
 Qué desea consultar: 
 Año
 Introduce el año del sorteo: 
-¿Quieres seguir añadiendo usuarios? 
+¿Quieres seguir añadiendo usuarios? (y/n)
 Di el número que compra el usuario: 
 Di el nombre del usuario: 
 Di el importe de la compra (5 € - 60 €): 
@@ -40,3 +40,4 @@ Núm peña
 Borrado
 Miembros
 No existe ninguna peña con esas caracteristicas para este año
+Salir

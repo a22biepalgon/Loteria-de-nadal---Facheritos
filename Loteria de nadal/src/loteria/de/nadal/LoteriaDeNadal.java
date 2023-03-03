@@ -201,7 +201,10 @@ public class LoteriaDeNadal {
         nompremi = 0;
         System.out.println(verde + RetornarLinia(IDIOMA, HASGANADO) + nomDelPremi + RetornarLinia(IDIOMA, CANTIDADDE) + premio / 10 + RetornarLinia(IDIOMA, EUROSALDECIMO) + reset);
     }
-
+    /**
+     * Comprobar si el fichero índice está vacío
+     * @return true si está vacío / false si está lleno
+     */
     public static boolean ComprobarIndexVacio() {
         DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
         indice index = LeerIndex(dis);
@@ -211,60 +214,13 @@ public class LoteriaDeNadal {
         }
         return noArray;
     }
+    
 
-    public static NumPremiado[] tipoLoteria(String[] tipos) throws FileNotFoundException, IOException {
-        boolean noArray = true;
-        NumPremiado[] arrayPremios = new NumPremiado[QUANTITATPREMIS];
-
-        while (noArray) {
-            System.out.println(RetornarLinia(IDIOMA, VOLEUCONSULTAR));
-            int opcion = MenuBucle(tipos, RetornarLinia(IDIOMA, OPCIONSELECCIONADA));
-            noArray = ComprobarIndexVacio();
-            if (opcion == 1) {
-
-                MostrarAnyos(); //Muestra los años guardados
-                arrayPremios = Sorteo();
-                BubbleSortPremis(arrayPremios);
-                year = IntroducirAnyo(); //Añades una nuevo sorteo al fichero, requerido un año no repetido
-                while (!ComprobarValidezAnyo(year)) {
-                    year = IntroducirAnyo();
-                }
-                ComprobarValidezAnyo(year);
-                GuardarDatos(arrayPremios, year);
-                noArray = false;
-            } else if (opcion == 2 && !noArray) {
-                MostrarAnyos(); //Muestra los años guardados
-                year = IntroducirAnyo();
-                while (ComprobarValidezAnyo(year)) {
-                    year = IntroducirAnyo();
-                }
-                long posicion = BuscarPosicionIndice(year);
-                if (posicion != -1) {
-                    arrayPremios = ExtraerDatos(posicion);
-                }
-            }
-        }
-
-        return arrayPremios;
-    }
-
-    public static int IntroducirAnyo() throws IOException {
-        int year = LlegirInt(RetornarLinia(IDIOMA, CONSULTAANY));
-        return year;
-    }
-
-    public static void MostrarAnyos() throws IOException {
-        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
-        indice index = LeerIndex(dis);
-        while (index != null && index.year > 0) {
-            MostrarAnyo(index);
-            index = LeerIndex(dis);
-        }
-
-        CerrarFicheroBinario(dis);
-
-    }
-
+    /**
+     * Leer fichro índice en posición "dis"
+     * @param dis
+     * @return clase de tipo índice con los datos leidos
+     */
     public static indice LeerIndex(DataInputStream dis) {
         indice id = new indice();
         try {
@@ -277,42 +233,9 @@ public class LoteriaDeNadal {
         return id;
     }
 
-    public static void MostrarAnyo(indice index) throws IOException {
-        System.out.println(RetornarLinia(IDIOMA, ANY) + ": " + index.year);
-    }
-
-    public static boolean ComprobarValidezAnyo(int anyo) {
-        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
-        boolean valido = true;
-        indice index = LeerIndice(dis);
-        if (index == null) {
-            valido = true;
-        } else {
-            while (valido && index != null) {
-                if (index.year == anyo) {
-                    valido = false;
-                }
-                index = LeerIndice(dis);
-            }
-        }
-        CerrarFicheroBinario(dis);
-        return valido;
-
-    }
-
-    public static long BuscarPosicionIndice(int anyo) {
-        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
-        long posicion = -1;
-        indice index = LeerIndice(dis);
-        while (index != null) {
-            if (index.year == anyo) {
-                posicion = index.pos;
-            }
-            index = LeerIndice(dis);
-        }
-        CerrarFicheroBinario(dis);
-        return posicion;
-    }
+ 
+    
+  
 
 // <editor-fold defaultstate="collapsed" desc="Escoger Idioma">    
     /**
@@ -816,7 +739,7 @@ public class LoteriaDeNadal {
 
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="GuardarPremios"> 
-    /**
+       /**
      * Procediment per a fuardar les dades de un nou sorteig a un fitxer
      *
      * @param premios Sorteig a guardar
@@ -839,8 +762,7 @@ public class LoteriaDeNadal {
         CerrarFicheroBinario(dos);
         raf.close();
     }
-
-    /**
+        /**
      * Escribir nuevo índice en fichero de índices
      *
      * @param blnAnyadir
@@ -857,7 +779,98 @@ public class LoteriaDeNadal {
         }
     }
 
+       /**
+     * Función para comprobar si un año no está repetido
+     * @param anyo
+     * @return 
+     */
+    public static boolean ComprobarValidezAnyo(int anyo) {
+        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
+        boolean valido = true;
+        indice index = LeerIndice(dis);
+        if (index == null) {
+            valido = true;
+        } else {
+            while (valido && index != null) {
+                if (index.year == anyo) {
+                    valido = false;
+                }
+                index = LeerIndice(dis);
+            }
+        }
+        CerrarFicheroBinario(dis);
+        return valido;
+
+    }
+        /**
+     * Consultar valor de variable año
+     * @return
+     * @throws IOException 
+     */
+    public static int IntroducirAnyo() throws IOException {
+        int year = LlegirInt(RetornarLinia(IDIOMA, CONSULTAANY));
+        return year;
+    }
     /**
+     * Imprimir los sorteos registrados 
+     * @throws IOException 
+     */
+    public static void MostrarAnyos() throws IOException {
+        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
+        indice index = LeerIndex(dis);
+        while (index != null && index.year > 0) {
+            MostrarAnyo(index);
+            index = LeerIndex(dis);
+        }
+
+        CerrarFicheroBinario(dis);
+
+    }
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Abrir Premios">
+    /**
+     * Escoger entre una loteria nueva o una guardada
+     * @param tipos  array con los tipos de lotería
+     * @return array de premios
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    public static NumPremiado[] tipoLoteria(String[] tipos) throws FileNotFoundException, IOException {
+        boolean noArray = true;
+        NumPremiado[] arrayPremios = new NumPremiado[QUANTITATPREMIS];
+
+        while (noArray) {
+            System.out.println(RetornarLinia(IDIOMA, VOLEUCONSULTAR));
+            int opcion = MenuBucle(tipos, RetornarLinia(IDIOMA, OPCIONSELECCIONADA));
+            noArray = ComprobarIndexVacio();
+            if (opcion == 1) {
+
+                MostrarAnyos(); //Muestra los años guardados
+                arrayPremios = Sorteo();
+                BubbleSortPremis(arrayPremios);
+                year = IntroducirAnyo(); //Añades una nuevo sorteo al fichero, requerido un año no repetido
+                while (!ComprobarValidezAnyo(year)) {
+                    year = IntroducirAnyo();
+                }
+                ComprobarValidezAnyo(year);
+                GuardarDatos(arrayPremios, year);
+                noArray = false;
+            } else if (opcion == 2 && !noArray) {
+                MostrarAnyos(); //Muestra los años guardados
+                year = IntroducirAnyo();
+                while (ComprobarValidezAnyo(year)) {
+                    year = IntroducirAnyo();
+                }
+                long posicion = BuscarPosicionIndice(year);
+                if (posicion != -1) {
+                    arrayPremios = ExtraerDatos(posicion);
+                }
+            }
+        }
+
+        return arrayPremios;
+    }
+        /**
      * Funció que llegeix un objecte de tipus Indice
      *
      * @param dis Objecte DataInputStream per a llegir el fitxer
@@ -873,8 +886,7 @@ public class LoteriaDeNadal {
         }
         return index;
     }
-
-    /**
+        /**
      * Funció per a Llegir un sorteig ja creat, en base al codi
      *
      * @param posicion posicio on comença el sorteig
@@ -899,7 +911,34 @@ public class LoteriaDeNadal {
         raf.close();
         return premios;
     }
-//</editor-fold>    
+        /**
+     * Imprimir un año formateado
+     * @param index clase índice con los valores de un registro
+     * @throws IOException 
+     */
+    public static void MostrarAnyo(indice index) throws IOException {
+        System.out.println(RetornarLinia(IDIOMA, ANY) + ": " + index.year);
+    }
+        /**
+     * Encontrar posición en fichero de un registro con código "anyo"
+     * @param anyo año del sorteo
+     * @return posición del registro
+     */
+    public static long BuscarPosicionIndice(int anyo) {
+        DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
+        long posicion = -1;
+        indice index = LeerIndice(dis);
+        while (index != null) {
+            if (index.year == anyo) {
+                posicion = index.pos;
+            }
+            index = LeerIndice(dis);
+        }
+        CerrarFicheroBinario(dis);
+        return posicion;
+    }
+    
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Creacion Colla">    
 
     /**
@@ -1409,7 +1448,11 @@ public class LoteriaDeNadal {
                 break;
         }
     }
-
+    /**
+     * Imprimir por pantalla los datos del parámetro u 
+     * @param u clase usuari
+     * @throws IOException 
+     */
     public static void EscribirDatosUsr(Usuari u) throws IOException {
         System.out.println(RetornarLinia(IDIOMA, TEXTNUMCOLLA) + ": " + u.numcolla);
         System.out.println(RetornarLinia(IDIOMA, TEXTNOM) + ": " + u.nom);
@@ -1418,7 +1461,10 @@ public class LoteriaDeNadal {
         System.out.println("---------------------");
 
     }
-
+    /**
+     * Mostrar Usuarios borrados de una peña específica
+     * @param codi codigo de la peña
+     */
     public static void MostrarBorrados(long codi) {
         try {
             RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
@@ -1526,7 +1572,7 @@ public class LoteriaDeNadal {
         }
         return posiciocolla;
     }
-
+    
     public static void RecuperarUsuaris(String nom, long codi) {
         try {
             RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
@@ -1543,20 +1589,7 @@ public class LoteriaDeNadal {
                     if (colla.any == year) {
                         long posicio = raf3.getFilePointer();
                         Usuari usr = LlegirUsuari(raf3);
-                        while (usr != null) {
-                            if (usr.nom.equals(nom) && usr.numcolla == colla.numcolla && usr.any == year) {
-                                usr.borrat = false;
-                                raf3.seek(posicio);
-                                EscriureUsuariP(usr, raf3);
-                                posiciocolla = id.pos;
-                                colla.quantMembres++;
-                                usr = null;
-                                raf.seek(raf.length());
-                            } else {
-                                posicio = raf3.getFilePointer();
-                                usr = LlegirUsuari(raf3);
-                            }
-                        }
+                        posiciocolla = RecuperarUsuarioEspecifico(usr, nom, colla, raf3, posicio, posiciocolla, id, raf);
 
                     }
                 }
@@ -1573,6 +1606,24 @@ public class LoteriaDeNadal {
         } catch (IOException ex) {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public static long RecuperarUsuarioEspecifico(Usuari usr, String nom, Colla colla, RandomAccessFile raf3, long posicio, long posiciocolla, indice2 id, RandomAccessFile raf) throws IOException {
+        while (usr != null) {
+            if (usr.nom.equals(nom) && usr.numcolla == colla.numcolla && usr.any == year) {
+                usr.borrat = false;
+                raf3.seek(posicio);
+                EscriureUsuariP(usr, raf3);
+                posiciocolla = id.pos;
+                colla.quantMembres++;
+                usr = null;
+                raf.seek(raf.length());
+            } else {
+                posicio = raf3.getFilePointer();
+                usr = LlegirUsuari(raf3);
+            }
+        }
+        return posiciocolla;
     }
 
     /**

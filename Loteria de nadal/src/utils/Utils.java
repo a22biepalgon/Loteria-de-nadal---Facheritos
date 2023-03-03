@@ -702,7 +702,7 @@ public class Utils {
         for (int i = 0; i < array_opcions.length; i++) {
             System.out.println(i + 1 + ") " + array_opcions[i]);
         }
-        System.out.println(array_opcions.length + 1 + LoteriaDeNadal.RetornarLinia(nomfitxer, numeroSortir ) + ") Salir");
+        System.out.println(array_opcions.length + 1 + ") "+LoteriaDeNadal.RetornarLinia(nomfitxer, numeroSortir ));
         resultat = LlegirInt(scan, mensaje, 1, array_opcions.length + 1);
 
         return resultat;

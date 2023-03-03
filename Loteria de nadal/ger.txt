@@ -17,7 +17,7 @@ Ausgewählte Option:
 Was möchten Sie überprüfen: 
 Jahr
 Geben Sie das Jahr der Ziehung ein: 
-Möchten Sie Benutzer weiter hinzufügen? (j/n)
+Möchten Sie Benutzer weiter hinzufügen? (y/n)
 Geben Sie die Kaufnummer des Benutzers ein: 
 Geben Sie den Namen des Benutzers ein: 
 Geben Sie den Kaufbetrag ein (5 € - 60 €): 

@@ -17,7 +17,7 @@ Opció seleccionada:
 Què voleu consultar: 
 Any
 Introdueix l'any del sorteig: 
-Vols seguir afegint usuaris? 
+Vols seguir afegint usuaris? (y/n)
 Digues el número que compra l'usuari: 
 Digues el nom de l'usuari: 
 Digues l'import de compra (5€ - 60€): 

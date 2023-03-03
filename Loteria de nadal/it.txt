@@ -17,7 +17,7 @@ Opzione selezionata:
 Cosa vuoi verificare: 
 Anno
 Inserisci l'anno dell'estrazione:
-Vuoi continuare ad aggiungere utenti? (s/n)
+Vuoi continuare ad aggiungere utenti? (y/n)
 Inserisci il numero di acquisto dell'utente: 
 Inserisci il nome dell'utente: 
 Inserisci l'importo dell'acquisto (5 € - 60 €): 
