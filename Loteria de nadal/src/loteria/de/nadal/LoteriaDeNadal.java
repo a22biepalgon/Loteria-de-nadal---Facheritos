@@ -322,7 +322,7 @@ public class LoteriaDeNadal {
      */
     public static String EscogerIdioma() {
         String resultat = "";
-        String[] opcions_menu = {"Català", "Castellano", "English", "Deustch", "Português", "Italiano" , "Chino"};
+        String[] opcions_menu = {"Català", "Castellano", "English", "Deustch", "Português", "Italiano", "Chino"};
         int seleccio = Utils.MenuBucle(opcions_menu, "Opció/Opción/Option/Opção/Opzione/選項: ");
         resultat = GestionMenuIdioma(seleccio);
         return resultat;
@@ -1372,7 +1372,7 @@ public class LoteriaDeNadal {
      */
     public static void SubmenuColles(NumPremiado[] premiados) throws FileNotFoundException, IOException {
         String[] opcions_menu = {RetornarLinia(IDIOMA, CREARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLES), RetornarLinia(IDIOMA, AFEGIRUNUSUARI), RetornarLinia(IDIOMA, MODIFCARUNUSUARI), RetornarLinia(IDIOMA, ESBORRARUNUSUARI), RetornarLinia(IDIOMA, RECUPERARUNUSUARI)};
-        int seleccio = Utils.Menu(opcions_menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA),TEXTSURTIR,IDIOMA);
+        int seleccio = Utils.Menu(opcions_menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA), TEXTSURTIR, IDIOMA);
         switch (seleccio) {
             case 1:
                 CrearColla(premiados);
@@ -1445,10 +1445,10 @@ public class LoteriaDeNadal {
                 }
                 id = LlegirIndice2(raf);
 
-                CerrarRAF(raf);
-                CerrarRAF(raf2);
-                CerrarRAF(raf3);
             }
+            CerrarRAF(raf);
+            CerrarRAF(raf2);
+            CerrarRAF(raf3);
         } catch (IOException ex) {
             Logger.getLogger(LoteriaDeNadal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1992,10 +1992,11 @@ public class LoteriaDeNadal {
 
 /**
  * Clase de dades que conté un usuari
+ *
  * @author palom
  */
 class Usuari {
-    
+
     long numcolla;
     String nom;
     int numero;
@@ -2009,6 +2010,7 @@ class Usuari {
 
 /**
  * Clase de dades que conté una colla
+ *
  * @author palom
  */
 class Colla {
@@ -2023,6 +2025,7 @@ class Colla {
 
 /**
  * Classe per a calcular les aproximacions d'un numero
+ *
  * @author palom
  */
 class Aproximacio {
@@ -2042,6 +2045,7 @@ class NumPremiado {
 
 /**
  * Clase per a guardar els indexos dels sortejos
+ *
  * @author palom
  */
 class indice {
@@ -2051,7 +2055,8 @@ class indice {
 }
 
 /**
- * Classe per a guardar els indexos de les  colles
+ * Classe per a guardar els indexos de les colles
+ *
  * @author palom
  */
 class indice2 {
