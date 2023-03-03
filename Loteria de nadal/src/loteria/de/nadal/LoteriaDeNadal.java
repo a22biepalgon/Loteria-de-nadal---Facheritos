@@ -111,6 +111,7 @@ public class LoteriaDeNadal {
     static int TEXTMEMBRES = 41;
     static int NOCOLLA = 42;
     static int TEXTSURTIR = 43;
+    static int TEXTUSUARIESPECIFIC = 44;
 
     /**
      * Variable per al nom del premi 1 = Primer premi 2 = Segon premi 3 = Tercer
@@ -201,8 +202,10 @@ public class LoteriaDeNadal {
         nompremi = 0;
         System.out.println(verde + RetornarLinia(IDIOMA, HASGANADO) + nomDelPremi + RetornarLinia(IDIOMA, CANTIDADDE) + premio / 10 + RetornarLinia(IDIOMA, EUROSALDECIMO) + reset);
     }
+
     /**
      * Comprobar si el fichero índice está vacío
+     *
      * @return true si está vacío / false si está lleno
      */
     public static boolean ComprobarIndexVacio() {
@@ -214,10 +217,10 @@ public class LoteriaDeNadal {
         }
         return noArray;
     }
-    
 
     /**
      * Leer fichro índice en posición "dis"
+     *
      * @param dis
      * @return clase de tipo índice con los datos leidos
      */
@@ -232,10 +235,6 @@ public class LoteriaDeNadal {
         }
         return id;
     }
-
- 
-    
-  
 
 // <editor-fold defaultstate="collapsed" desc="Escoger Idioma">    
     /**
@@ -739,7 +738,7 @@ public class LoteriaDeNadal {
 
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="GuardarPremios"> 
-       /**
+    /**
      * Procediment per a fuardar les dades de un nou sorteig a un fitxer
      *
      * @param premios Sorteig a guardar
@@ -762,7 +761,8 @@ public class LoteriaDeNadal {
         CerrarFicheroBinario(dos);
         raf.close();
     }
-        /**
+
+    /**
      * Escribir nuevo índice en fichero de índices
      *
      * @param blnAnyadir
@@ -779,10 +779,11 @@ public class LoteriaDeNadal {
         }
     }
 
-       /**
+    /**
      * Función para comprobar si un año no está repetido
+     *
      * @param anyo
-     * @return 
+     * @return
      */
     public static boolean ComprobarValidezAnyo(int anyo) {
         DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
@@ -802,18 +803,22 @@ public class LoteriaDeNadal {
         return valido;
 
     }
-        /**
+
+    /**
      * Consultar valor de variable año
+     *
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static int IntroducirAnyo() throws IOException {
         int year = LlegirInt(RetornarLinia(IDIOMA, CONSULTAANY));
         return year;
     }
+
     /**
-     * Imprimir los sorteos registrados 
-     * @throws IOException 
+     * Imprimir los sorteos registrados
+     *
+     * @throws IOException
      */
     public static void MostrarAnyos() throws IOException {
         DataInputStream dis = AbrirFicheroLecturaBinario(NOM_FTX_LOTERIASINDEX_BIN, true);
@@ -828,12 +833,14 @@ public class LoteriaDeNadal {
     }
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Abrir Premios">
+
     /**
      * Escoger entre una loteria nueva o una guardada
-     * @param tipos  array con los tipos de lotería
+     *
+     * @param tipos array con los tipos de lotería
      * @return array de premios
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     public static NumPremiado[] tipoLoteria(String[] tipos) throws FileNotFoundException, IOException {
         boolean noArray = true;
@@ -870,7 +877,8 @@ public class LoteriaDeNadal {
 
         return arrayPremios;
     }
-        /**
+
+    /**
      * Funció que llegeix un objecte de tipus Indice
      *
      * @param dis Objecte DataInputStream per a llegir el fitxer
@@ -886,7 +894,8 @@ public class LoteriaDeNadal {
         }
         return index;
     }
-        /**
+
+    /**
      * Funció per a Llegir un sorteig ja creat, en base al codi
      *
      * @param posicion posicio on comença el sorteig
@@ -911,16 +920,20 @@ public class LoteriaDeNadal {
         raf.close();
         return premios;
     }
-        /**
+
+    /**
      * Imprimir un año formateado
+     *
      * @param index clase índice con los valores de un registro
-     * @throws IOException 
+     * @throws IOException
      */
     public static void MostrarAnyo(indice index) throws IOException {
         System.out.println(RetornarLinia(IDIOMA, ANY) + ": " + index.year);
     }
-        /**
+
+    /**
      * Encontrar posición en fichero de un registro con código "anyo"
+     *
      * @param anyo año del sorteo
      * @return posición del registro
      */
@@ -937,10 +950,9 @@ public class LoteriaDeNadal {
         CerrarFicheroBinario(dis);
         return posicion;
     }
-    
+
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Creacion Colla">    
-
     /**
      * Procediment per a Crear una colla
      *
@@ -1410,7 +1422,7 @@ public class LoteriaDeNadal {
      * @throws FileNotFoundException
      */
     public static void SubmenuColles(NumPremiado[] premiados) throws FileNotFoundException, IOException {
-        String[] opcions_menu = {RetornarLinia(IDIOMA, CREARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLES), RetornarLinia(IDIOMA, AFEGIRUNUSUARI), RetornarLinia(IDIOMA, MODIFCARUNUSUARI), RetornarLinia(IDIOMA, ESBORRARUNUSUARI), RetornarLinia(IDIOMA, RECUPERARUNUSUARI)};
+        String[] opcions_menu = {RetornarLinia(IDIOMA, CREARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLA), RetornarLinia(IDIOMA, MOSTRARCOLLES), RetornarLinia(IDIOMA, TEXTUSUARIESPECIFIC), RetornarLinia(IDIOMA, AFEGIRUNUSUARI), RetornarLinia(IDIOMA, MODIFCARUNUSUARI), RetornarLinia(IDIOMA, ESBORRARUNUSUARI), RetornarLinia(IDIOMA, RECUPERARUNUSUARI)};
         int seleccio = Utils.Menu(opcions_menu, RetornarLinia(IDIOMA, OPCIONSELECCIONADA), TEXTSURTIR, IDIOMA);
         switch (seleccio) {
             case 1:
@@ -1424,34 +1436,54 @@ public class LoteriaDeNadal {
                 MostrarTotesLesColles();
                 break;
             case 4:
+                long codiColla6 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
+                String nomUser6 = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
+                ImprimirUsuariEspecific(codiColla6, nomUser6);
+                break;
+            case 5:
+
                 long codiColla2 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
                 AfegirUsuaris(codiColla2, premiados);
                 break;
-            case 5:
+            case 6:
                 long codiColla3 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
                 String nomUser = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
                 ModificarUsuaris(codiColla3, premiados, nomUser);
                 break;
-            case 6:
+            case 7:
                 long codiColla4 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
                 String nomUser2 = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
                 EsborrarUsuari(codiColla4, nomUser2);
                 break;
-            case 7:
+            case 8:
                 long codiColla5 = Utils.LlegirLong(RetornarLinia(IDIOMA, NUMDECOLLA));
                 MostrarBorrados(codiColla5);
                 String nomUser3 = Utils.LlegirString(RetornarLinia(IDIOMA, NOMDELUSUARI));
                 RecuperarUsuaris(nomUser3, codiColla5);
                 break;
 
-            case 8:
+            case 9:
                 break;
         }
     }
+
+    public static void ImprimirUsuariEspecific(long codi, String nom) throws FileNotFoundException, IOException {
+        RandomAccessFile raf = CrearFitxer(NOM_FTX_USR, "r");
+        Usuari usr = LlegirUsuari(raf);
+        nom = OmplirNomAmbEspais(nom);
+        while (usr != null) {
+            if (usr.numcolla == codi && usr.nom.equals(nom) && usr.any == year) {
+                EscribirDatosUsr(usr);
+            }
+            usr = LlegirUsuari(raf);
+        }
+    }
+
     /**
-     * Imprimir por pantalla los datos del parámetro u 
+     * Imprimir por pantalla los datos del parámetro u
+     *
      * @param u clase usuari
-     * @throws IOException 
+     * @throws IOException
      */
     public static void EscribirDatosUsr(Usuari u) throws IOException {
         System.out.println(RetornarLinia(IDIOMA, TEXTNUMCOLLA) + ": " + u.numcolla);
@@ -1461,8 +1493,10 @@ public class LoteriaDeNadal {
         System.out.println("---------------------");
 
     }
+
     /**
      * Mostrar Usuarios borrados de una peña específica
+     *
      * @param codi codigo de la peña
      */
     public static void MostrarBorrados(long codi) {
@@ -1572,7 +1606,7 @@ public class LoteriaDeNadal {
         }
         return posiciocolla;
     }
-    
+
     public static void RecuperarUsuaris(String nom, long codi) {
         try {
             RandomAccessFile raf = CrearFitxer(NOM_FTX_COLLAS_INDEX, "r");
